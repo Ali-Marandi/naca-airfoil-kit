@@ -106,3 +106,10 @@ class NACAGenerator:
         yl = yc - yt * np.cos(theta)
 
         return xu, yu, xl, yl
+
+def naca4(code, points=100):
+    """Compatibility wrapper for the original naca4 function."""
+    xu, yu, xl, yl = NACAGenerator.naca4(code, n_points=points)
+    upper = list(zip(xu, yu))
+    lower = list(zip(xl, yl))
+    return upper, lower
