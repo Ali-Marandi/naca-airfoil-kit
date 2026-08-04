@@ -1,0 +1,45 @@
+name: Weekly Report
+
+on:
+  schedule:
+    # Every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  weekly-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Generate Weekly Report
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python scripts/weekly_report.py
+    
+    - name: Upload Report Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: weekly-reports
+        path: reports/
+        retention-days: 90
+    
+    - name: Commit Report to Repository
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add reports/ || true
+        git commit -m "chore: add weekly report $(date +%Y-%m-%d)" || true
+        git push origin main || true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
