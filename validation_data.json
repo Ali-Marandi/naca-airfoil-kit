@@ -1,0 +1,29 @@
+{
+    "NACA 0012": {
+        "source": "Abbott & von Doenhoff (Theory of Wing Sections)",
+        "reynolds": 1000000,
+        "data": [
+            {"alpha": 0.0, "cl": 0.0, "cd": 0.006},
+            {"alpha": 2.0, "cl": 0.22, "cd": 0.0062},
+            {"alpha": 4.0, "cl": 0.44, "cd": 0.0068},
+            {"alpha": 6.0, "cl": 0.65, "cd": 0.0078},
+            {"alpha": 8.0, "cl": 0.86, "cd": 0.0092},
+            {"alpha": 10.0, "cl": 1.05, "cd": 0.0115},
+            {"alpha": 12.0, "cl": 1.22, "cd": 0.0150},
+            {"alpha": 14.0, "cl": 1.35, "cd": 0.0210}
+        ]
+    },
+    "NACA 2412": {
+        "source": "Abbott & von Doenhoff (Theory of Wing Sections)",
+        "reynolds": 1000000,
+        "data": [
+            {"alpha": 0.0, "cl": 0.24, "cd": 0.0065},
+            {"alpha": 2.0, "cl": 0.46, "cd": 0.0070},
+            {"alpha": 4.0, "cl": 0.68, "cd": 0.0080},
+            {"alpha": 6.0, "cl": 0.89, "cd": 0.0095},
+            {"alpha": 8.0, "cl": 1.08, "cd": 0.0120},
+            {"alpha": 10.0, "cl": 1.25, "cd": 0.0160},
+            {"alpha": 12.0, "cl": 1.38, "cd": 0.0220}
+        ]
+    }
+}
