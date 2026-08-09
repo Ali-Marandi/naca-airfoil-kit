@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         self.uiuc_data = []
         self.current_coords = None
         self.current_name = "NACA 2412"
-        self.comparison_list = {} # {name: coords}
+        self.comparison_list = {}
         self.load_uiuc_db()
         self.init_ui()
         self.update_all()
@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
         self.db_group = QGroupBox("UIUC Database")
         db_layout = QVBoxLayout()
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Search airfoil (e.g. Clark Y)...")
+        self.search_input.setPlaceholderText("Search airfoil...")
         self.search_input.textChanged.connect(self.filter_db)
         db_layout.addWidget(self.search_input)
         self.db_list = QListWidget()
@@ -102,18 +102,14 @@ class MainWindow(QMainWindow):
         self.db_group.hide()
         sidebar_layout.addWidget(self.db_group)
 
-        # Multi-Airfoil Comparison Group
         comp_group = QGroupBox("Comparison Suite")
         comp_layout = QVBoxLayout()
         self.comp_list_widget = QListWidget()
-        self.comp_list_widget.setFixedHeight(120)
+        self.comp_list_widget.setFixedHeight(100)
         comp_layout.addWidget(self.comp_list_widget)
-        btn_add_comp = QPushButton("Add Current to Comparison")
+        btn_add_comp = QPushButton("Add to Comparison")
         btn_add_comp.clicked.connect(self.add_to_comparison)
         comp_layout.addWidget(btn_add_comp)
-        btn_clear_comp = QPushButton("Clear Comparison")
-        btn_clear_comp.clicked.connect(self.clear_comparison)
-        comp_layout.addWidget(btn_clear_comp)
         comp_group.setLayout(comp_layout)
         sidebar_layout.addWidget(comp_group)
 
@@ -121,13 +117,16 @@ class MainWindow(QMainWindow):
         opt_layout = QFormLayout()
         self.target_cl_input = QLineEdit("0.5")
         opt_layout.addRow("Target Cl:", self.target_cl_input)
-        btn_opt = QPushButton("Optimize Camber")
-        btn_opt.clicked.connect(self.optimize_geometry)
-        opt_layout.addRow(btn_opt)
+        btn_opt_cl = QPushButton("Match Cl")
+        btn_opt_cl.clicked.connect(self.optimize_cl)
+        opt_layout.addRow(btn_opt_cl)
+        btn_opt_ld = QPushButton("Maximize L/D")
+        btn_opt_ld.clicked.connect(self.optimize_ld)
+        opt_layout.addRow(btn_opt_ld)
         opt_group.setLayout(opt_layout)
         sidebar_layout.addWidget(opt_group)
 
-        analysis_group = QGroupBox("Real-time Aero")
+        analysis_group = QGroupBox("Aero Analysis")
         analysis_layout = QFormLayout()
         self.alpha_slider = QSlider(Qt.Orientation.Horizontal)
         self.alpha_slider.setRange(-10, 20); self.alpha_slider.setValue(0)
@@ -136,9 +135,14 @@ class MainWindow(QMainWindow):
         self.re_input = QLineEdit("1000000")
         self.re_input.textChanged.connect(self.update_all)
         analysis_layout.addRow("Reynolds:", self.re_input)
+        self.rough_input = QLineEdit("0.0")
+        self.rough_input.textChanged.connect(self.update_all)
+        analysis_layout.addRow("Roughness (k/c):", self.rough_input)
         self.cl_label = QLabel("Cl: 0.000"); self.cl_label.setStyleSheet("color: #00ff00; font-weight: bold;")
         self.cd_label = QLabel("Cd: 0.000"); self.cd_label.setStyleSheet("color: #ffaa00; font-weight: bold;")
+        self.ld_label = QLabel("L/D: 0.00"); self.ld_label.setStyleSheet("color: #00aaff; font-weight: bold;")
         analysis_layout.addRow(self.cl_label, self.cd_label)
+        analysis_layout.addRow(self.ld_label)
         analysis_group.setLayout(analysis_layout)
         sidebar_layout.addWidget(analysis_group)
 
@@ -168,13 +172,6 @@ class MainWindow(QMainWindow):
             self.comparison_list[name] = self.current_coords
             self.comp_list_widget.addItem(name)
             self.update_plots()
-            self.status_bar.showMessage(f"Added {name} to comparison", 3000)
-
-    def clear_comparison(self):
-        self.comparison_list = {}
-        self.comp_list_widget.clear()
-        self.update_plots()
-        self.status_bar.showMessage("Comparison cleared", 3000)
 
     def on_mode_changed(self, index):
         if index == 0: self.gen_group.show(); self.db_group.hide()
@@ -192,15 +189,12 @@ class MainWindow(QMainWindow):
         name = item.text()
         self.current_name = name
         url = next(i['url'] for i in self.uiuc_data if i['name'] == name)
-        self.status_bar.showMessage(f"Loading {name} from UIUC...")
         coords = UIUCLoader.load_from_url(url)
         if coords:
             self.current_coords = coords
             self.update_plots()
-            self.status_bar.showMessage(f"Loaded {name}", 3000)
-        else: self.status_bar.showMessage("Failed to load airfoil", 5000)
 
-    def optimize_geometry(self):
+    def optimize_cl(self):
         if self.mode_combo.currentIndex() != 0: return
         try:
             target = float(self.target_cl_input.text())
@@ -208,7 +202,18 @@ class MainWindow(QMainWindow):
             series = '4-digit' if self.series_combo.currentIndex() == 0 else '5-digit'
             new_code = GeometryOptimizer.match_cl(code, target, series)
             self.code_input.setText(new_code)
-            self.status_bar.showMessage(f"Optimized to NACA {new_code}", 5000)
+        except: pass
+
+    def optimize_ld(self):
+        if self.mode_combo.currentIndex() != 0: return
+        try:
+            code = self.code_input.text()
+            alpha = self.alpha_slider.value()
+            re = float(self.re_input.text())
+            series = '4-digit' if self.series_combo.currentIndex() == 0 else '5-digit'
+            new_code, best_ld = GeometryOptimizer.optimize_ld(code, alpha, re, series)
+            self.code_input.setText(new_code)
+            self.status_bar.showMessage(f"Optimized for L/D: {best_ld:.2f} (NACA {new_code})", 5000)
         except: pass
 
     def update_all(self):
@@ -227,27 +232,23 @@ class MainWindow(QMainWindow):
         alpha = self.alpha_slider.value()
         try: re = float(self.re_input.text())
         except: re = 1e6
+        try: rough = float(self.rough_input.text())
+        except: rough = 0.0
         
-        self.last_cl, self.last_cd, self.last_cp, self.last_xc = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha, re)
+        self.last_cl, self.last_cd, self.last_cp, self.last_xc = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha, re, rough)
         self.cl_label.setText(f"Cl: {self.last_cl:.4f}")
         self.cd_label.setText(f"Cd: {self.last_cd:.4f}")
+        self.ld_label.setText(f"L/D: {self.last_cl/self.last_cd:.2f}" if self.last_cd > 0 else "L/D: N/A")
         
         ax = self.geom_canvas.axes; ax.clear()
-        
-        # Plot Comparison Items
         colors = ['#555', '#777', '#999', '#bbb']
         for i, (name, coords) in enumerate(self.comparison_list.items()):
             cxu, cyu, cxl, cyl = coords
-            ax.plot(cxu, cyu, color=colors[i % len(colors)], linestyle='--', alpha=0.6)
-            ax.plot(cxl, cyl, color=colors[i % len(colors)], linestyle='--', alpha=0.6, label=f"Ref: {name}")
-
-        # Plot Current
-        ax.plot(xu, yu, '#00aaff', linewidth=2.5)
-        ax.plot(xl, yl, '#ff5500', linewidth=2.5, label=f"Current: {self.current_name}")
+            ax.plot(cxu, cyu, color=colors[i % len(colors)], linestyle='--', alpha=0.5)
+            ax.plot(cxl, cyl, color=colors[i % len(colors)], linestyle='--', alpha=0.5)
+        ax.plot(xu, yu, '#00aaff', xl, yl, '#ff5500', linewidth=2.5)
         ax.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), '#333', alpha=0.3)
-        
-        ax.set_aspect('equal'); ax.grid(True, color='#333', linestyle=':'); ax.set_title(f"Geometry Comparison View", color='white')
-        ax.legend(prop={'size': 8})
+        ax.set_aspect('equal'); ax.grid(True, color='#333', linestyle=':'); ax.set_title(f"{self.current_name} Geometry", color='white')
         self.geom_canvas.draw()
         
         axp = self.press_canvas.axes; axp.clear()
@@ -265,18 +266,11 @@ class MainWindow(QMainWindow):
             'name': self.current_name,
             'cl': self.last_cl,
             'cd': self.last_cd,
-            'params': {
-                'Alpha': f"{self.alpha_slider.value()} deg",
-                'Reynolds': self.re_input.text(),
-                'Points': str(len(self.current_coords[0]))
-            },
+            'params': {'Alpha': f"{self.alpha_slider.value()} deg", 'Reynolds': self.re_input.text(), 'Roughness': self.rough_input.text()},
             'plot_path': temp_plot
         }
-        try:
-            generate_pdf_report(path, data)
-            self.status_bar.showMessage(f"Report saved to {path}", 5000)
-        except Exception as e:
-            self.status_bar.showMessage(f"PDF Error: {str(e)}", 5000)
+        try: generate_pdf_report(path, data); self.status_bar.showMessage(f"Report saved to {path}", 5000)
+        except Exception as e: self.status_bar.showMessage(f"PDF Error: {str(e)}", 5000)
         finally:
             if os.path.exists(temp_plot): os.remove(temp_plot)
 

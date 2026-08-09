@@ -95,7 +95,11 @@ class UIUCLoader:
 
 class AirfoilAnalysis:
     @staticmethod
-    def compute_aerodynamics(xu, yu, xl, yl, alpha_deg, reynolds=1e6):
+    def compute_aerodynamics(xu, yu, xl, yl, alpha_deg, reynolds=1e6, roughness=0.0):
+        """
+        Advanced Aero Analysis with Surface Roughness.
+        roughness: Equivalent sand grain roughness (k/c)
+        """
         x = np.concatenate([xu[::-1], xl[1:]])
         y = np.concatenate([yu[::-1], yl[1:]])
         n_panels = len(x) - 1
@@ -120,21 +124,29 @@ class AirfoilAnalysis:
             cl = 2 * np.sum(gamma[:-1] * l)
             cp = 1 - (gamma[:-1])**2
             
-            # --- Advanced Empirical Aero ---
-            # 1. Skin Friction Drag (Schlichting formula for turbulent)
-            cf = 0.455 / (np.log10(reynolds)**2.58)
-            cd_skin = cf * 2 # Both sides
+            # --- Advanced Empirical Aero with Roughness ---
+            # 1. Skin Friction Drag (Schlichting with Roughness correction)
+            # Cf_smooth = 0.455 / (log10(Re)^2.58)
+            # For rough surfaces: Cf = (1.89 + 1.62*log10(c/k))^-2.5
+            if roughness > 1e-7:
+                cf_rough = (1.89 + 1.62 * np.log10(1.0/roughness))**-2.5
+                cf_smooth = 0.455 / (np.log10(reynolds)**2.58)
+                cf = max(cf_smooth, cf_rough)
+            else:
+                cf = 0.455 / (np.log10(reynolds)**2.58)
             
-            # 2. Form Drag (based on thickness)
-            # Find max thickness
+            cd_skin = cf * 2 
+            
+            # 2. Form Drag
             thickness = np.max(yu - np.interp(xu, xl, yl))
             cd_form = cd_skin * (2 * thickness + 60 * thickness**4)
             
-            # 3. Stall Estimation (Empirical)
-            # Max Cl typically around 1.2-1.6 for NACA airfoils
-            cl_max = 1.5 + (thickness - 0.12) * 2
+            # 3. Stall & Roughness effect on Cl_max
+            cl_max_base = 1.5 + (thickness - 0.12) * 2
+            # Roughness reduces Cl_max (empirical factor)
+            cl_max = cl_max_base * (1.0 - 50.0 * roughness)
+            
             if abs(cl) > cl_max:
-                # Post-stall behavior
                 cl = cl_max * np.sign(cl) * np.exp(-0.2 * (abs(cl) - cl_max))
                 cd_form += 0.1 * (abs(cl) - cl_max)**2
                 
@@ -144,6 +156,30 @@ class AirfoilAnalysis:
             return 0.0, 0.0, np.zeros(n_panels), xc
 
 class GeometryOptimizer:
+    @staticmethod
+    def optimize_ld(code, alpha, reynolds, series='4-digit'):
+        """Optimize camber (m) and position (p) for max L/D."""
+        best_ld = -1e9
+        best_code = code
+        
+        # Grid search for m (0-9) and p (1-9)
+        for m in range(0, 10):
+            for p in range(1, 10):
+                test_code = f"{m}{p}{code[2:]}"
+                if series == '4-digit':
+                    coords = NACAGeneratorPro.naca4(test_code)
+                else:
+                    coords = NACAGeneratorPro.naca5(test_code)
+                
+                if coords:
+                    cl, cd, _, _ = AirfoilAnalysis.compute_aerodynamics(*coords, alpha, reynolds)
+                    if cd > 0:
+                        ld = cl / cd
+                        if ld > best_ld:
+                            best_ld = ld
+                            best_code = test_code
+        return best_code, best_ld
+
     @staticmethod
     def match_cl(code, target_cl, series='4-digit'):
         best_m = 0
