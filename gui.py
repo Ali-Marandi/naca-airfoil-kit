@@ -9,7 +9,8 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from PyQt6.QtCore import Qt, QSize
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from airfoil_pro import NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, GeometryOptimizer, export_stl
+import matplotlib.animation as animation
+from airfoil_pro import NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, GeometryOptimizer, export_stl, export_csv_advanced
 from report_gen import generate_pdf_report
 
 STYLESHEET = """
@@ -119,6 +120,9 @@ class MainWindow(QMainWindow):
         analysis_group.setLayout(analysis_layout); sidebar_layout.addWidget(analysis_group)
 
         sidebar_layout.addStretch()
+        btn_anim = QPushButton("Export Flow Animation (GIF)"); btn_anim.clicked.connect(self.export_animation)
+        btn_anim.setStyleSheet("background-color: #00b294;"); sidebar_layout.addWidget(btn_anim)
+        
         btn_report = QPushButton("Generate PDF Report"); btn_report.clicked.connect(self.export_pdf)
         btn_report.setStyleSheet("background-color: #d83b01;"); sidebar_layout.addWidget(btn_report)
         btn_export = QPushButton("Export Suite"); btn_export.clicked.connect(self.show_export_dialog)
@@ -187,7 +191,7 @@ class MainWindow(QMainWindow):
         alpha, re, rough = self.alpha_slider.value(), float(self.re_input.text() or 1e6), float(self.rough_input.text() or 0.0)
         
         res = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha, re, rough)
-        self.last_cl, self.last_cd, self.last_cp, self.last_xc, gamma, pxc, pyc, pphi, pl = res
+        self.last_cl, self.last_cd, self.last_cp, self.last_xc, self.last_gamma, self.last_pxc, self.last_pyc, self.last_pphi, self.last_pl = res
         self.cl_label.setText(f"Cl: {self.last_cl:.4f}"); self.cd_label.setText(f"Cd: {self.last_cd:.4f}")
         self.ld_label.setText(f"L/D: {self.last_cl/self.last_cd:.2f}" if self.last_cd > 0 else "L/D: N/A")
         
@@ -203,13 +207,44 @@ class MainWindow(QMainWindow):
         axp.plot(self.last_xc, self.last_cp, '#00ff00', linewidth=2); axp.invert_yaxis()
         axp.grid(True, color='#333'); self.press_canvas.draw()
 
-        # Streamlines
         axs = self.stream_canvas.axes; axs.clear()
-        X, Y, u, v = AirfoilAnalysis.get_streamlines(xu, yu, xl, yl, alpha, gamma, pxc, pyc, pphi, pl)
+        X, Y, u, v = AirfoilAnalysis.get_streamlines(xu, yu, xl, yl, alpha, self.last_gamma, self.last_pxc, self.last_pyc, self.last_pphi, self.last_pl)
         axs.streamplot(X, Y, u, v, color='#00aaff', linewidth=1, density=1.5)
         axs.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), 'white', zorder=10)
         axs.set_aspect('equal'); axs.set_xlim(-0.5, 1.5); axs.set_ylim(-0.5, 0.5)
         axs.grid(True, color='#333'); self.stream_canvas.draw()
+
+    def export_animation(self):
+        if not self.current_coords: return
+        path, _ = QFileDialog.getSaveFileName(self, "Save Flow Animation", f"{self.current_name}_Flow.gif", "GIF (*.gif)")
+        if not path: return
+        
+        self.status_bar.showMessage("Generating animation, please wait...", 0)
+        fig = Figure(figsize=(8, 4), facecolor='#1e1e1e')
+        ax = fig.add_subplot(111)
+        ax.set_facecolor('#1e1e1e')
+        
+        xu, yu, xl, yl = self.current_coords
+        alphas = np.linspace(-5, 15, 20)
+        
+        def update(i):
+            ax.clear()
+            alpha = alphas[i]
+            res = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha)
+            _, _, _, _, gamma, pxc, pyc, pphi, pl = res
+            X, Y, u, v = AirfoilAnalysis.get_streamlines(xu, yu, xl, yl, alpha, gamma, pxc, pyc, pphi, pl)
+            ax.streamplot(X, Y, u, v, color='#00aaff', linewidth=1, density=1.2)
+            ax.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), 'white', zorder=10)
+            ax.set_aspect('equal'); ax.set_xlim(-0.5, 1.5); ax.set_ylim(-0.5, 0.5)
+            ax.set_title(f"Flow Field (Alpha={alpha:.1f} deg)", color='white')
+            return ax,
+
+        anim = animation.FuncAnimation(fig, update, frames=len(alphas), interval=100)
+        try:
+            anim.save(path, writer='pillow')
+            self.status_bar.showMessage(f"Animation saved to {path}", 5000)
+        except Exception as e:
+            self.status_bar.showMessage(f"Animation Error: {str(e)}", 5000)
 
     def export_pdf(self):
         if not self.current_coords: return
@@ -225,10 +260,12 @@ class MainWindow(QMainWindow):
 
     def show_export_dialog(self):
         if not self.current_coords: return
-        path, _ = QFileDialog.getSaveFileName(self, "Export Airfoil", "airfoil.stl", "STL (*.stl);;DAT (*.dat);;DXF (*.dxf)")
+        path, _ = QFileDialog.getSaveFileName(self, "Export Airfoil", "airfoil.csv", "Advanced CSV (*.csv);;STL (*.stl);;DAT (*.dat);;DXF (*.dxf)")
         if not path: return
         xu, yu, xl, yl = self.current_coords
-        if path.endswith('.stl'): export_stl(xu, yu, xl, yl, path)
+        if path.endswith('.csv'):
+            export_csv_advanced(xu, yu, xl, yl, self.last_xc, self.last_cp, path)
+        elif path.endswith('.stl'): export_stl(xu, yu, xl, yl, path)
         elif path.endswith('.dat'):
             with open(path, 'w') as f:
                 for i in range(len(xu)-1, -1, -1): f.write(f"{xu[i]:.6f} {yu[i]:.6f}\n")

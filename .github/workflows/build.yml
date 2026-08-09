@@ -4,25 +4,31 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     - name: Install dependencies
       run: |
-        pip install PyQt6 matplotlib numpy
+        pip install PyQt6 matplotlib numpy requests fpdf2 pillow
         pip install pyinstaller
+    - name: Run tests
+      run: |
+        python -m unittest discover -v
     - name: Build EXE
       run: |
-        pyinstaller --noconfirm --onefile --windowed --name "NACA-Airfoil-Kit-Pro" --clean gui.py
+        pyinstaller --noconfirm --onefile --windowed --name "NACA-Airfoil-Kit-Pro" --add-data "uiuc_database.json;." --clean gui.py
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: dist/NACA-Airfoil-Kit-Pro.exe
       env:

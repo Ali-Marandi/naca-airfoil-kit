@@ -1,6 +1,7 @@
 import numpy as np
 import requests
 from math import atan2, cos, sin, sqrt, pi
+import matplotlib.animation as animation
 
 class NACAGeneratorPro:
     @staticmethod
@@ -136,18 +137,14 @@ class AirfoilAnalysis:
 
     @staticmethod
     def get_streamlines(xu, yu, xl, yl, alpha_deg, gamma, pxc, pyc, pphi, pl):
-        """Calculate velocity field for streamlines."""
         alpha = np.radians(alpha_deg)
         X, Y = np.meshgrid(np.linspace(-0.5, 1.5, 30), np.linspace(-0.5, 0.5, 20))
         u = np.cos(alpha) * np.ones_like(X)
         v = np.sin(alpha) * np.ones_like(X)
-        
         for i in range(len(gamma)):
             r2 = (X - pxc[i])**2 + (Y - pyc[i])**2 + 1e-6
-            # Vortex influence
             u += (gamma[i] * pl[i] / (2 * np.pi * r2)) * (Y - pyc[i])
             v -= (gamma[i] * pl[i] / (2 * np.pi * r2)) * (X - pxc[i])
-            
         return X, Y, u, v
 
 class GeometryOptimizer:
@@ -194,3 +191,20 @@ def export_stl(xu, yu, xl, yl, filename, thickness=0.1):
                 for j in tri: f.write(f"vertex {pts[j][0]} {pts[j][1]} {pts[j][2]}\n")
                 f.write("endloop\nendfacet\n")
         f.write("endsolid airfoil\n")
+
+def export_csv_advanced(xu, yu, xl, yl, xc, cp, filename):
+    import csv
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["X_Upper", "Y_Upper", "X_Lower", "Y_Lower", "X_Panel_Center", "Cp"])
+        max_len = max(len(xu), len(xc))
+        for i in range(max_len):
+            row = [
+                xu[i] if i < len(xu) else "",
+                yu[i] if i < len(yu) else "",
+                xl[i] if i < len(xl) else "",
+                yl[i] if i < len(yl) else "",
+                xc[i] if i < len(xc) else "",
+                cp[i] if i < len(cp) else ""
+            ]
+            writer.writerow(row)
