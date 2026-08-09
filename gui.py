@@ -10,6 +10,7 @@ from PyQt6.QtCore import Qt, QSize
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from airfoil_pro import NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, GeometryOptimizer, export_stl
+from report_gen import generate_pdf_report
 
 STYLESHEET = """
 QMainWindow { background-color: #1e1e1e; }
@@ -41,13 +42,17 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(STYLESHEET)
         self.uiuc_data = []
         self.current_coords = None
+        self.current_name = "NACA 2412"
         self.load_uiuc_db()
         self.init_ui()
         self.update_all()
 
     def load_uiuc_db(self):
+        # Handle path for EXE
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        db_path = os.path.join(base_path, "uiuc_database.json")
         try:
-            with open("uiuc_database.json", 'r') as f:
+            with open(db_path, 'r') as f:
                 self.uiuc_data = json.load(f)
         except: self.uiuc_data = []
 
@@ -59,7 +64,6 @@ class MainWindow(QMainWindow):
         sidebar.setFixedWidth(380)
         sidebar_layout = QVBoxLayout(sidebar)
 
-        # 1. Mode Selector
         mode_group = QGroupBox("Operation Mode")
         mode_layout = QVBoxLayout()
         self.mode_combo = QComboBox()
@@ -69,7 +73,6 @@ class MainWindow(QMainWindow):
         mode_group.setLayout(mode_layout)
         sidebar_layout.addWidget(mode_group)
 
-        # 2. Generator Controls
         self.gen_group = QGroupBox("NACA Generator")
         gen_layout = QFormLayout()
         self.series_combo = QComboBox()
@@ -86,7 +89,6 @@ class MainWindow(QMainWindow):
         self.gen_group.setLayout(gen_layout)
         sidebar_layout.addWidget(self.gen_group)
 
-        # 3. UIUC Database Controls
         self.db_group = QGroupBox("UIUC Database")
         db_layout = QVBoxLayout()
         self.search_input = QLineEdit()
@@ -100,7 +102,6 @@ class MainWindow(QMainWindow):
         self.db_group.hide()
         sidebar_layout.addWidget(self.db_group)
 
-        # 4. Optimization
         opt_group = QGroupBox("Smart Optimization")
         opt_layout = QFormLayout()
         self.target_cl_input = QLineEdit("0.5")
@@ -111,7 +112,6 @@ class MainWindow(QMainWindow):
         opt_group.setLayout(opt_layout)
         sidebar_layout.addWidget(opt_group)
 
-        # 5. Analysis
         analysis_group = QGroupBox("Real-time Aero")
         analysis_layout = QFormLayout()
         self.alpha_slider = QSlider(Qt.Orientation.Horizontal)
@@ -128,6 +128,11 @@ class MainWindow(QMainWindow):
         sidebar_layout.addWidget(analysis_group)
 
         sidebar_layout.addStretch()
+        btn_report = QPushButton("Generate PDF Report")
+        btn_report.clicked.connect(self.export_pdf)
+        btn_report.setStyleSheet("background-color: #d83b01;")
+        sidebar_layout.addWidget(btn_report)
+        
         btn_export = QPushButton("Export Suite")
         btn_export.clicked.connect(self.show_export_dialog)
         sidebar_layout.addWidget(btn_export)
@@ -155,6 +160,7 @@ class MainWindow(QMainWindow):
 
     def load_uiuc_airfoil(self, item):
         name = item.text()
+        self.current_name = name
         url = next(i['url'] for i in self.uiuc_data if i['name'] == name)
         self.status_bar.showMessage(f"Loading {name} from UIUC...")
         coords = UIUCLoader.load_from_url(url)
@@ -178,6 +184,7 @@ class MainWindow(QMainWindow):
     def update_all(self):
         if self.mode_combo.currentIndex() == 0:
             code = self.code_input.text()
+            self.current_name = f"NACA {code}"
             n_pts = self.points_slider.value()
             if self.series_combo.currentIndex() == 0:
                 self.current_coords = NACAGeneratorPro.naca4(code, n_pts)
@@ -191,20 +198,49 @@ class MainWindow(QMainWindow):
         try: re = float(self.re_input.text())
         except: re = 1e6
         
-        cl, cd, cp, xc = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha, re)
-        self.cl_label.setText(f"Cl: {cl:.4f}")
-        self.cd_label.setText(f"Cd: {cd:.4f}")
+        self.last_cl, self.last_cd, self.last_cp, self.last_xc = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha, re)
+        self.cl_label.setText(f"Cl: {self.last_cl:.4f}")
+        self.cd_label.setText(f"Cd: {self.last_cd:.4f}")
         
         ax = self.geom_canvas.axes; ax.clear()
         ax.plot(xu, yu, '#00aaff', xl, yl, '#ff5500', linewidth=2)
         ax.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), '#333', alpha=0.5)
-        ax.set_aspect('equal'); ax.grid(True, color='#333'); ax.set_title("Geometry View", color='white')
+        ax.set_aspect('equal'); ax.grid(True, color='#333'); ax.set_title(f"{self.current_name} Geometry", color='white')
         self.geom_canvas.draw()
         
         axp = self.press_canvas.axes; axp.clear()
-        axp.plot(xc, cp, '#00ff00', linewidth=2); axp.invert_yaxis()
+        axp.plot(self.last_xc, self.last_cp, '#00ff00', linewidth=2); axp.invert_yaxis()
         axp.grid(True, color='#333'); axp.set_title(f"Pressure Distribution (Alpha={alpha}°)", color='white')
         self.press_canvas.draw()
+
+    def export_pdf(self):
+        if not self.current_coords: return
+        path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", f"{self.current_name}_Report.pdf", "PDF (*.pdf)")
+        if not path: return
+        
+        # Save plot to temp file
+        temp_plot = "temp_plot.png"
+        self.geom_canvas.fig.savefig(temp_plot, facecolor='#ffffff')
+        
+        data = {
+            'name': self.current_name,
+            'cl': self.last_cl,
+            'cd': self.last_cd,
+            'params': {
+                'Alpha': f"{self.alpha_slider.value()} deg",
+                'Reynolds': self.re_input.text(),
+                'Points': str(len(self.current_coords[0]))
+            },
+            'plot_path': temp_plot
+        }
+        
+        try:
+            generate_pdf_report(path, data)
+            self.status_bar.showMessage(f"Report saved to {path}", 5000)
+        except Exception as e:
+            self.status_bar.showMessage(f"PDF Error: {str(e)}", 5000)
+        finally:
+            if os.path.exists(temp_plot): os.remove(temp_plot)
 
     def show_export_dialog(self):
         if not self.current_coords: return
