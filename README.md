@@ -1,57 +1,37 @@
-# NACA Airfoil Kit Pro (Commercial Edition)
+# NACA Airfoil Kit Pro (Enterprise Edition)
 
-A high-performance, commercial-grade toolkit for generating, analyzing, and exporting NACA airfoil coordinates. This professional edition features an advanced aerodynamic analysis engine and a modern, high-fidelity user interface.
+The ultimate toolkit for aerodynamicists and aerospace engineers. This edition expands beyond NACA series to include the entire UIUC database, advanced drag estimation, and intelligent geometry optimization.
 
-## 🚀 Key Features
+## 🚀 Enterprise Features
 
-### 🔹 Advanced Geometry Engine
-- **NACA 4-Digit & 5-Digit Support**: High-precision coordinate generation.
-- **Enhanced Spacing Options**: Linear, Cosine, and Half-Cosine spacing for optimized CFD meshing.
-- **Trailing Edge Control**: Option for open or closed trailing edges.
-- **High Resolution**: Support for up to 500 coordinate points.
+### 📂 UIUC Airfoil Database Integration
+- **1,600+ Airfoils**: Direct access to the UIUC Applied Aerodynamics Group database.
+- **Instant Search**: Find and load standard airfoils (e.g., Clark Y, Eppler, Wortmann) in seconds.
+- **Cloud-Sync**: Coordinates are fetched directly from the database servers.
 
-### 📊 Aerodynamic Analysis (Pro)
-- **Vortex Panel Method**: Real-time estimation of the Lift Coefficient ($C_l$).
-- **Pressure Distribution**: Interactive plotting of the Pressure Coefficient ($C_p$) along the chord.
-- **Variable Alpha**: Analyze performance across a range of angles of attack (-10° to 20°).
+### 📊 Advanced Aerodynamics & Analysis
+- **Vortex Panel Method**: High-fidelity lift coefficient ($C_l$) and pressure distribution ($C_p$).
+- **Drag Estimation ($C_d$)**: Integrated boundary layer approximation for profile drag.
+- **Reynolds Number Support**: Analyze performance across different flow regimes.
 
-### 🛠 Commercial Export Suite
-- **Selig DAT**: Standard format for XFOIL and other research tools.
-- **CAD DXF**: Ready-to-import geometry for SolidWorks, Fusion 360, and AutoCAD.
-- **3D STL**: Direct export for 3D printing and rapid prototyping.
+### 🧠 Smart Geometry Optimization
+- **Target Cl Matching**: Automatically adjust NACA camber to achieve your desired lift coefficient.
+- **Real-time Feedback**: See how geometry changes affect aerodynamic performance instantly.
 
-### 🎨 Modern UI/UX
-- **Dark Mode Interface**: Optimized for long engineering sessions.
-- **Interactive Plots**: Real-time updates as parameters change.
-- **Professional Styling**: Clean, responsive layout built with PyQt6.
+### 🛠 Professional Export Suite
+- **CAD/CAM Ready**: Export to DXF (CAD) and STL (3D Printing).
+- **Research Standard**: Selig DAT format compatibility.
 
-## 📥 Installation
+## 📥 Getting Started
 
-### For Windows Users
-Download the latest `NACA-Airfoil-Kit-Pro.exe` from the [Releases](https://github.com/Ali-Marandi/naca-airfoil-kit/releases) page. It is a standalone executable—no installation or Python environment required.
+### Windows Executable
+Download the standalone `NACA-Airfoil-Kit-Pro.exe` from [Releases](https://github.com/Ali-Marandi/naca-airfoil-kit/releases).
 
-### For Developers
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Ali-Marandi/naca-airfoil-kit.git
-   ```
-2. Install dependencies:
-   ```bash
-   pip install PyQt6 matplotlib numpy
-   ```
-3. Run the application:
-   ```bash
-   python gui.py
-   ```
-
-## 🛠 Building from Source
-To build the standalone executable yourself, use PyInstaller:
+### Developer Setup
 ```bash
-pyinstaller --onefile --windowed --name "NACA-Airfoil-Kit-Pro" gui.py
+pip install PyQt6 matplotlib numpy requests
+python gui.py
 ```
 
-## 📄 License
-This project is licensed under the MIT License.
-
 ---
-*Developed by Manus AI for Commercial Grade Engineering Applications*
+*Developed by Manus AI - Engineering the Future*
