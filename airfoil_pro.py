@@ -81,13 +81,12 @@ class UIUCLoader:
             if response.status_code != 200: return None
             lines = response.text.splitlines()
             coords = []
-            for line in lines[1:]: # Skip title
+            for line in lines[1:]:
                 parts = line.split()
                 if len(parts) >= 2:
                     try: coords.append([float(parts[0]), float(parts[1])])
                     except: continue
             coords = np.array(coords)
-            # Split into upper and lower (Selig format: TE -> LE -> TE)
             le_idx = np.argmin(coords[:, 0])
             upper = coords[:le_idx+1][::-1]
             lower = coords[le_idx:]
@@ -120,25 +119,33 @@ class AirfoilAnalysis:
             gamma = np.linalg.solve(A, b)
             cl = 2 * np.sum(gamma[:-1] * l)
             cp = 1 - (gamma[:-1])**2
-            # Boundary Layer Estimation (Simple Drag)
-            ue = np.abs(gamma[:-1]) # Local velocity
-            cd = AirfoilAnalysis.estimate_drag(xc, ue, reynolds)
+            
+            # --- Advanced Empirical Aero ---
+            # 1. Skin Friction Drag (Schlichting formula for turbulent)
+            cf = 0.455 / (np.log10(reynolds)**2.58)
+            cd_skin = cf * 2 # Both sides
+            
+            # 2. Form Drag (based on thickness)
+            # Find max thickness
+            thickness = np.max(yu - np.interp(xu, xl, yl))
+            cd_form = cd_skin * (2 * thickness + 60 * thickness**4)
+            
+            # 3. Stall Estimation (Empirical)
+            # Max Cl typically around 1.2-1.6 for NACA airfoils
+            cl_max = 1.5 + (thickness - 0.12) * 2
+            if abs(cl) > cl_max:
+                # Post-stall behavior
+                cl = cl_max * np.sign(cl) * np.exp(-0.2 * (abs(cl) - cl_max))
+                cd_form += 0.1 * (abs(cl) - cl_max)**2
+                
+            cd = cd_skin + cd_form
             return cl, cd, cp, xc
         except:
             return 0.0, 0.0, np.zeros(n_panels), xc
 
-    @staticmethod
-    def estimate_drag(xc, ue, re):
-        # Simplified Squire-Young for profile drag
-        # Assuming fully turbulent for simplicity in this version
-        # Cf approx 0.074 / Re^0.2
-        cf = 0.074 / (re**0.2)
-        return np.mean(cf * ue**2) * 2
-
 class GeometryOptimizer:
     @staticmethod
     def match_cl(code, target_cl, series='4-digit'):
-        # Simple iterative search for camber (m) to match Cl
         best_m = 0
         min_diff = 100
         for m in range(0, 10):
