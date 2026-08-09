@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from airfoil import NACAGeneratorPro, AirfoilAnalysis
+from airfoil_pro import NACAGeneratorPro, AirfoilAnalysis
 
 class AirfoilTests(unittest.TestCase):
     def test_symmetric_section(self):
@@ -13,7 +13,7 @@ class AirfoilTests(unittest.TestCase):
     def test_aero_results(self):
         coords = NACAGeneratorPro.naca4("0012", 50)
         res = AirfoilAnalysis.compute_aerodynamics(*coords, 0)
-        self.assertEqual(len(res), 9) # cl, cd, cp, xc, gamma, pxc, pyc, pphi, pl
+        self.assertEqual(len(res), 8) # cl, cd, cp, xc, gamma, xc, yc, l
         cl = res[0]
         self.assertAlmostEqual(cl, 0, places=2)
 
