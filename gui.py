@@ -43,12 +43,12 @@ class MainWindow(QMainWindow):
         self.uiuc_data = []
         self.current_coords = None
         self.current_name = "NACA 2412"
+        self.comparison_list = {} # {name: coords}
         self.load_uiuc_db()
         self.init_ui()
         self.update_all()
 
     def load_uiuc_db(self):
-        # Handle path for EXE
         base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         db_path = os.path.join(base_path, "uiuc_database.json")
         try:
@@ -102,6 +102,21 @@ class MainWindow(QMainWindow):
         self.db_group.hide()
         sidebar_layout.addWidget(self.db_group)
 
+        # Multi-Airfoil Comparison Group
+        comp_group = QGroupBox("Comparison Suite")
+        comp_layout = QVBoxLayout()
+        self.comp_list_widget = QListWidget()
+        self.comp_list_widget.setFixedHeight(120)
+        comp_layout.addWidget(self.comp_list_widget)
+        btn_add_comp = QPushButton("Add Current to Comparison")
+        btn_add_comp.clicked.connect(self.add_to_comparison)
+        comp_layout.addWidget(btn_add_comp)
+        btn_clear_comp = QPushButton("Clear Comparison")
+        btn_clear_comp.clicked.connect(self.clear_comparison)
+        comp_layout.addWidget(btn_clear_comp)
+        comp_group.setLayout(comp_layout)
+        sidebar_layout.addWidget(comp_group)
+
         opt_group = QGroupBox("Smart Optimization")
         opt_layout = QFormLayout()
         self.target_cl_input = QLineEdit("0.5")
@@ -145,6 +160,21 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.tabs)
         self.status_bar = QStatusBar(); self.setStatusBar(self.status_bar)
         self.filter_db()
+
+    def add_to_comparison(self):
+        if not self.current_coords: return
+        name = self.current_name
+        if name not in self.comparison_list:
+            self.comparison_list[name] = self.current_coords
+            self.comp_list_widget.addItem(name)
+            self.update_plots()
+            self.status_bar.showMessage(f"Added {name} to comparison", 3000)
+
+    def clear_comparison(self):
+        self.comparison_list = {}
+        self.comp_list_widget.clear()
+        self.update_plots()
+        self.status_bar.showMessage("Comparison cleared", 3000)
 
     def on_mode_changed(self, index):
         if index == 0: self.gen_group.show(); self.db_group.hide()
@@ -203,9 +233,21 @@ class MainWindow(QMainWindow):
         self.cd_label.setText(f"Cd: {self.last_cd:.4f}")
         
         ax = self.geom_canvas.axes; ax.clear()
-        ax.plot(xu, yu, '#00aaff', xl, yl, '#ff5500', linewidth=2)
-        ax.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), '#333', alpha=0.5)
-        ax.set_aspect('equal'); ax.grid(True, color='#333'); ax.set_title(f"{self.current_name} Geometry", color='white')
+        
+        # Plot Comparison Items
+        colors = ['#555', '#777', '#999', '#bbb']
+        for i, (name, coords) in enumerate(self.comparison_list.items()):
+            cxu, cyu, cxl, cyl = coords
+            ax.plot(cxu, cyu, color=colors[i % len(colors)], linestyle='--', alpha=0.6)
+            ax.plot(cxl, cyl, color=colors[i % len(colors)], linestyle='--', alpha=0.6, label=f"Ref: {name}")
+
+        # Plot Current
+        ax.plot(xu, yu, '#00aaff', linewidth=2.5)
+        ax.plot(xl, yl, '#ff5500', linewidth=2.5, label=f"Current: {self.current_name}")
+        ax.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), '#333', alpha=0.3)
+        
+        ax.set_aspect('equal'); ax.grid(True, color='#333', linestyle=':'); ax.set_title(f"Geometry Comparison View", color='white')
+        ax.legend(prop={'size': 8})
         self.geom_canvas.draw()
         
         axp = self.press_canvas.axes; axp.clear()
@@ -217,11 +259,8 @@ class MainWindow(QMainWindow):
         if not self.current_coords: return
         path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", f"{self.current_name}_Report.pdf", "PDF (*.pdf)")
         if not path: return
-        
-        # Save plot to temp file
         temp_plot = "temp_plot.png"
         self.geom_canvas.fig.savefig(temp_plot, facecolor='#ffffff')
-        
         data = {
             'name': self.current_name,
             'cl': self.last_cl,
@@ -233,7 +272,6 @@ class MainWindow(QMainWindow):
             },
             'plot_path': temp_plot
         }
-        
         try:
             generate_pdf_report(path, data)
             self.status_bar.showMessage(f"Report saved to {path}", 5000)
