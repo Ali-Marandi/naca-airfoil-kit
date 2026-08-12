@@ -1,0 +1,19 @@
+services:
+  naca-airfoil-kit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: naca-airfoil-kit-pro:latest
+    container_name: naca-airfoil-kit-pro
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    environment:
+      STREAMLIT_SERVER_HEADLESS: "true"
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3

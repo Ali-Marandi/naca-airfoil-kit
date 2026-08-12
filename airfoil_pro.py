@@ -95,7 +95,8 @@ class AirfoilAnalysis:
         b = np.append(np.cos(beta - alpha), 0)
         
         try:
-            gamma = np.linalg.solve(A, b)[:-1]
+            # Least-squares solution remains stable for closely spaced cosine panels.
+            gamma = np.linalg.lstsq(A, b, rcond=None)[0][:-1]
             cl = 2 * np.sum(gamma * l)
             cp = 1 - gamma**2
             cf = max(0.455/(np.log10(re)**2.58), (1.89+1.62*np.log10(1.0/max(rough, 1e-9)))**-2.5 if rough > 1e-7 else 0)
