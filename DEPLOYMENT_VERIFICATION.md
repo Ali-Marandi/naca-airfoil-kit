@@ -9,3 +9,7 @@ Verified on 12 August 2026:
 - Local post-fix sanity check for NACA 2412 at 4° returned eight result fields with non-zero coefficients: `Cl = 0.12094`, `Cd = 0.0111998`.
 
 The temporary URL remains available only while the sandbox service is running. Permanent hosting is documented in `DEPLOYMENT.md`.
+
+## Public interface confirmation
+
+A subsequent browser check confirmed that the temporary public deployment rendered successfully after the solver stabilization. With the default NACA 2412 profile at 0° angle of attack and Reynolds number 1,000,000, the interface displayed `Cl = 0.1021`, `Cd = 0.0112`, and `L/D = 9.12`. The page also exposed the NACA generator, UIUC database mode, roughness input, L/D optimization, and Geometry, Pressure Distribution, and Flow Field tabs.
