@@ -1,59 +1,56 @@
 # استقرار بدون کارت NACA Airfoil Kit Pro – نسخه وب
 
-## گزینهٔ پیشنهادی: Streamlit Community Cloud
+**تهیه‌کننده: Manus AI**
 
-برای نسخه وب موجود، **Streamlit Community Cloud** مناسب‌ترین مسیر بدون کارت است. این سرویس به‌صورت رایگان اپلیکیشن‌های Streamlit را مستقیماً از مخزن GitHub اجرا می‌کند، نگه‌داری کانتینر را انجام می‌دهد و با هر `git push` تغییرات را به‌روزرسانی می‌کند. این روش از همان فایل‌های موجود پروژه یعنی `app.py` و `requirements.txt` استفاده می‌کند و نیازی به Docker، کارت پرداخت یا تغییر معماری ندارد.
+## جمع‌بندی اجرایی
 
-### پیش‌نیازهای آماده‌شده در مخزن
+برای نسخه وب فعلی، **Streamlit Community Cloud** توصیهٔ اصلی است. این سرویس برای اپلیکیشن‌های Streamlit طراحی شده، رایگان است، با انتخاب مخزن، شاخه و فایل اصلی برنامه استقرار را انجام می‌دهد و پس از هر `git push` برنامه را به‌روزرسانی می‌کند. [1] [2] این مسیر با ساختار حاضر پروژه سازگار است و به Docker، سرور مجازی یا کارت پرداخت نیاز ندارد.
 
-| مورد | وضعیت | توضیح |
+> «Pick a repo, branch, and file» و سپس «Click Deploy»؛ Community Cloud اپلیکیشن را از مخزن GitHub می‌سازد و منتشر می‌کند. [1]
+
+| معیار | Streamlit Community Cloud | Hugging Face Spaces | Render در حساب فعلی |
+|---|---|---|---|
+| نیاز به کارت پرداخت در مسیر بررسی‌شده | ندارد | مسیر پایهٔ Space عمومی نیازمند کارت نیست | Render پنجرهٔ Add Card و تأیید موقت ۱ دلار نمایش داد |
+| سازگاری با `app.py` فعلی | مستقیم | مستقیم، با SDK Streamlit | مستقیم، از Dockerfile |
+| منبع کد | مخزن GitHub موجود | مخزن جداگانهٔ Space | مخزن GitHub موجود |
+| بهترین کاربرد | استقرار عمومی و سریع همین برنامه | راهکار جایگزین یا نمایش در اکوسیستم Hugging Face | محیط production با کنترل و منابع بیشتر |
+
+## وضعیت فنی آماده‌شده در مخزن
+
+مخزن `Ali-Marandi/naca-airfoil-kit` در شاخه `main` برای Community Cloud آماده شده است. فایل `app.py` نقطهٔ ورود رابط وب است و `requirements.txt` وابستگی‌های Python را تعیین می‌کند. پیکربندی `.streamlit/config.toml` نیز پورت ثابت را حذف کرده است تا هم با Community Cloud و هم با Hugging Face Spaces سازگار بماند. این تصمیم با الزام رسمی Spaces برای استفاده از پورت پیش‌فرض 8501 هم‌راستا است. [3]
+
+| پرونده | نقش در استقرار بدون کارت | وضعیت |
 |---|---|---|
-| `app.py` | آماده | نقطهٔ ورود رابط Streamlit |
-| `requirements.txt` | آماده | وابستگی‌های Python شامل Streamlit، NumPy و Matplotlib |
-| `.streamlit/config.toml` | آماده | تم و تنظیمات عمومی؛ پورت ثابت حذف شده تا با سرویس‌های ابری سازگار باشد |
-| مخزن GitHub | عمومی | `Ali-Marandi/naca-airfoil-kit` روی شاخه `main` |
+| `app.py` | فایل اصلی برنامه Streamlit | آماده |
+| `requirements.txt` | نصب Streamlit، NumPy، Matplotlib، Pillow و وابستگی‌های پشتیبان | آماده |
+| `.streamlit/config.toml` | تم، اجرای headless و تنظیمات کاربر بدون اجبار پورت | آماده |
+| `NO_CARD_DEPLOYMENT.md` | راهنمای عملی و مستند این مسیر | آماده |
 
-### مراحل استقرار
+## روش پیشنهادی: Streamlit Community Cloud
 
-1. وارد [Streamlit Community Cloud](https://share.streamlit.io/) شوید و با حساب GitHub خود ادامه دهید.
-2. گزینه **Create app** را انتخاب کنید.
-3. این مقادیر را وارد کنید:
+ابتدا به [Streamlit Community Cloud](https://share.streamlit.io/) بروید و با حساب GitHub وارد شوید. Community Cloud می‌تواند به مخزن‌های عمومی یا خصوصی GitHub متصل شود و اغلب برنامه‌ها را در چند دقیقه اجرا می‌کند. [2] سپس گزینه **Create app** را انتخاب کنید و تنظیمات زیر را وارد نمایید.
 
-| فیلد | مقدار |
+| فیلد در فرم Streamlit | مقدار پیشنهادی |
 |---|---|
 | Repository | `Ali-Marandi/naca-airfoil-kit` |
 | Branch | `main` |
 | Main file path | `app.py` |
-| App URL (پیشنهادی) | `naca-airfoil-kit-pro`، در صورت آزادبودن |
+| App URL | `naca-airfoil-kit-pro`، در صورت آزاد بودن |
 
-4. روی **Deploy** کلیک کنید. پس از نصب وابستگی‌ها، یک نشانی عمومی از الگوی زیر دریافت می‌کنید:
-
-```text
-https://naca-airfoil-kit-pro.streamlit.app
-```
-
-### مدیریت پس از استقرار
-
-هر تغییر جدید در شاخه `main` به‌طور خودکار برنامه را به‌روزرسانی می‌کند. گزارش‌های build، گزینه Reboot و تنظیمات مشاهده‌کنندگان از داشبورد Streamlit Community Cloud قابل مدیریت است. برنامه را با داده‌های عمومی نگه دارید و هر کلید API آینده را فقط از بخش **Secrets** همان سرویس وارد کنید، نه در GitHub.
-
-> سرویس رایگان برای دمو، نمونه‌کار و استفاده سبک مناسب است. برای SLA، دامنه سفارشی سازمانی، کاربر هم‌زمان زیاد یا بار محاسباتی دائمی، باید بعداً به یک سرویس تجاری یا VPS ارتقا داد.
+پس از انتخاب **Deploy**، سرویس وابستگی‌ها را از `requirements.txt` نصب می‌کند و برنامه را اجرا خواهد کرد. نشانی نهایی معمولاً در دامنه `streamlit.app` ارائه می‌شود؛ نام دقیق آن را پلتفرم هنگام ساخت تأیید می‌کند. از این پس، انتشار هر commit جدید روی شاخه `main` به‌روزرسانی برنامه را فعال می‌کند. [1]
 
 ## گزینهٔ پشتیبان: Hugging Face Spaces
 
-اگر Streamlit Community Cloud در دسترس نبود، [Hugging Face Spaces](https://huggingface.co/new-space) گزینهٔ جایگزین است. هنگام ساخت Space، SDK را **Streamlit** انتخاب کنید. مستندات رسمی Hugging Face برای Spaces مبتنی بر Streamlit تأکید می‌کند که پورت پیش‌فرض 8501 باید حفظ شود؛ فایل پیکربندی فعلی پروژه به همین دلیل پورت را به‌صورت ثابت تنظیم نمی‌کند.
+اگر Community Cloud قابل استفاده نبود، یک Space عمومی در [Hugging Face Spaces](https://huggingface.co/new-space) بسازید و هنگام ایجاد، SDK را **Streamlit** انتخاب کنید. طبق مستندات رسمی، Space از یک مخزن Git تشکیل شده و با `requirements.txt` وابستگی‌ها را نصب می‌کند؛ برای Streamlit باید پورت پیش‌فرض 8501 حفظ شود. [3]
 
-برای این مسیر، یک Space عمومی جدید بسازید و کد پروژه را در مخزن Space قرار دهید. فایل `requirements.txt` موجود برای نصب وابستگی‌ها استفاده می‌شود. از آنجا که Space و GitHub دو مخزن جدا هستند، هماهنگ‌سازی تغییرات باید با push به هر دو مخزن یا با یک workflow اختصاصی انجام شود.
+در این مسیر، کد پروژه را به مخزن Space منتقل یا همگام‌سازی می‌کنید. چون Space و GitHub دو مخزن مستقل هستند، هر تغییر آتی باید به Space نیز push شود یا با یک workflow جداگانه همگام‌سازی شود. این روش برای نمایش عمومی مناسب است، اما Community Cloud برای نگه‌داری مستقیم پروژهٔ فعلی ساده‌تر خواهد بود.
 
-## مواردی که عمداً استفاده نمی‌شوند
+## الزامات امنیتی و عملیاتی
 
-| سرویس | دلیل مناسب نبودن در این مرحله |
-|---|---|
-| Render | درخواست تأیید کارت برای ساخت سرویس در این حساب |
-| GitHub Pages | فقط فایل ایستا را میزبانی می‌کند و نمی‌تواند اپلیکیشن Python/Streamlit را اجرا کند |
-| Vercel/Netlify | برای اجرای مستقیم Streamlit/Python به معماری serverless یا بازطراحی بک‌اند نیاز دارد |
+نسخه فعلی داده‌های عمومی و فایل `uiuc_database.json` را داخل مخزن دارد. اگر در آینده ذخیره‌سازی ابری واقعی، کلید API یا حساب‌های کاربری به برنامه افزوده شوند، کلیدها نباید در GitHub قرار گیرند. آن‌ها را فقط از بخش Secrets پلتفرم میزبان تزریق کنید. همچنین سرویس‌های بدون کارت برای دمو، نمونه‌کار و استفاده سبک مناسب هستند؛ استقرار تجاری با تضمین در دسترس‌بودن، دامنه سازمانی، ظرفیت کاربران هم‌زمان یا محاسبات سنگین، به یک سرویس پولی یا VPS نیاز خواهد داشت.
 
-## منابع رسمی
+## منابع
 
-1. [Streamlit Community Cloud](https://streamlit.io/cloud)
-2. [مستندات Streamlit Community Cloud](https://docs.streamlit.io/deploy/streamlit-community-cloud)
-3. [مستندات Hugging Face Streamlit Spaces](https://huggingface.co/docs/hub/en/spaces-sdks-streamlit)
+[1]: https://streamlit.io/cloud "Streamlit Community Cloud"
+[2]: https://docs.streamlit.io/deploy/streamlit-community-cloud "Streamlit Community Cloud documentation"
+[3]: https://huggingface.co/docs/hub/en/spaces-sdks-streamlit "Hugging Face Streamlit Spaces documentation"
