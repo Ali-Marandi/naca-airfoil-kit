@@ -1,0 +1,16 @@
+.git
+.github
+__pycache__/
+*.py[cod]
+*.log
+*.gif
+*.png
+*.pdf
+*.webp
+marketing_deck/
+scripts/
+test_*.py
+streamlit.log
+FINAL_REPORT.md
+CLOUD_GUIDE.md
+performance_benchmark.png
