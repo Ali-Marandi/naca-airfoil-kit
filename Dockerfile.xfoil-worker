@@ -1,0 +1,49 @@
+# syntax=docker/dockerfile:1
+# Production image for the isolated NACA Airfoil Kit XFOIL worker.
+# Run this image with a read-only root filesystem and a tmpfs /tmp mount.
+FROM python:3.12-slim-bookworm
+
+LABEL org.opencontainers.image.title="NACA Airfoil Kit XFOIL Worker" \
+      org.opencontainers.image.description="Restricted HTTP worker for preliminary XFOIL polar calculations" \
+      org.opencontainers.image.licenses="See upstream XFOIL package and repository licensing"
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8080 \
+    XFOIL_EXECUTABLE=/usr/bin/xfoil \
+    XFOIL_TEMP_ROOT=/tmp/xfoil-runs \
+    XFOIL_MAX_CONCURRENCY=1
+
+WORKDIR /srv/xfoil-worker
+
+# XFOIL is installed from the Debian package archive. The installed version is
+# written into the image for operational provenance and release review.
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y xfoil \
+    && mkdir -p /usr/share/xfoil-worker \
+    && dpkg-query -W -f='${Package}=${Version}\n' xfoil > /usr/share/xfoil-worker/xfoil-package-version.txt \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY xfoil_worker_requirements.txt ./
+RUN pip install --no-cache-dir --upgrade -r xfoil_worker_requirements.txt
+
+COPY xfoil_adapter.py xfoil_worker_app.py ./
+
+# Never run a solver process as root. UID is fixed to simplify restrictive
+# Kubernetes/Docker security contexts and volume ownership.
+RUN groupadd --gid 10001 worker \
+    && useradd --uid 10001 --gid 10001 --create-home --shell /usr/sbin/nologin worker \
+    && mkdir -p /tmp/xfoil-runs \
+    && chown -R worker:worker /srv/xfoil-worker /tmp/xfoil-runs
+
+USER 10001:10001
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=3)" || exit 1
+
+# One API process per container keeps CPU/memory limits and XFOIL concurrency
+# predictable. Terminate TLS at the platform ingress, not in this container.
+CMD ["uvicorn", "xfoil_worker_app:app", "--host", "0.0.0.0", "--port", "8080", "--proxy-headers"]

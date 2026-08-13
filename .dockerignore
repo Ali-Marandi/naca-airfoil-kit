@@ -14,3 +14,15 @@ streamlit.log
 FINAL_REPORT.md
 CLOUD_GUIDE.md
 performance_benchmark.png
+
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+*.crt
+.pytest_cache/
+.mypy_cache/
+analysis_outputs/
+research_sources/

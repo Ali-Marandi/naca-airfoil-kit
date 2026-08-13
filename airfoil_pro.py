@@ -298,6 +298,122 @@ class EngineeringStudy:
         return {"rankings": rankings, "polars": polars}
 
 
+class ParetoExplorer:
+    """Multi-objective preliminary screening based on L/D and lift objectives.
+
+    A candidate dominates another candidate when it is at least as good in both
+    objectives and strictly better in one. Results are model-screening outputs,
+    not a substitute for viscous analysis or validated design margins.
+    """
+
+    @staticmethod
+    def _is_dominated(candidate: dict, challenger: dict, ld_key: str, cl_key: str) -> bool:
+        candidate_ld, candidate_cl = float(candidate[ld_key]), float(candidate[cl_key])
+        challenger_ld, challenger_cl = float(challenger[ld_key]), float(challenger[cl_key])
+        return (
+            challenger_ld >= candidate_ld
+            and challenger_cl >= candidate_cl
+            and (challenger_ld > candidate_ld or challenger_cl > candidate_cl)
+        )
+
+    @staticmethod
+    def non_dominated_sort(rows: Iterable[dict], ld_key: str = "best_ld", cl_key: str = "cl_objective"):
+        """Assign one-based Pareto front ranks for two maximization objectives."""
+        normalized_rows = [dict(row) for row in rows]
+        remaining = set(range(len(normalized_rows)))
+        rank = 1
+        while remaining:
+            front = [
+                index
+                for index in remaining
+                if not any(
+                    ParetoExplorer._is_dominated(normalized_rows[index], normalized_rows[other], ld_key, cl_key)
+                    for other in remaining
+                    if other != index
+                )
+            ]
+            if not front:
+                break
+            for index in front:
+                normalized_rows[index]["pareto_rank"] = rank
+                normalized_rows[index]["pareto_front"] = rank == 1
+            remaining.difference_update(front)
+            rank += 1
+        normalized_rows.sort(key=lambda row: (row.get("pareto_rank", 999), -float(row[ld_key]), -float(row[cl_key])))
+        return normalized_rows
+
+    @staticmethod
+    def screen_naca4(
+        codes: Iterable[str],
+        alpha_values: Iterable[float],
+        re: float,
+        rough: float = 0.0,
+        cl_objective: str = "cl_max",
+        design_alpha_deg: float | None = None,
+        n_points: int = 100,
+    ):
+        """Screen candidates and return a Pareto-ranked L/D–Cl trade-off study.
+
+        ``cl_objective`` is either ``cl_max`` across the supplied envelope or
+        ``cl_at_design_alpha`` sampled from the polar at a declared design alpha.
+        """
+        if cl_objective not in {"cl_max", "cl_at_design_alpha"}:
+            raise ValueError("cl_objective must be 'cl_max' or 'cl_at_design_alpha'.")
+        alpha_array = np.asarray(list(alpha_values), dtype=float)
+        if alpha_array.size < 2:
+            raise ValueError("At least two alpha values are required for Pareto screening.")
+        if cl_objective == "cl_at_design_alpha" and design_alpha_deg is None:
+            raise ValueError("design_alpha_deg is required when using the design-alpha lift objective.")
+        if design_alpha_deg is not None and not float(alpha_array.min()) <= float(design_alpha_deg) <= float(alpha_array.max()):
+            raise ValueError("design_alpha_deg must lie within the supplied alpha envelope.")
+
+        candidates, polars = [], {}
+        code_values = EngineeringStudy.parse_naca4_codes(codes) if isinstance(codes, str) else EngineeringStudy.parse_naca4_codes(",".join(str(value) for value in codes))
+        for code in code_values:
+            coords = NACAGeneratorPro.naca4(code, n_points)
+            if coords is None:
+                continue
+            polar = AirfoilAnalysis.compute_polar(*coords, alpha_array, re=float(re), rough=float(rough))
+            summary = AirfoilAnalysis.summarize_polar(polar["rows"])
+            metric = AirfoilAnalysis.geometry_metrics(*coords)
+            if cl_objective == "cl_max":
+                cl_value = float(summary["cl_max"])
+                objective_label = "Maximum Cl over envelope"
+            else:
+                polar_alpha = np.asarray([row["alpha_deg"] for row in polar["rows"]], dtype=float)
+                polar_cl = np.asarray([row["cl"] for row in polar["rows"]], dtype=float)
+                cl_value = float(np.interp(float(design_alpha_deg), polar_alpha, polar_cl))
+                objective_label = f"Cl at α = {float(design_alpha_deg):.2f}°"
+            airfoil_name = f"NACA {code}"
+            candidates.append(
+                {
+                    "airfoil": airfoil_name,
+                    "best_ld": float(summary["best_ld"]),
+                    "best_ld_alpha_deg": float(summary["best_alpha_deg"]),
+                    "cl_objective": cl_value,
+                    "cl_objective_name": objective_label,
+                    "cl_max": float(summary["cl_max"]),
+                    "cd_min": float(summary["cd_min"]),
+                    "max_thickness_pct": float(metric["max_thickness_pct"]),
+                    "max_camber_pct": float(metric["max_camber_pct"]),
+                }
+            )
+            polars[airfoil_name] = polar["rows"]
+        ranked = ParetoExplorer.non_dominated_sort(candidates)
+        return {
+            "rankings": ranked,
+            "polars": polars,
+            "objective": {
+                "ld": "Maximum L/D over envelope",
+                "cl": ranked[0]["cl_objective_name"] if ranked else "Cl objective",
+                "reynolds": float(re),
+                "roughness_k_over_c": float(rough),
+                "alpha_values_deg": [float(value) for value in alpha_array],
+                "design_alpha_deg": float(design_alpha_deg) if design_alpha_deg is not None else None,
+            },
+        }
+
+
 class GeometryOptimizer:
     @staticmethod
     def optimize_ld(code, alpha, re, series="4-digit"):

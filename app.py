@@ -21,6 +21,7 @@ from airfoil_pro import (
     GeometryOptimizer,
     GeometryTools,
     NACAGeneratorPro,
+    ParetoExplorer,
     RobustStudy,
     StudyAudit,
     UIUCLoader,
@@ -146,6 +147,27 @@ def render_validation(comparison_rows, name):
     st.pyplot(figure, clear_figure=True)
 
 
+def render_pareto(ranking_rows, objective):
+    """Render the L/D–Cl objective map with the non-dominated front emphasized."""
+    figure, axis = plt.subplots(figsize=(9, 5))
+    if not ranking_rows:
+        st.info("No valid candidates were available for Pareto analysis.")
+        return
+    objective_cl = np.asarray([row["cl_objective"] for row in ranking_rows], dtype=float)
+    objective_ld = np.asarray([row["best_ld"] for row in ranking_rows], dtype=float)
+    is_front = np.asarray([row["pareto_front"] for row in ranking_rows], dtype=bool)
+    axis.scatter(objective_cl[~is_front], objective_ld[~is_front], color="#94a3b8", s=58, label="Dominated candidate", zorder=2)
+    axis.scatter(objective_cl[is_front], objective_ld[is_front], color="#f97316", edgecolor="#7c2d12", linewidth=0.8, s=82, label="Pareto front", zorder=3)
+    for row in ranking_rows:
+        if row["pareto_front"]:
+            axis.annotate(row["airfoil"].replace("NACA ", ""), (row["cl_objective"], row["best_ld"]), xytext=(5, 5), textcoords="offset points", fontsize=8)
+    axis.set(title="Preliminary multi-objective Pareto map", xlabel=objective["cl"], ylabel=objective["ld"])
+    axis.grid(True, alpha=0.3)
+    axis.legend(loc="best")
+    figure.tight_layout()
+    st.pyplot(figure, clear_figure=True)
+
+
 def render_robustness(envelope_rows, name):
     alpha = np.asarray([row["alpha_deg"] for row in envelope_rows])
     ld_min = np.asarray([row["ld_min"] for row in envelope_rows])
@@ -215,13 +237,14 @@ metric_b.metric("Drag coefficient — Cd", f"{cd:.5f}")
 metric_c.metric("L/D ratio", f"{cl / cd:.2f}" if cd > 0 else "N/A")
 metric_d.metric("Maximum thickness", f"{metrics['max_thickness_pct']:.2f}%")
 
-analysis_tab, pressure_tab, flow_tab, polar_tab, study_tab, qa_tab, flap_tab, validation_tab, robustness_tab = st.tabs(
+analysis_tab, pressure_tab, flow_tab, polar_tab, study_tab, pareto_tab, qa_tab, flap_tab, validation_tab, robustness_tab = st.tabs(
     [
         "Geometry",
         "Pressure",
         "Flow Field",
         "Polar & Envelope",
         "Design Study",
+        "Pareto Explorer",
         "QA & Export",
         "Flap Lab",
         "Validation",
@@ -310,6 +333,46 @@ with study_tab:
         axis.legend(ncol=2)
         figure.tight_layout()
         st.pyplot(figure, clear_figure=True)
+
+with pareto_tab:
+    st.subheader("Multi-objective Pareto Explorer")
+    st.write("Screen NACA 4-digit candidates by maximizing estimated best L/D and a declared lift objective. Orange points are non-dominated trade-offs; all values remain preliminary model results.")
+    pareto_candidates = st.text_area("Pareto NACA 4-digit candidates", "0012, 2412, 4412, 6409", key="pareto_candidates")
+    pareto_controls = st.columns(4)
+    pareto_start = pareto_controls[0].number_input("Pareto alpha start", -15.0, 5.0, -4.0, 0.5, key="pareto_start")
+    pareto_end = pareto_controls[1].number_input("Pareto alpha end", 0.0, 20.0, 12.0, 0.5, key="pareto_end")
+    pareto_step = pareto_controls[2].selectbox("Pareto alpha increment", [1.0, 2.0], key="pareto_step")
+    pareto_lift_metric = pareto_controls[3].selectbox("Lift objective", ["Maximum Cl over envelope", "Cl at a design alpha"], key="pareto_lift_metric")
+    design_alpha = st.number_input("Design alpha for Cl objective [deg]", -15.0, 20.0, 4.0, 0.5, disabled=pareto_lift_metric != "Cl at a design alpha", key="pareto_design_alpha")
+    if st.button("Run Pareto Explorer", use_container_width=True):
+        try:
+            if pareto_end <= pareto_start:
+                raise ValueError("Pareto alpha end must be greater than alpha start.")
+            pareto_alpha_values = np.arange(pareto_start, pareto_end + 0.5 * pareto_step, pareto_step)
+            objective_key = "cl_max" if pareto_lift_metric == "Maximum Cl over envelope" else "cl_at_design_alpha"
+            st.session_state["pareto_study"] = ParetoExplorer.screen_naca4(
+                pareto_candidates,
+                pareto_alpha_values,
+                reynolds,
+                roughness,
+                cl_objective=objective_key,
+                design_alpha_deg=design_alpha if objective_key == "cl_at_design_alpha" else None,
+                n_points=100,
+            )
+        except ValueError as error:
+            st.error(str(error))
+    pareto_result = st.session_state.get("pareto_study")
+    if pareto_result and pareto_result["rankings"]:
+        pareto_rows = pareto_result["rankings"]
+        front_count = sum(bool(row["pareto_front"]) for row in pareto_rows)
+        pareto_a, pareto_b, pareto_c = st.columns(3)
+        pareto_a.metric("Pareto-front candidates", str(front_count))
+        pareto_b.metric("Screened candidates", str(len(pareto_rows)))
+        pareto_c.metric("Lift objective", pareto_result["objective"]["cl"])
+        render_pareto(pareto_rows, pareto_result["objective"])
+        st.dataframe(pareto_rows, use_container_width=True, hide_index=True)
+        pareto_file, pareto_filename = csv_download(pareto_rows, "naca_pareto_explorer.csv")
+        st.download_button("Download Pareto ranking CSV", pareto_file, pareto_filename, "text/csv", use_container_width=True)
 
 with qa_tab:
     st.subheader("Geometry quality assurance")

@@ -17,3 +17,34 @@ services:
       timeout: 5s
       start_period: 20s
       retries: 3
+
+
+  xfoil-worker:
+    profiles: ["xfoil"]
+    build:
+      context: .
+      dockerfile: Dockerfile.xfoil-worker
+    image: naca-airfoil-kit-xfoil-worker:local
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      XFOIL_WORKER_API_KEY: ${XFOIL_WORKER_API_KEY:?Set a long random worker API key in .env before enabling the xfoil profile}
+      XFOIL_MAX_CONCURRENCY: "1"
+      XFOIL_TEMP_ROOT: /tmp/xfoil-runs
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3

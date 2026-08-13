@@ -12,12 +12,14 @@ NACA Airfoil Kit Pro is an engineering application for the **preliminary generat
 | UIUC profile library | Searches and loads indexed UIUC coordinate profiles | Desktop and web |
 | Preliminary aerodynamic analysis | Computes estimated Cl, Cd, L/D, Cp distribution, streamlines, roughness response and empirical stall flags | Desktop and web |
 | Polar and design workbench | Sweeps alpha, summarizes best L/D and Clmax, compares NACA candidates and exports engineering CSV files | Web |
+| Multi-objective Pareto Explorer | Ranks non-dominated NACA candidates against maximum L/D and a declared Cl objective, with chart and CSV export | Desktop and web |
 | Geometry QA | Reports thickness, camber, trailing-edge gap and normalized-area checks | Web |
 | Experimental validation | Imports experimental polar CSV files, compares at the measurement alpha values and reports residuals, MAE, RMSE and bias | Desktop and web |
 | Multi-condition robustness | Sweeps selected Reynolds and roughness values and exports deterministic min/mean/max response envelopes | Web |
 | Hinged-flap study | Applies a rigid trailing-edge flap geometry for preliminary comparative studies | Desktop and web |
 | Study audit trail | Exports a JSON manifest containing geometry signature, conditions, solver provenance and study metadata | Desktop and web |
-| Safe XFOIL adapter draft | Provides an allowlisted batch protocol, disposable working directory, timeout guardrail and polar parser; a solver binary/backend is still required | Core module |
+| Safe XFOIL adapter draft | Provides an allowlisted batch protocol, disposable working directory, timeout guardrail and polar parser | Core module |
+| Containerized XFOIL worker | Provides a restricted FastAPI worker, non-root Docker image, health endpoint and CI/CD build/publish workflow; production ingress and worker key remain deployment responsibilities | Docker/CI |
 | Reporting and export | Provides normalized coordinate, polar, QA and validation CSV exports; desktop reporting includes PDF workflow | Desktop and web |
 
 ## Start the Web Application
@@ -29,7 +31,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The web application presents the **Geometry**, **Pressure**, **Flow Field**, **Polar & Envelope**, **Design Study**, **QA & Export**, **Flap Lab**, **Validation** and **Robustness** workspaces. The free Streamlit Community Cloud deployment procedure is documented in [`HOSTING_DEPLOYMENT_PLAYBOOK.md`](HOSTING_DEPLOYMENT_PLAYBOOK.md), with an alternate no-card deployment overview in [`NO_CARD_DEPLOYMENT.md`](NO_CARD_DEPLOYMENT.md).
+The web application presents the **Geometry**, **Pressure**, **Flow Field**, **Polar & Envelope**, **Design Study**, **Pareto Explorer**, **QA & Export**, **Flap Lab**, **Validation** and **Robustness** workspaces. The free Streamlit Community Cloud deployment procedure is documented in [`HOSTING_DEPLOYMENT_PLAYBOOK.md`](HOSTING_DEPLOYMENT_PLAYBOOK.md), with an alternate no-card deployment overview in [`NO_CARD_DEPLOYMENT.md`](NO_CARD_DEPLOYMENT.md).
 
 ## Start the Desktop Application
 
@@ -67,6 +69,8 @@ The flap controls rotate the geometry aft of a user-selected hinge. Positive def
 |---|---|
 | `airfoil_pro.py` | Geometry, panel/empirical analysis, validation parser/metrics, robustness, flap transformations and study audit manifests |
 | `xfoil_adapter.py` | Allowlisted, temporary-directory-isolated XFOIL batch adapter and polar parser |
+| `xfoil_worker_app.py` / `Dockerfile.xfoil-worker` | Restricted FastAPI solver worker and non-root XFOIL container image |
+| `.github/workflows/xfoil-worker.yml` | Tests, constrained image smoke test, GHCR publication, SBOM and provenance workflow |
 | `scripts/compare_naca0012_airfoil360.py` | Airfoil 360 NACA 0012 experiment-versus-model comparison chart and residual export |
 | `app.py` | Streamlit web interface |
 | `gui.py` | PyQt6 desktop interface |
@@ -95,7 +99,7 @@ After the GitHub Actions job finishes successfully, review the generated release
 
 ## Further Development
 
-The next highest-priority commercial investment is completing the optional, traceable viscous-solver integration (for example, XFOIL/QFoil) with a pinned executable or worker backend, solver version logging, raw input/output retention and failure diagnostics. The repository now contains the safe adapter draft and its unit tests, but does not package an XFOIL executable or claim numerical validation. This should be followed by constraint-aware inverse design, multi-objective Pareto selection, wing/rotor integration, project collaboration and an auditable API. See [`COMMERCIAL_FEATURE_ROADMAP.md`](COMMERCIAL_FEATURE_ROADMAP.md) for the complete prioritization.
+The next highest-priority commercial investment is connecting the new restricted XFOIL worker to a protected production endpoint, pinning solver/image releases, retaining raw artifacts under an explicit storage policy and validating results against documented data. Multi-objective Pareto selection is now delivered for preliminary L/D–Cl screening. The next product areas are constraint-aware inverse design, wing/rotor integration, project collaboration and an auditable API. See [`COMMERCIAL_FEATURE_ROADMAP.md`](COMMERCIAL_FEATURE_ROADMAP.md) for the complete prioritization.
 
 ## References
 

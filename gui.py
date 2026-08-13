@@ -12,7 +12,7 @@ from PyQt6.QtCore import Qt, QSize
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
-from airfoil_pro import (NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, ExperimentalValidation, GeometryOptimizer, GeometryTools, RobustStudy, StudyAudit, export_stl, export_csv_advanced)
+from airfoil_pro import (NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, ExperimentalValidation, GeometryOptimizer, GeometryTools, ParetoExplorer, RobustStudy, StudyAudit, export_stl, export_csv_advanced)
 from report_gen import generate_pdf_report
 
 STYLESHEET = """
@@ -116,6 +116,18 @@ class MainWindow(QMainWindow):
         flap_layout.addRow("Deflection [deg]:", self.flap_deflection_slider)
         flap_group.setLayout(flap_layout); sidebar_layout.addWidget(flap_group)
 
+        pareto_group = QGroupBox("Pareto Explorer (Preliminary)")
+        pareto_layout = QFormLayout()
+        self.pareto_codes_input = QLineEdit("0012, 2412, 4412, 6409")
+        pareto_layout.addRow("Candidates:", self.pareto_codes_input)
+        btn_pareto = QPushButton("Run L/D–Cl Pareto Study")
+        btn_pareto.clicked.connect(self.run_pareto_study)
+        pareto_layout.addRow(btn_pareto)
+        self.pareto_summary_label = QLabel("Pareto: not run")
+        self.pareto_summary_label.setWordWrap(True)
+        pareto_layout.addRow(self.pareto_summary_label)
+        pareto_group.setLayout(pareto_layout); sidebar_layout.addWidget(pareto_group)
+
         sidebar_layout.addStretch()
         btn_report = QPushButton("Generate PDF Report"); btn_report.clicked.connect(self.export_pdf)
         btn_report.setStyleSheet("background-color: #d83b01;"); sidebar_layout.addWidget(btn_report)
@@ -127,6 +139,7 @@ class MainWindow(QMainWindow):
         self.geom_canvas = MplCanvas(self); self.tabs.addTab(self.geom_canvas, "Geometry")
         self.val_canvas = MplCanvas(self); self.tabs.addTab(self.val_canvas, "Validation (Cl vs Alpha)")
         self.stream_canvas = MplCanvas(self); self.tabs.addTab(self.stream_canvas, "Flow Field")
+        self.pareto_canvas = MplCanvas(self); self.tabs.addTab(self.pareto_canvas, "Pareto Explorer")
         
         main_layout.addWidget(sidebar); main_layout.addWidget(self.tabs)
         self.status_bar = QStatusBar(); self.setStatusBar(self.status_bar)
@@ -209,6 +222,37 @@ class MainWindow(QMainWindow):
         axs.streamplot(X, Y, u, v, color='#00aaff', linewidth=1)
         axs.fill(np.concatenate([xu, xl[::-1]]), np.concatenate([yu, yl[::-1]]), 'white', zorder=10)
         axs.set_aspect('equal'); self.stream_canvas.draw()
+
+    def run_pareto_study(self):
+        try:
+            study = ParetoExplorer.screen_naca4(
+                self.pareto_codes_input.text(),
+                np.arange(-4.0, 13.0, 1.0),
+                re=1_000_000.0,
+                rough=0.0,
+                cl_objective="cl_max",
+                n_points=100,
+            )
+            rows = study["rankings"]
+            if not rows:
+                raise ValueError("Enter at least one valid NACA 4-digit candidate.")
+            front = [row for row in rows if row["pareto_front"]]
+            axis = self.pareto_canvas.axes; axis.clear()
+            dominated = [row for row in rows if not row["pareto_front"]]
+            if dominated:
+                axis.scatter([row["cl_objective"] for row in dominated], [row["best_ld"] for row in dominated], color="#94a3b8", label="Dominated")
+            axis.scatter([row["cl_objective"] for row in front], [row["best_ld"] for row in front], color="#ffaa00", edgecolor="#7c2d12", label="Pareto front", zorder=3)
+            for row in front:
+                axis.annotate(row["airfoil"].replace("NACA ", ""), (row["cl_objective"], row["best_ld"]), xytext=(5, 5), textcoords="offset points", color="white", fontsize=8)
+            axis.set_title("Preliminary L/D–Cl Pareto map", color="white")
+            axis.set_xlabel(study["objective"]["cl"], color="white")
+            axis.set_ylabel(study["objective"]["ld"], color="white")
+            axis.tick_params(colors="white"); axis.legend(); axis.grid(True, color="#333")
+            self.pareto_canvas.draw()
+            self.pareto_summary_label.setText(f"Pareto: {len(front)} non-dominated of {len(rows)} candidates")
+            self.status_bar.showMessage("Pareto screening completed; results are preliminary model estimates.", 5000)
+        except ValueError as error:
+            QMessageBox.warning(self, "Pareto Explorer", str(error))
 
     def export_pdf(self):
         path, _ = QFileDialog.getSaveFileName(self, "Save Report", f"{self.current_name}_Report.pdf", "PDF (*.pdf)")

@@ -1,0 +1,131 @@
+name: XFOIL Worker Container
+
+on:
+  pull_request:
+    paths:
+      - 'xfoil_adapter.py'
+      - 'xfoil_worker_app.py'
+      - 'xfoil_worker_requirements.txt'
+      - 'Dockerfile.xfoil-worker'
+      - 'test_xfoil_adapter.py'
+      - 'test_xfoil_worker.py'
+      - '.github/workflows/xfoil-worker.yml'
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'xfoil_adapter.py'
+      - 'xfoil_worker_app.py'
+      - 'xfoil_worker_requirements.txt'
+      - 'Dockerfile.xfoil-worker'
+      - 'test_xfoil_adapter.py'
+      - 'test_xfoil_worker.py'
+      - '.github/workflows/xfoil-worker.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: xfoil-worker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    name: Worker and adapter tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: pip install -r requirements.txt -r xfoil_worker_requirements.txt
+      - name: Run worker-focused tests
+        run: python -m unittest -v test_xfoil_adapter.py test_xfoil_worker.py
+
+  image-smoke-test:
+    name: Container smoke test
+    needs: python-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build worker image locally
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.xfoil-worker
+          load: true
+          push: false
+          tags: naca-airfoil-kit-xfoil-worker:ci
+      - name: Run constrained container and verify health endpoint
+        run: |
+          docker run --detach --name xfoil-worker-ci \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --pids-limit 128 --memory 512m --cpus 1 \
+            naca-airfoil-kit-xfoil-worker:ci
+          for attempt in $(seq 1 20); do
+            if docker exec xfoil-worker-ci python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=2)"; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs xfoil-worker-ci
+          exit 1
+      - name: Clean up container
+        if: always()
+        run: docker rm -f xfoil-worker-ci || true
+
+  publish:
+    name: Publish worker image to GHCR
+    needs: image-smoke-test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Define lowercase package name
+        id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/naca-airfoil-kit-xfoil-worker" >> "$GITHUB_OUTPUT"
+      - name: Authenticate to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate OCI metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+      - name: Build, attest and publish image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.xfoil-worker
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+      - name: Attest image provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ steps.image.outputs.name }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
