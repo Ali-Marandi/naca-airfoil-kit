@@ -5,8 +5,12 @@ panel/empirical model, so results must be validated with experimental data or a
 higher-fidelity viscous solver before safety-critical or certification decisions.
 """
 
+from datetime import datetime, timezone
+from hashlib import sha256
+import json
 from math import pi
 from typing import Iterable
+from uuid import uuid4
 
 import numpy as np
 import requests
@@ -499,3 +503,83 @@ class RobustStudy:
                 }
             )
         return rows
+
+
+class StudyAudit:
+    """Create versioned, exportable manifests for reproducible engineering studies."""
+
+    SCHEMA_VERSION = "1.0"
+
+    @staticmethod
+    def _geometry_payload(xu, yu, xl, yl):
+        surfaces = []
+        for label, x_values, y_values in (("upper", xu, yu), ("lower", xl, yl)):
+            x_values, y_values = np.asarray(x_values, dtype=float), np.asarray(y_values, dtype=float)
+            if x_values.shape != y_values.shape or x_values.size < 4:
+                raise ValueError(f"{label.title()} surface requires matching arrays with at least four points.")
+            surfaces.append(
+                {
+                    "surface": label,
+                    "points": [[round(float(x), 10), round(float(y), 10)] for x, y in zip(x_values, y_values)],
+                }
+            )
+        return surfaces
+
+    @staticmethod
+    def geometry_sha256(xu, yu, xl, yl) -> str:
+        """Return a stable geometry signature from normalized coordinate values."""
+        payload = StudyAudit._geometry_payload(xu, yu, xl, yl)
+        encoded = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8")
+        return sha256(encoded).hexdigest()
+
+    @staticmethod
+    def build_manifest(
+        airfoil_name: str,
+        xu,
+        yu,
+        xl,
+        yl,
+        operating_conditions: dict,
+        solver: dict | None = None,
+        study_label: str | None = None,
+        source_data: dict | None = None,
+    ) -> dict:
+        """Build a JSON-serializable record suitable for engineering handoff and review.
+
+        The manifest is a provenance record, not a certification artifact. Callers
+        should attach their raw polar, validation residual, and solver logs where
+        an auditable study package is required.
+        """
+        if not isinstance(airfoil_name, str) or not airfoil_name.strip():
+            raise ValueError("A non-empty airfoil name is required.")
+        if not isinstance(operating_conditions, dict):
+            raise ValueError("Operating conditions must be a dictionary.")
+        geometry = StudyAudit._geometry_payload(xu, yu, xl, yl)
+        geometry_hash = StudyAudit.geometry_sha256(xu, yu, xl, yl)
+        normalized_solver = solver or {
+            "name": "naca-airfoil-kit-preliminary-panel-empirical",
+            "fidelity": "preliminary_screening",
+        }
+        manifest = {
+            "schema_version": StudyAudit.SCHEMA_VERSION,
+            "study_id": str(uuid4()),
+            "created_utc": datetime.now(timezone.utc).isoformat(),
+            "study_label": study_label or airfoil_name.strip(),
+            "airfoil": {
+                "name": airfoil_name.strip(),
+                "geometry_sha256": geometry_hash,
+                "upper_point_count": len(geometry[0]["points"]),
+                "lower_point_count": len(geometry[1]["points"]),
+                "geometry_metrics": AirfoilAnalysis.geometry_metrics(xu, yu, xl, yl),
+            },
+            "operating_conditions": operating_conditions,
+            "solver": normalized_solver,
+            "source_data": source_data or {},
+            "scope_notice": "Preliminary engineering screening; validate independently before safety-critical or production decisions.",
+        }
+        return manifest
+
+    @staticmethod
+    def to_json(manifest: dict) -> str:
+        """Serialize a manifest with stable indentation for review and archiving."""
+        return json.dumps(manifest, indent=2, sort_keys=True, default=str) + "\n"

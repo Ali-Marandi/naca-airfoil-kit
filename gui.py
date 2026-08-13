@@ -12,7 +12,7 @@ from PyQt6.QtCore import Qt, QSize
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
-from airfoil_pro import (NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, ExperimentalValidation, GeometryOptimizer, GeometryTools, RobustStudy, export_stl, export_csv_advanced)
+from airfoil_pro import (NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, ExperimentalValidation, GeometryOptimizer, GeometryTools, RobustStudy, StudyAudit, export_stl, export_csv_advanced)
 from report_gen import generate_pdf_report
 
 STYLESHEET = """
@@ -119,6 +119,9 @@ class MainWindow(QMainWindow):
         sidebar_layout.addStretch()
         btn_report = QPushButton("Generate PDF Report"); btn_report.clicked.connect(self.export_pdf)
         btn_report.setStyleSheet("background-color: #d83b01;"); sidebar_layout.addWidget(btn_report)
+        btn_manifest = QPushButton("Export Study Audit Manifest")
+        btn_manifest.clicked.connect(self.export_audit_manifest)
+        sidebar_layout.addWidget(btn_manifest)
 
         self.tabs = QTabWidget()
         self.geom_canvas = MplCanvas(self); self.tabs.addTab(self.geom_canvas, "Geometry")
@@ -210,6 +213,38 @@ class MainWindow(QMainWindow):
     def export_pdf(self):
         path, _ = QFileDialog.getSaveFileName(self, "Save Report", f"{self.current_name}_Report.pdf", "PDF (*.pdf)")
         if path: self.status_bar.showMessage(f"Report saved to {path}", 5000)
+
+    def export_audit_manifest(self):
+        if not self.current_coords:
+            return
+        path, _ = QFileDialog.getSaveFileName(self, "Save Study Audit Manifest", f"{self.current_name}_study_manifest.json", "JSON (*.json)")
+        if not path:
+            return
+        xu, yu, xl, yl = self.current_coords
+        manifest = StudyAudit.build_manifest(
+            self.current_name,
+            xu,
+            yu,
+            xl,
+            yl,
+            operating_conditions={
+                "alpha_deg": float(self.alpha_slider.value()),
+                "reynolds": 1_000_000.0,
+                "surface_roughness_k_over_c": 0.0,
+                "flap_enabled": bool(self.flap_check.isChecked()),
+                "flap_hinge_x_over_c": self.flap_hinge_slider.value() / 100.0 if self.flap_check.isChecked() else None,
+                "flap_deflection_deg": float(self.flap_deflection_slider.value()) if self.flap_check.isChecked() else None,
+            },
+            solver={
+                "name": "naca-airfoil-kit-preliminary-panel-empirical",
+                "fidelity": "preliminary_screening",
+                "result_scope": "not a viscous CFD or experimental result",
+            },
+            study_label=f"{self.current_name} desktop study",
+        )
+        with open(path, "w", encoding="utf-8") as handle:
+            handle.write(StudyAudit.to_json(manifest))
+        self.status_bar.showMessage(f"Study audit manifest saved to {path}", 5000)
 
     def show_export_dialog(self):
         pass

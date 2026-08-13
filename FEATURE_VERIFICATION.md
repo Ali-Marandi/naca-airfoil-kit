@@ -19,3 +19,13 @@ The core now includes a CSV experimental-polar parser, point-aligned model-versu
 A local end-to-end Streamlit verification confirmed that the Validation tab accepted a CSV in the documented format, calculated all residual metrics, rendered the model-versus-measurement overlay, showed the residual table and enabled CSV download. A separate Robustness run over three Reynolds values and two roughness values produced the L/D envelope, a min/mean/max table and an engineering CSV download. The Flap Lab tab rendered its controls and scope warnings. The CSV used for the browser smoke test was internal test data only and was not presented as wind-tunnel data.
 
 Final quality checks completed successfully: `python3 -m py_compile gui.py airfoil_pro.py app.py` and `python3 -m unittest discover -v`. The suite reported **12 passing tests**, including dedicated coverage for flap geometry, experimental CSV parsing, validation metrics and multi-condition envelopes.
+
+## XFOIL adapter, Airfoil 360 comparison and audit trail — 2026-08-14
+
+A new `xfoil_adapter.py` implements a **draft** XFOIL batch adapter with an allowlisted command generator, finite/sweep guardrails, `shell=False` process execution, bounded logs, time limits, polar parsing and a disposable per-run temporary directory. It does not bundle or execute an unverified XFOIL binary in this release. Five dedicated unit tests verify command injection resistance, unsafe-sweep rejection, standard polar parsing, missing-binary handling, `shell=False`, and cleanup of the temporary work directory.
+
+`scripts/compare_naca0012_airfoil360.py` was executed against the CC BY 4.0 Airfoil 360 workbook for NACA 0012 at Re = 50,000 and 100,000 over alpha 0°–8.1°. It produced a PNG overlay, residual CSV and metrics JSON. The current preliminary model yielded Cl RMSE of 0.27392 and Cd RMSE of 0.02228 at Re = 50,000, and Cl RMSE of 0.28998 and Cd RMSE of 0.02942 at Re = 100,000. These results are evidence of the model limitation at low Reynolds number, not a calibration or an experimental validation claim.
+
+The new **Study Audit Trail** creates a JSON manifest with schema version, UUID, UTC creation time, geometry SHA-256, geometry metrics, operating conditions, solver provenance and scope notice. The control was added to the Streamlit QA & Export tab and the PyQt6 desktop sidebar. A browser smoke check showed the `Download audit manifest JSON` control in QA & Export after a cache-bypass reload. Unit tests verified stable geometry hashing and JSON serialization.
+
+Final checks completed successfully: `python3 -m py_compile airfoil_pro.py xfoil_adapter.py app.py gui.py scripts/compare_naca0012_airfoil360.py` and `python3 -m unittest discover -v`. The suite reported **19 passing tests**.

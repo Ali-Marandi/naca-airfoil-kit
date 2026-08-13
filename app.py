@@ -22,6 +22,7 @@ from airfoil_pro import (
     GeometryTools,
     NACAGeneratorPro,
     RobustStudy,
+    StudyAudit,
     UIUCLoader,
 )
 
@@ -324,6 +325,37 @@ with qa_tab:
 
     coordinates_file, coordinates_filename = csv_download(coordinate_rows(xu, yu, xl, yl), f"{name.replace(' ', '_')}_coordinates.csv")
     st.download_button("Download normalized coordinate CSV", coordinates_file, coordinates_filename, "text/csv", use_container_width=True)
+
+    st.subheader("Study audit trail")
+    st.caption("The manifest records geometry signature, inputs and solver provenance. Attach polar/validation exports for a complete review package.")
+    audit_manifest = StudyAudit.build_manifest(
+        name,
+        xu,
+        yu,
+        xl,
+        yl,
+        operating_conditions={
+            "alpha_deg": float(alpha),
+            "reynolds": float(reynolds),
+            "surface_roughness_k_over_c": float(roughness),
+            "flap_enabled": bool(flap_enabled),
+            "flap_hinge_x_over_c": float(flap_hinge) if flap_enabled else None,
+            "flap_deflection_deg": float(flap_deflection) if flap_enabled else None,
+        },
+        solver={
+            "name": "naca-airfoil-kit-preliminary-panel-empirical",
+            "fidelity": "preliminary_screening",
+            "result_scope": "not a viscous CFD or experimental result",
+        },
+        study_label=f"{name} screening study",
+    )
+    st.download_button(
+        "Download audit manifest JSON",
+        StudyAudit.to_json(audit_manifest),
+        f"{name.replace(' ', '_')}_study_manifest.json",
+        "application/json",
+        use_container_width=True,
+    )
 
 with flap_tab:
     st.subheader("Hinged trailing-edge flap study")

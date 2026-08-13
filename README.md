@@ -16,6 +16,8 @@ NACA Airfoil Kit Pro is an engineering application for the **preliminary generat
 | Experimental validation | Imports experimental polar CSV files, compares at the measurement alpha values and reports residuals, MAE, RMSE and bias | Desktop and web |
 | Multi-condition robustness | Sweeps selected Reynolds and roughness values and exports deterministic min/mean/max response envelopes | Web |
 | Hinged-flap study | Applies a rigid trailing-edge flap geometry for preliminary comparative studies | Desktop and web |
+| Study audit trail | Exports a JSON manifest containing geometry signature, conditions, solver provenance and study metadata | Desktop and web |
+| Safe XFOIL adapter draft | Provides an allowlisted batch protocol, disposable working directory, timeout guardrail and polar parser; a solver binary/backend is still required | Core module |
 | Reporting and export | Provides normalized coordinate, polar, QA and validation CSV exports; desktop reporting includes PDF workflow | Desktop and web |
 
 ## Start the Web Application
@@ -51,7 +53,7 @@ alpha_deg,cl,cd
 
 The software evaluates the model at the same alpha values and provides pointwise model-minus-experiment residuals. It reports Cl and Cd metrics separately, which avoids hiding drag errors behind lift agreement. A validation study should also record the exact geometry, chord, Reynolds number, Mach number, surface state or transition information, turbulence level, tunnel corrections, alpha convention and source identifier.
 
-Use [`VALIDATION_GUIDE.md`](VALIDATION_GUIDE.md) for the full documented workflow, data-selection method, uncertainty boundaries and authoritative reference sources. The guide highlights NASA’s critical assessment of NACA 0012 datasets, a NASA NACA 2412 separation study and the openly licensed Airfoil 360 low-Re data. [1] [2] [3]
+Use [`VALIDATION_GUIDE.md`](VALIDATION_GUIDE.md) for the full documented workflow, data-selection method, uncertainty boundaries and authoritative reference sources. The guide highlights NASA’s critical assessment of NACA 0012 datasets, a NASA NACA 2412 separation study and the openly licensed Airfoil 360 low-Re data. [1] [2] [3] The reproducible `scripts/compare_naca0012_airfoil360.py` utility reads the downloaded Airfoil 360 workbook and generates a PNG overlay, residual CSV and metrics JSON for the current preliminary model.
 
 The **Robustness** workspace is a deterministic sensitivity study, not a statistical confidence interval. It maps how this model responds to the Reynolds and roughness conditions chosen by the user; it does not quantify wind-tunnel measurement uncertainty.
 
@@ -63,7 +65,9 @@ The flap controls rotate the geometry aft of a user-selected hinge. Positive def
 
 | Path | Purpose |
 |---|---|
-| `airfoil_pro.py` | Geometry, panel/empirical analysis, validation parser/metrics, robustness and flap transformations |
+| `airfoil_pro.py` | Geometry, panel/empirical analysis, validation parser/metrics, robustness, flap transformations and study audit manifests |
+| `xfoil_adapter.py` | Allowlisted, temporary-directory-isolated XFOIL batch adapter and polar parser |
+| `scripts/compare_naca0012_airfoil360.py` | Airfoil 360 NACA 0012 experiment-versus-model comparison chart and residual export |
 | `app.py` | Streamlit web interface |
 | `gui.py` | PyQt6 desktop interface |
 | `VALIDATION_GUIDE.md` | Repeatable wind-tunnel comparison protocol and reference sources |
@@ -91,7 +95,7 @@ After the GitHub Actions job finishes successfully, review the generated release
 
 ## Further Development
 
-The next highest-priority commercial investment is an optional, traceable viscous-solver integration (for example, XFOIL/QFoil) with solver version logging, input/output retention and failure diagnostics. This should be followed by constraint-aware inverse design, multi-objective Pareto selection, wing/rotor integration, project collaboration and an auditable API. See [`COMMERCIAL_FEATURE_ROADMAP.md`](COMMERCIAL_FEATURE_ROADMAP.md) for the complete prioritization.
+The next highest-priority commercial investment is completing the optional, traceable viscous-solver integration (for example, XFOIL/QFoil) with a pinned executable or worker backend, solver version logging, raw input/output retention and failure diagnostics. The repository now contains the safe adapter draft and its unit tests, but does not package an XFOIL executable or claim numerical validation. This should be followed by constraint-aware inverse design, multi-objective Pareto selection, wing/rotor integration, project collaboration and an auditable API. See [`COMMERCIAL_FEATURE_ROADMAP.md`](COMMERCIAL_FEATURE_ROADMAP.md) for the complete prioritization.
 
 ## References
 

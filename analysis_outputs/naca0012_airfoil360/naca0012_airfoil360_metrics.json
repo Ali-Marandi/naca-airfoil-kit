@@ -1,0 +1,46 @@
+[
+  {
+    "reynolds": 50000,
+    "alpha_min_deg": 0.0,
+    "alpha_max_deg": 8.1,
+    "point_count": 9,
+    "cl_metrics": {
+      "n": 9,
+      "mae": 0.22922474654786848,
+      "rmse": 0.27392444482284894,
+      "bias": -0.20954076979322334,
+      "mape_pct": 60.74431754013592
+    },
+    "cd_metrics": {
+      "n": 9,
+      "mae": 0.020458165932835743,
+      "rmse": 0.02228454033399323,
+      "bias": -0.020458165932835743,
+      "mape_pct": 46.32276715020454
+    },
+    "source_url": "https://data.mendeley.com/datasets/dz4bv26ncd/1",
+    "model_scope": "preliminary panel/empirical; not a viscous solver"
+  },
+  {
+    "reynolds": 100000,
+    "alpha_min_deg": 0.0,
+    "alpha_max_deg": 8.1,
+    "point_count": 9,
+    "cl_metrics": {
+      "n": 9,
+      "mae": 0.23678733004552205,
+      "rmse": 0.2899795730906152,
+      "bias": -0.21578261357538275,
+      "mape_pct": 59.389942215396374
+    },
+    "cd_metrics": {
+      "n": 9,
+      "mae": 0.026532590025029522,
+      "rmse": 0.029418935592940787,
+      "bias": -0.026532590025029522,
+      "mape_pct": 56.257780233814
+    },
+    "source_url": "https://data.mendeley.com/datasets/dz4bv26ncd/1",
+    "model_scope": "preliminary panel/empirical; not a viscous solver"
+  }
+]
