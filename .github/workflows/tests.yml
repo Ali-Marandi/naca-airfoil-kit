@@ -19,6 +19,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install test dependencies
-        run: python -m pip install --upgrade pip numpy
+        run: python -m pip install --upgrade pip numpy requests
       - name: Run unit tests
         run: python -m unittest discover -v
