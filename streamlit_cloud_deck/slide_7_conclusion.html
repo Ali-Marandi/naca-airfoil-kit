@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .slide-container { 
+          width: 1280px; 
+          min-height: 720px; 
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+          color: #f8fafc;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .header {
+          /* keep top padding (title upper spacing) at 60px as required */
+          padding: 60px 60px 10px;
+          text-align: center;
+      }
+      h1 {
+          font-size: 52px;
+          color: #38bdf8;
+          margin-bottom: 20px;
+      }
+      .intro-text {
+          font-size: 28px;
+          color: #cbd5e1;
+          text-align: center;
+          padding: 0 60px;
+          line-height: 1.6;
+      }
+      .content {
+          display: flex;
+          flex: 1;
+          padding: 20px 60px 40px;
+          gap: 30px;
+      }
+      .comparison-box {
+          flex: 1;
+          background: rgba(51, 65, 85, 0.3);
+          border-top: 6px solid;
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+      }
+      .box-current {
+          border-color: #38bdf8;
+      }
+      .box-future {
+          border-color: #10b981;
+      }
+      .comparison-box i {
+          font-size: 64px;
+          margin-bottom: 12px;
+      }
+      .box-current i {
+          color: #38bdf8;
+      }
+      .box-future i {
+          color: #10b981;
+      }
+      .comparison-box h3 {
+          font-size: 36px;
+          color: #f8fafc;
+          margin-bottom: 18px;
+      }
+      .feature-list {
+          list-style: none;
+          width: 100%;
+          text-align: right;
+          /* make list two-column to save vertical space */
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px 18px;
+      }
+      .feature-list li {
+          font-size: 26px;
+          color: #e2e8f0;
+          margin-bottom: 12px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+      }
+      .box-current .feature-list li i {
+          font-size: 24px;
+          color: #7dd3fc;
+          margin-bottom: 0;
+      }
+      .box-future .feature-list li i {
+          font-size: 24px;
+          color: #34d399;
+          margin-bottom: 0;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>از دمو تا محصول، با کنترل‌پذیری پیش بروید</h1>
+            <p class="intro-text">Community Cloud نقطه شروعی عالی است، اما با رشد نیازهای تجاری، مسیر ارتقا کاملاً روشن است.</p>
+        </div>
+        <div class="content">
+            <div class="comparison-box box-current">
+                <i class="fas fa-cloud"></i>
+                <h3>Community Cloud</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> مناسب برای نسخه عمومی و دمو</li>
+                    <li><i class="fas fa-check"></i> ایده‌آل برای آموزش و نمایش محصول</li>
+                    <li><i class="fas fa-check"></i> استقرار سریع و کاملاً رایگان</li>
+                    <li><i class="fas fa-check"></i> بدون نیاز به مدیریت زیرساخت</li>
+                </ul>
+            </div>
+            <div class="comparison-box box-future">
+                <i class="fas fa-server"></i>
+                <h3>Production / VPS</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-arrow-up"></i> تضمین پایداری و SLA مشخص</li>
+                    <li><i class="fas fa-arrow-up"></i> پشتیبانی از کاربران هم‌زمان زیاد</li>
+                    <li><i class="fas fa-arrow-up"></i> اتصال به دامنه اختصاصی سازمانی</li>
+                    <li><i class="fas fa-arrow-up"></i> منابع اختصاصی برای تحلیل‌های سنگین</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

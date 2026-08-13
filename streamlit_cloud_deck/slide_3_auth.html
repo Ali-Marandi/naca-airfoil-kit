@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .slide-container { 
+          width: 1280px; 
+          min-height: 720px; 
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+          color: #f8fafc;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .header {
+          padding: 60px 80px 40px;
+      }
+      h1 {
+          font-size: 56px;
+          color: #38bdf8;
+      }
+      .content {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding: 20px 80px 40px;
+          justify-content: space-between;
+      }
+      .steps-container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 20px;
+      }
+      .step {
+          flex: 1;
+          background: rgba(51, 65, 85, 0.4);
+          border: 1px solid rgba(56, 189, 248, 0.3);
+          padding: 40px 30px;
+          text-align: center;
+          position: relative;
+          min-height: 280px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+      .step-number {
+          position: absolute;
+          top: -25px;
+          right: 30px;
+          background: #0284c7;
+          color: white;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 28px;
+          font-weight: bold;
+      }
+      .step i {
+          font-size: 64px;
+          color: #7dd3fc;
+          margin-bottom: 25px;
+          margin-top: 10px;
+      }
+      .step h3 {
+          font-size: 28px;
+          color: #e2e8f0;
+          margin-bottom: 15px;
+      }
+      .step p {
+          font-size: 22px;
+          color: #cbd5e1;
+          line-height: 1.5;
+      }
+      .arrow {
+          font-size: 40px;
+          color: #475569;
+          margin: 0 20px;
+      }
+      .note-box {
+          background: rgba(15, 23, 42, 0.6);
+          border-right: 6px solid #38bdf8;
+          padding: 24px 40px;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+      }
+      .note-box i {
+          font-size: 36px;
+          color: #38bdf8;
+      }
+      .note-box p {
+          font-size: 24px;
+          color: #e0f2fe;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>ابتدا GitHub را به Cloud متصل کنید</h1>
+        </div>
+        <div class="content">
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">۱</div>
+                    <i class="fas fa-sign-in-alt"></i>
+                    <h3>ورود به پلتفرم</h3>
+                    <p>در <code>share.streamlit.io</code> با حساب GitHub خود وارد شوید.</p>
+                </div>
+                <i class="fas fa-chevron-left arrow"></i>
+                <div class="step">
+                    <div class="step-number">۲</div>
+                    <i class="fas fa-link"></i>
+                    <h3>اتصال حساب</h3>
+                    <p>از منوی Workspaces گزینه <strong>Connect GitHub account</strong> را انتخاب کنید.</p>
+                </div>
+                <i class="fas fa-chevron-left arrow"></i>
+                <div class="step">
+                    <div class="step-number">۳</div>
+                    <i class="fas fa-check-circle"></i>
+                    <h3>تأیید دسترسی</h3>
+                    <p>در صفحه OAuth گیت‌هاب، گزینه <strong>Authorize streamlit</strong> را تأیید کنید.</p>
+                </div>
+            </div>
+            <div class="note-box">
+                <i class="fas fa-info-circle"></i>
+                <p>دسترسی به مخزن‌های عمومی برای این پروژه کافی است؛ دسترسی private فقط در صورت نیاز فعال می‌شود.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

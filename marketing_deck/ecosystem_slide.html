@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      body { margin: 0; }
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        font-family: 'Segoe UI', sans-serif;
+        color: #334E68;
+      }
+      .header-block {
+        padding-top: 40px;
+        margin-left: 60px;
+      }
+      h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 56px;
+        color: #102A43;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .ecosystem-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        padding-top: 32px;
+        margin-left: 60px;
+        margin-right: 60px;
+      }
+      .ecosystem-card {
+        border: 2px solid #102A43;
+        padding-top: 20px;
+        padding-left: 16px;
+        padding-right: 16px;
+        clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        background: white;
+        text-align: center;
+        min-height: 320px;
+      }
+      .ecosystem-card i {
+        font-size: 60px;
+        color: #0078d4;
+        margin-bottom: 16px;
+      }
+      .ecosystem-card h3 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 24px;
+        color: #102A43;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+      }
+      .ecosystem-card p {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        line-height: 1.4;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header-block">
+            <h2>Enterprise Ecosystem</h2>
+        </div>
+        <div class="ecosystem-grid">
+            <div class="ecosystem-card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>Multi-Platform</h3>
+                <p>Native Windows EXE for offline power + Streamlit Web App for instant online access.</p>
+            </div>
+            <div class="ecosystem-card">
+                <i class="fas fa-file-export"></i>
+                <h3>CAD/CAM Ready</h3>
+                <p>High-precision DXF and 3D-printable STL exports for seamless manufacturing integration.</p>
+            </div>
+            <div class="ecosystem-card">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Cloud Sync</h3>
+                <p>Securely save and share projects across teams with unique collaboration links.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

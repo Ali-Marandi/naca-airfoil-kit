@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .slide-container { 
+          width: 1280px; 
+          min-height: 720px; 
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+          color: #f8fafc;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .header {
+          padding: 60px 80px 40px;
+      }
+      h1 {
+          font-size: 56px;
+          color: #38bdf8;
+      }
+      /* Layout refreshed: two columns to avoid stacking and vertical overflow */
+      .content {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          flex: 1;
+          padding: 20px 80px 40px;
+          gap: 30px;
+      }
+      .checklist {
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+          flex: 1;
+      }
+      .check-item {
+          display: flex;
+          align-items: center;
+          background: rgba(51, 65, 85, 0.3);
+          border: 1px solid rgba(56, 189, 248, 0.2);
+          padding: 20px 24px; /* slightly reduced inner padding */
+          gap: 20px;
+      }
+      .check-item i {
+          font-size: 36px;
+          color: #10b981; /* Green check */
+      }
+      .check-item p {
+          font-size: 28px;
+          color: #e2e8f0;
+      }
+      .right-column {
+          width: 360px; /* reserved column for troubleshooting box */
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+      }
+      .troubleshoot-box {
+          background: rgba(239, 68, 68, 0.1);
+          border-right: 6px solid #ef4444;
+          padding: 20px 28px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+      }
+      .troubleshoot-box i {
+          font-size: 40px;
+          color: #ef4444;
+      }
+      .troubleshoot-box p {
+          font-size: 26px;
+          color: #fca5a5;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Build را با پنج آزمون کوتاه تأیید کنید</h1>
+        </div>
+        <div class="content">
+            <div class="checklist">
+                <div class="check-item">
+                    <i class="fas fa-check-circle"></i>
+                    <p>صفحه با عنوان <strong>NACA Airfoil Kit Pro</strong> باز می‌شود.</p>
+                </div>
+                <div class="check-item">
+                    <i class="fas fa-check-circle"></i>
+                    <p>پروفایل <strong>NACA 2412</strong> با 100 نقطه بدون خطا تولید می‌شود.</p>
+                </div>
+                <div class="check-item">
+                    <i class="fas fa-check-circle"></i>
+                    <p>مقادیر <strong>Cl، Cd و L/D</strong> در پنل شاخص‌ها دیده می‌شوند.</p>
+                </div>
+                <div class="check-item">
+                    <i class="fas fa-check-circle"></i>
+                    <p>سه تب <strong>Geometry، Pressure Distribution و Flow Field</strong> کار می‌کنند.</p>
+                </div>
+            </div>
+            <div class="right-column">
+                <div class="troubleshoot-box">
+                    <i class="fas fa-tools"></i>
+                    <p><strong>عیب‌یابی:</strong> اگر build شکست خورد، ابتدا فایل <code>requirements.txt</code> و لاگ‌های استقرار را بررسی کنید.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

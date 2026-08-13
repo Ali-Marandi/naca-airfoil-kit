@@ -321,3 +321,181 @@ class GeometryOptimizer:
             if abs(cl - target) < min_distance:
                 min_distance, best_m = abs(cl - target), camber
         return f"{best_m}{str(code)[1:]}"
+
+
+class GeometryTools:
+    """Geometry transformations for preliminary design studies."""
+
+    @staticmethod
+    def apply_hinged_flap(xu, yu, xl, yl, hinge_x: float = 0.75, deflection_deg: float = 0.0):
+        """Apply a rigid hinged trailing-edge flap.
+
+        Positive deflection moves the trailing edge downward. The operation is a
+        geometric convenience for preliminary studies and does not model hinge
+        gaps, seals, deformation, or viscous flap aerodynamics.
+        """
+        xu, yu, xl, yl = (np.asarray(value, dtype=float).copy() for value in (xu, yu, xl, yl))
+        if abs(float(deflection_deg)) < 1e-12:
+            return xu, yu, xl, yl
+        hinge_x = float(np.clip(hinge_x, 0.5, 0.95))
+        hinge_y = 0.5 * (np.interp(hinge_x, xu, yu) + np.interp(hinge_x, xl, yl))
+        theta = -np.radians(float(deflection_deg))
+        cosine, sine = np.cos(theta), np.sin(theta)
+
+        def rotate_branch(x_values, y_values):
+            affected = x_values >= hinge_x
+            dx = x_values[affected] - hinge_x
+            dy = y_values[affected] - hinge_y
+            x_values[affected] = hinge_x + cosine * dx - sine * dy
+            y_values[affected] = hinge_y + sine * dx + cosine * dy
+            order = np.argsort(x_values)
+            return x_values[order], y_values[order]
+
+        xu, yu = rotate_branch(xu, yu)
+        xl, yl = rotate_branch(xl, yl)
+        return xu, yu, xl, yl
+
+
+class ExperimentalValidation:
+    """Compare model polars to user-provided experimental measurements."""
+
+    REQUIRED_ALPHA_FIELDS = ("alpha_deg", "alpha", "aoa", "angle_of_attack")
+    CL_FIELDS = ("cl", "c_l", "lift_coefficient")
+    CD_FIELDS = ("cd", "c_d", "drag_coefficient")
+
+    @staticmethod
+    def _find_field(fieldnames, accepted):
+        lower_to_original = {str(name).strip().lower(): name for name in fieldnames}
+        for candidate in accepted:
+            if candidate in lower_to_original:
+                return lower_to_original[candidate]
+        return None
+
+    @staticmethod
+    def parse_csv_text(csv_text: str):
+        """Parse a user CSV with alpha_deg/alpha and optional cl/cd columns."""
+        import csv
+        import io
+
+        reader = csv.DictReader(io.StringIO(csv_text.lstrip("\ufeff")))
+        if not reader.fieldnames:
+            raise ValueError("The CSV must have a header row.")
+        alpha_key = ExperimentalValidation._find_field(reader.fieldnames, ExperimentalValidation.REQUIRED_ALPHA_FIELDS)
+        cl_key = ExperimentalValidation._find_field(reader.fieldnames, ExperimentalValidation.CL_FIELDS)
+        cd_key = ExperimentalValidation._find_field(reader.fieldnames, ExperimentalValidation.CD_FIELDS)
+        if alpha_key is None or (cl_key is None and cd_key is None):
+            raise ValueError("CSV requires alpha_deg (or alpha) and at least one of cl or cd.")
+
+        rows = []
+        for source_row in reader:
+            try:
+                alpha = float(source_row[alpha_key])
+            except (TypeError, ValueError):
+                continue
+            record = {"alpha_deg": alpha}
+            for canonical, key in (("cl", cl_key), ("cd", cd_key)):
+                if key is None or source_row.get(key, "") in (None, ""):
+                    record[canonical] = np.nan
+                    continue
+                try:
+                    record[canonical] = float(source_row[key])
+                except (TypeError, ValueError):
+                    record[canonical] = np.nan
+            rows.append(record)
+        if len(rows) < 2:
+            raise ValueError("At least two numeric measurement rows are required.")
+        return rows
+
+    @staticmethod
+    def _error_metrics(observed, predicted):
+        observed, predicted = np.asarray(observed, dtype=float), np.asarray(predicted, dtype=float)
+        valid = np.isfinite(observed) & np.isfinite(predicted)
+        if not np.any(valid):
+            return {"n": 0, "mae": np.nan, "rmse": np.nan, "bias": np.nan, "mape_pct": np.nan}
+        residual = predicted[valid] - observed[valid]
+        nonzero = np.abs(observed[valid]) > 1e-10
+        mape = np.mean(np.abs(residual[nonzero] / observed[valid][nonzero])) * 100.0 if np.any(nonzero) else np.nan
+        return {
+            "n": int(valid.sum()),
+            "mae": float(np.mean(np.abs(residual))),
+            "rmse": float(np.sqrt(np.mean(residual**2))),
+            "bias": float(np.mean(residual)),
+            "mape_pct": float(mape),
+        }
+
+    @staticmethod
+    def compare_polar(xu, yu, xl, yl, experimental_rows, re: float, rough: float = 0.0):
+        """Evaluate model points at the experimental alpha values and calculate residuals."""
+        if not experimental_rows:
+            raise ValueError("Experimental rows are required for validation.")
+        alpha_values = [float(row["alpha_deg"]) for row in experimental_rows]
+        model_rows = AirfoilAnalysis.compute_polar(xu, yu, xl, yl, alpha_values, re, rough)["rows"]
+        comparison = []
+        for experimental, model in zip(experimental_rows, model_rows):
+            experiment_cl = float(experimental.get("cl", np.nan))
+            experiment_cd = float(experimental.get("cd", np.nan))
+            comparison.append(
+                {
+                    "alpha_deg": float(experimental["alpha_deg"]),
+                    "experimental_cl": experiment_cl,
+                    "model_cl": float(model["cl"]),
+                    "cl_error": float(model["cl"] - experiment_cl) if np.isfinite(experiment_cl) else np.nan,
+                    "experimental_cd": experiment_cd,
+                    "model_cd": float(model["cd"]),
+                    "cd_error": float(model["cd"] - experiment_cd) if np.isfinite(experiment_cd) else np.nan,
+                    "stalled_estimate": bool(model["stalled_estimate"]),
+                }
+            )
+        return {
+            "comparison": comparison,
+            "cl_metrics": ExperimentalValidation._error_metrics(
+                [row["experimental_cl"] for row in comparison], [row["model_cl"] for row in comparison]
+            ),
+            "cd_metrics": ExperimentalValidation._error_metrics(
+                [row["experimental_cd"] for row in comparison], [row["model_cd"] for row in comparison]
+            ),
+        }
+
+
+class RobustStudy:
+    """Deterministic condition-sensitivity tools for preliminary design robustness."""
+
+    @staticmethod
+    def condition_envelope(xu, yu, xl, yl, alpha_values, reynolds_values, roughness_values):
+        """Return min/mean/max model response over user-defined Re and roughness grids.
+
+        This is a model sensitivity envelope, not a statistical uncertainty
+        interval or a replacement for experimental measurement uncertainty.
+        """
+        alpha_values = np.asarray(alpha_values, dtype=float)
+        reynolds_values = np.asarray(reynolds_values, dtype=float)
+        roughness_values = np.asarray(roughness_values, dtype=float)
+        if alpha_values.size == 0 or reynolds_values.size == 0 or roughness_values.size == 0:
+            raise ValueError("Alpha, Reynolds, and roughness samples are required.")
+        prepared = AirfoilAnalysis._prepare_panel_system(xu, yu, xl, yl)
+        cl_samples, cd_samples, ld_samples = [], [], []
+        for reynolds in reynolds_values:
+            for roughness in roughness_values:
+                result = AirfoilAnalysis._solve_polar(prepared, alpha_values, float(reynolds), float(roughness))
+                cl_samples.append(result["cl"])
+                cd_samples.append(result["cd"])
+                ld_samples.append(result["ld"])
+        cl_samples, cd_samples, ld_samples = np.asarray(cl_samples), np.asarray(cd_samples), np.asarray(ld_samples)
+        rows = []
+        for index, alpha in enumerate(alpha_values):
+            rows.append(
+                {
+                    "alpha_deg": float(alpha),
+                    "cl_min": float(np.nanmin(cl_samples[:, index])),
+                    "cl_mean": float(np.nanmean(cl_samples[:, index])),
+                    "cl_max": float(np.nanmax(cl_samples[:, index])),
+                    "cd_min": float(np.nanmin(cd_samples[:, index])),
+                    "cd_mean": float(np.nanmean(cd_samples[:, index])),
+                    "cd_max": float(np.nanmax(cd_samples[:, index])),
+                    "ld_min": float(np.nanmin(ld_samples[:, index])),
+                    "ld_mean": float(np.nanmean(ld_samples[:, index])),
+                    "ld_max": float(np.nanmax(ld_samples[:, index])),
+                    "condition_samples": int(cl_samples.shape[0]),
+                }
+            )
+        return rows

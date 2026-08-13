@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      html,body{height:100%;margin:0;padding:0}
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        top: -8px; /* shift up to keep overall page < 720px */
+        font-family: 'Segoe UI', sans-serif;
+      }
+      .content-block {
+        border: 2px solid #102A43;
+        background: rgba(240, 244, 248, 0.9);
+        /* keep top padding for title consistency, reduce others */
+        padding: 60px 40px 40px;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        text-align: center;
+        max-width: 900px;
+      }
+      h1 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 84px;
+        color: #102A43;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+      p {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: 400;
+        font-size: 32px;
+        color: #334E68;
+      }
+      .accent-line {
+        width: 100px;
+        height: 6px;
+        background: #829AB1;
+        margin: 20px auto; /* reduced spacing to save height */
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="content-block">
+            <h1>NACA Airfoil Kit Pro</h1>
+            <div class="accent-line"></div>
+            <p>The Ultimate Enterprise Solution for Aerodynamic Excellence</p>
+        </div>
+    </div>
+</body>
+</html>

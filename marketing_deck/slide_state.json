@@ -1,0 +1,111 @@
+{
+  "project_info": {
+    "title": "NACA Airfoil Kit Pro",
+    "created": 1786315814.687,
+    "last_updated": 1786315992.27,
+    "total_slides": 9
+  },
+  "slides": [
+    {
+      "id": "title_slide",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "vision_slide",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "data_slide",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "aero_engine_slide",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "optimization_slide",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "visualization_slide",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "ecosystem_slide",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "performance_slide",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "closing_slide",
+      "state": "edited",
+      "pageNum": 9
+    }
+  ],
+  "outline": [
+    {
+      "id": "title_slide",
+      "title": "NACA Airfoil Kit Pro",
+      "summary": "Title slide for the commercial airfoil design toolkit.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "vision_slide",
+      "title": "Engineering Excellence",
+      "summary": "The vision and transformation of the project into a commercial platform.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "data_slide",
+      "title": "Massive Data Integration",
+      "summary": "Highlighting the UIUC database and NACA series support.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "aero_engine_slide",
+      "title": "Advanced Aero Engine",
+      "summary": "Technical details of the Vortex Panel Method and real-world physics modeling.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "optimization_slide",
+      "title": "Smart Optimization",
+      "summary": "Showcasing L/D maximization and Target Cl matching.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "visualization_slide",
+      "title": "Flow Visualization",
+      "summary": "Interactive streamlines and flow animation capabilities.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "ecosystem_slide",
+      "title": "Enterprise Ecosystem",
+      "summary": "Multi-platform support, CAD exports, and Cloud Sync.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "performance_slide",
+      "title": "Performance & Reporting",
+      "summary": "Benchmark results (38x speedup) and professional PDF reporting.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "closing_slide",
+      "title": "Elevate Your Engineering",
+      "summary": "Closing slide with call to action and repository link.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

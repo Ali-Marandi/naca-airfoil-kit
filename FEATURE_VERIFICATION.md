@@ -11,3 +11,11 @@ The Design Study executed successfully for NACA 0012, 2412, 4412 and 6409 over a
 The QA & Export tab rendered successfully for NACA 2412. It displayed maximum-thickness location 0.304 c, maximum camber 2.00% at 0.398 c, trailing-edge gap 0.253% c, normalized area ratio 0.08226, and two CSV download controls for QA metrics and normalized coordinates.
 
 Final code quality check: `python3 -m py_compile airfoil_pro.py app.py`, `python3 -m unittest discover -p 'test*.py'`, and `git diff --check` all completed successfully. The test suite reported 8 passing tests.
+
+## Validation, Robustness and Flap update — 2026-08-13
+
+The core now includes a CSV experimental-polar parser, point-aligned model-versus-measurement residuals with Cl/Cd MAE, RMSE, bias and MAPE, a deterministic multi-condition Reynolds/roughness sensitivity envelope, and rigid hinged trailing-edge flap geometry for preliminary studies. The Streamlit interface exposes the capabilities through **Validation**, **Robustness** and **Flap Lab** tabs; the PyQt desktop interface exposes experimental CSV loading/residual summary and hinged-flap controls for the Windows build.
+
+A local end-to-end Streamlit verification confirmed that the Validation tab accepted a CSV in the documented format, calculated all residual metrics, rendered the model-versus-measurement overlay, showed the residual table and enabled CSV download. A separate Robustness run over three Reynolds values and two roughness values produced the L/D envelope, a min/mean/max table and an engineering CSV download. The Flap Lab tab rendered its controls and scope warnings. The CSV used for the browser smoke test was internal test data only and was not presented as wind-tunnel data.
+
+Final quality checks completed successfully: `python3 -m py_compile gui.py airfoil_pro.py app.py` and `python3 -m unittest discover -v`. The suite reported **12 passing tests**, including dedicated coverage for flap geometry, experimental CSV parsing, validation metrics and multi-condition envelopes.

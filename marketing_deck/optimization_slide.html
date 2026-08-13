@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      body { margin: 0; }
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        font-family: 'Segoe UI', sans-serif;
+        color: #334E68;
+      }
+      .header-block {
+        padding-top: 40px;
+        margin-left: 60px;
+      }
+      h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 56px;
+        color: #102A43;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        padding-top: 40px;
+        margin-left: 60px;
+        margin-right: 60px;
+      }
+      .opt-block {
+        border: 2px solid #102A43;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        background: white;
+        min-height: 420px;
+      }
+      .opt-block i {
+        font-size: 50px;
+        color: #0078d4;
+        margin-bottom: 20px;
+      }
+      .opt-block h3 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 28px;
+        color: #102A43;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+      .bullet-item {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+      }
+      .bullet-item i {
+        font-size: 18px;
+        color: #829AB1;
+        margin-right: 15px;
+        padding-top: 4px;
+        margin-bottom: 0;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header-block">
+            <h2>Smart Optimization</h2>
+        </div>
+        <div class="main-content">
+            <div class="opt-block">
+                <i class="fas fa-brain"></i>
+                <h3>Maximize Efficiency</h3>
+                <div class="bullet-item">
+                    <i class="fas fa-caret-right"></i>
+                    <span>Auto-find the highest <strong>L/D ratio</strong> for any flight regime.</span>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-caret-right"></i>
+                    <span>Intelligent search across camber and thickness parameters.</span>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-caret-right"></i>
+                    <span>Instant visual feedback on optimized geometry.</span>
+                </div>
+            </div>
+            <div class="opt-block">
+                <i class="fas fa-target-crosshair"></i>
+                <h3>Target Cl Matching</h3>
+                <div class="bullet-item">
+                    <i class="fas fa-caret-right"></i>
+                    <span>Automatically adjust geometry to meet specific <strong>Lift Requirements</strong>.</span>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-caret-right"></i>
+                    <span>Precision matching for custom design constraints.</span>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-caret-right"></i>
+                    <span>Seamless integration with the advanced aero engine.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

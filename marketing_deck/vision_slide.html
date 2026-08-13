@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      body{margin:0;} /* remove default page margins to avoid extra vertical space */
+      .slide-container {
+        width: 1280px;
+        min-height: 720px; /* keep as required */
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        font-family: 'Segoe UI', sans-serif;
+        color: #334E68;
+      }
+      .header-block {
+        padding-top: 40px; /* must not be changed */
+        margin-left: 60px;
+      }
+      h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 56px;
+        color: #102A43;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px; /* reduced to save vertical space where columns wrap */
+        padding-top: 20px; /* reduced inner spacing */
+        margin-left: 60px;
+        margin-right: 60px;
+      }
+      .text-block {
+        border: 2px solid #102A43;
+        padding-top: 16px; /* reduced */
+        padding-left: 16px;
+        padding-right: 16px;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        background: white;
+        min-height: 320px; /* reduced from 400 to lower overall height */
+      }
+      .bullet-item {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 24px; /* must not shrink */
+        margin-bottom: 18px; /* slightly smaller */
+        display: flex;
+        align-items: flex-start;
+      }
+      .bullet-item i {
+        color: #0078d4;
+        margin-right: 15px;
+        padding-top: 5px;
+      }
+      .visual-block {
+        border: 2px solid #829AB1;
+        background: #102A43;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        height: 320px; /* reduced to match text-block */
+      }
+      .visual-block i {
+        font-size: 150px; /* do not shrink font sizes */
+        color: #F0F4F8;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header-block">
+            <h2>Transforming Airfoil Design</h2>
+        </div>
+        <div class="main-content">
+            <div class="text-block">
+                <div class="bullet-item">
+                    <i class="fas fa-check-square"></i>
+                    <span>From a simple script to a <strong>commercial-grade platform</strong>.</span>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-check-square"></i>
+                    <span>Trusted by engineers for <strong>precision, speed, and visualization</strong>.</span>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-check-square"></i>
+                    <span>Bridging the gap between <strong>theoretical research</strong> and <strong>industrial manufacturing</strong>.</span>
+                </div>
+            </div>
+            <div class="visual-block">
+                <i class="fas fa-drafting-compass"></i>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

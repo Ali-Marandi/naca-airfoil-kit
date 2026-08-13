@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      body { margin: 0; }
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        font-family: 'Segoe UI', sans-serif;
+        color: #334E68;
+      }
+      .header-block {
+        padding-top: 40px;
+        margin-left: 60px;
+      }
+      h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 56px;
+        color: #102A43;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 40px;
+        padding-top: 40px;
+        margin-left: 60px;
+        margin-right: 60px;
+      }
+      .data-block {
+        border: 2px solid #102A43;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        background: white;
+        min-height: 420px;
+      }
+      .feature-block {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .info-card {
+        border: 2px solid #829AB1;
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        background: #102A43;
+        color: white;
+        min-height: 180px;
+      }
+      .info-card h3 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: #829AB1;
+      }
+      .info-card p {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        margin-top: 20px;
+      }
+      th {
+        text-align: left;
+        color: #102A43;
+        border-bottom: 2px solid #102A43;
+        padding: 10px;
+      }
+      td {
+        padding: 15px 10px;
+        border-bottom: 1px dashed #829AB1;
+      }
+      tr:nth-child(even) {
+        background-color: #F0F4F8;
+      }
+      .highlight-text {
+        color: #0078d4;
+        font-weight: bold;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header-block">
+            <h2>Performance & Reporting</h2>
+        </div>
+        <div class="main-content">
+            <div class="data-block">
+                <h3 style="font-family: 'Arial Black'; text-transform: uppercase; color: #102A43;">Computation Benchmark</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Legacy (v1.0)</th>
+                            <th>Pro (v2.9)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Engine Type</td>
+                            <td>Nested Loops</td>
+                            <td>Vectorized NumPy</td>
+                        </tr>
+                        <tr>
+                            <td>Process Time</td>
+                            <td>~1.2s</td>
+                            <td>~0.03s</td>
+                        </tr>
+                        <tr>
+                            <td>Efficiency</td>
+                            <td>Baseline</td>
+                            <td class="highlight-text">38.9x Speedup</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 30px; font-style: italic; font-size: 16px;">*Benchmark conducted with 500 panels on standard hardware.</p>
+            </div>
+            <div class="feature-block">
+                <div class="info-card">
+                    <h3><i class="fas fa-file-pdf"></i> PDF Reporting</h3>
+                    <p>One-click professional technical reports with embedded geometry and aero data.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-chart-line"></i> Data Export</h3>
+                    <p>Advanced CSV exports including pressure distribution and aerodynamic coefficients.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

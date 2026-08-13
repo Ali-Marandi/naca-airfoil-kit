@@ -1,0 +1,89 @@
+{
+  "project_info": {
+    "title": "سریع‌ترین مسیر عمومی",
+    "created": 1786573651.111,
+    "last_updated": 1786573863.119,
+    "total_slides": 7
+  },
+  "slides": [
+    {
+      "id": "slide_1_intro",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "slide_2_prereqs",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "slide_3_auth",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "slide_4_form",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "slide_5_verify",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "slide_6_update",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "slide_7_conclusion",
+      "state": "edited",
+      "pageNum": 7
+    }
+  ],
+  "outline": [
+    {
+      "id": "slide_1_intro",
+      "title": "سریع‌ترین مسیر عمومی",
+      "summary": "معرفی Streamlit Community Cloud به‌عنوان ساده‌ترین و سریع‌ترین مسیر استقرار از مخزن GitHub.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_2_prereqs",
+      "title": "پیش‌نیازهای انتشار",
+      "summary": "معرفی چهار فایل و تنظیمات ضروری مخزن برای استقرار موفق.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_3_auth",
+      "title": "اتصال GitHub",
+      "summary": "مراحل اتصال حساب GitHub به Community Cloud و تأیید دسترسی.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_4_form",
+      "title": "تکمیل فرم استقرار",
+      "summary": "مقادیر دقیق مورد نیاز برای فیلدهای فرم Create app در Streamlit.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_5_verify",
+      "title": "تأیید Build",
+      "summary": "آزمون‌های کوتاه برای اطمینان از عملکرد صحیح اپلیکیشن پس از استقرار.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_6_update",
+      "title": "چرخهٔ به‌روزرسانی",
+      "summary": "نحوه به‌روزرسانی خودکار نسخه وب با push به GitHub و مدیریت لاگ‌ها.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_7_conclusion",
+      "title": "مسیر آینده",
+      "summary": "جایگاه Community Cloud در چرخه محصول و زمان مناسب برای ارتقا به سرویس‌های تجاری.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

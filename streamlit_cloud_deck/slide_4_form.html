@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .slide-container { 
+          width: 1280px; 
+          min-height: 720px; 
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+          color: #f8fafc;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .header {
+          padding: 60px 80px 40px; /* keep upper padding */
+      }
+      h1 {
+          font-size: 56px;
+          color: #38bdf8;
+      }
+      .content {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding: 12px 80px 20px; /* reduced top and bottom padding */
+          gap: 20px; /* reduced gap */
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          background: rgba(15, 23, 42, 0.4);
+          border: 1px solid rgba(56, 189, 248, 0.3);
+      }
+      th {
+          background: rgba(51, 65, 85, 0.8);
+          color: #38bdf8;
+          font-size: 32px;
+          padding: 12px 20px; /* reduced vertical padding */
+          text-align: right;
+          border-bottom: 2px solid rgba(56, 189, 248, 0.5);
+      }
+      td {
+          font-size: 28px;
+          padding: 12px 20px; /* reduced vertical padding */
+          border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+          color: #e2e8f0;
+      }
+      tr:last-child td {
+          border-bottom: none;
+      }
+      .code-val {
+          font-family: monospace;
+          color: #7dd3fc;
+          direction: ltr;
+          display: inline-block;
+          background: rgba(0, 0, 0, 0.3);
+          padding: 4px 8px; /* slightly reduced */
+      }
+      .instruction {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          background: rgba(56, 189, 248, 0.06);
+          padding: 16px 20px; /* reduced padding */
+          border: 1px solid rgba(56, 189, 248, 0.3);
+      }
+      .instruction i {
+          font-size: 40px;
+          color: #38bdf8;
+      }
+      .instruction p {
+          font-size: 28px;
+          color: #e0f2fe;
+      }
+      .instruction strong {
+          color: #fff;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>فرم Create app را دقیق پر کنید</h1>
+        </div>
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>فیلد</th>
+                        <th>مقدار</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Repository</td>
+                        <td><span class="code-val">Ali-Marandi/naca-airfoil-kit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Branch</td>
+                        <td><span class="code-val">main</span></td>
+                    </tr>
+                    <tr>
+                        <td>Main file path</td>
+                        <td><span class="code-val">app.py</span></td>
+                    </tr>
+                    <tr>
+                        <td>Custom subdomain</td>
+                        <td><span class="code-val">naca-airfoil-kit-pro</span> <span style="font-size: 22px; color: #94a3b8;">(در صورت آزادبودن)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="instruction">
+                <i class="fas fa-mouse-pointer"></i>
+                <p>بعد از انتخاب <strong>Yup, I have an app</strong>، مقادیر را دستی وارد کنید و <strong>Deploy</strong> را بزنید.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

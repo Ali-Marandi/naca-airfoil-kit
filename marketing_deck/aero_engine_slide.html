@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      body { margin: 0; }
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        font-family: 'Segoe UI', sans-serif;
+        color: #334E68;
+      }
+      .header-block {
+        padding-top: 40px;
+        margin-left: 60px;
+      }
+      h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 56px;
+        color: #102A43;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 40px;
+        padding-top: 40px;
+        margin-left: 60px;
+        margin-right: 60px;
+      }
+      .feature-list {
+        border: 2px solid #102A43;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        background: white;
+        min-height: 420px;
+      }
+      .feature-item {
+        margin-bottom: 30px;
+      }
+      .feature-item h3 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 24px;
+        color: #102A43;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+      }
+      .feature-item h3 i {
+        margin-right: 15px;
+        color: #0078d4;
+      }
+      .feature-item p {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        line-height: 1.4;
+        margin-left: 40px;
+      }
+      .visual-box {
+        border: 2px solid #829AB1;
+        background: #102A43;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        height: 420px;
+        color: #F0F4F8;
+        text-align: center;
+      }
+      .visual-box i {
+        font-size: 120px;
+        margin-bottom: 20px;
+      }
+      .visual-box span {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header-block">
+            <h2>Advanced Aero Engine</h2>
+        </div>
+        <div class="main-content">
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3><i class="fas fa-microchip"></i>Vortex Panel Method</h3>
+                    <p>High-fidelity potential flow solver optimized with NumPy vectorization for 38x faster computation.</p>
+                </div>
+                <div class="feature-item">
+                    <h3><i class="fas fa-wind"></i>Real-World Physics</h3>
+                    <p>Integrated Schlichting drag models and empirical stall estimation considering surface roughness (k/c).</p>
+                </div>
+                <div class="feature-item">
+                    <h3><i class="fas fa-vial"></i>Experimental Validation</h3>
+                    <p>Built-in comparison with classic wind tunnel data to ensure industrial-grade accuracy.</p>
+                </div>
+            </div>
+            <div class="visual-box">
+                <i class="fas fa-cogs"></i>
+                <span>Computational Core v2.9</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

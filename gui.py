@@ -12,7 +12,7 @@ from PyQt6.QtCore import Qt, QSize
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
-from airfoil_pro import NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, GeometryOptimizer, export_stl, export_csv_advanced
+from airfoil_pro import (NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, ExperimentalValidation, GeometryOptimizer, GeometryTools, RobustStudy, export_stl, export_csv_advanced)
 from report_gen import generate_pdf_report
 
 STYLESHEET = """
@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(STYLESHEET)
         self.uiuc_data, self.validation_data = [], {}
         self.current_coords = None
+        self.experimental_rows = None
         self.current_name, self.comparison_list = "NACA 2412", {}
         self.load_resources()
         self.init_ui()
@@ -92,7 +93,28 @@ class MainWindow(QMainWindow):
         analysis_layout.addRow(self.show_val_check)
         self.cl_label = QLabel("Cl: 0.000"); self.cd_label = QLabel("Cd: 0.000")
         analysis_layout.addRow(self.cl_label, self.cd_label)
+        btn_load_validation = QPushButton("Load Experimental CSV")
+        btn_load_validation.clicked.connect(self.load_validation_csv)
+        analysis_layout.addRow(btn_load_validation)
+        self.validation_summary_label = QLabel("Validation: no uploaded CSV")
+        self.validation_summary_label.setWordWrap(True)
+        analysis_layout.addRow(self.validation_summary_label)
         analysis_group.setLayout(analysis_layout); sidebar_layout.addWidget(analysis_group)
+
+        flap_group = QGroupBox("Trailing-Edge Flap (Preliminary)")
+        flap_layout = QFormLayout()
+        self.flap_check = QCheckBox("Apply hinged flap")
+        self.flap_check.stateChanged.connect(self.update_all)
+        self.flap_hinge_slider = QSlider(Qt.Orientation.Horizontal)
+        self.flap_hinge_slider.setRange(50, 95); self.flap_hinge_slider.setValue(75)
+        self.flap_hinge_slider.valueChanged.connect(self.update_all)
+        self.flap_deflection_slider = QSlider(Qt.Orientation.Horizontal)
+        self.flap_deflection_slider.setRange(-20, 20); self.flap_deflection_slider.setValue(0)
+        self.flap_deflection_slider.valueChanged.connect(self.update_all)
+        flap_layout.addRow(self.flap_check)
+        flap_layout.addRow("Hinge x/c:", self.flap_hinge_slider)
+        flap_layout.addRow("Deflection [deg]:", self.flap_deflection_slider)
+        flap_group.setLayout(flap_layout); sidebar_layout.addWidget(flap_group)
 
         sidebar_layout.addStretch()
         btn_report = QPushButton("Generate PDF Report"); btn_report.clicked.connect(self.export_pdf)
@@ -119,6 +141,24 @@ class MainWindow(QMainWindow):
     def update_all(self):
         code = self.code_input.text(); self.current_name = f"NACA {code}"
         self.current_coords = NACAGeneratorPro.naca4(code, 100)
+        if self.flap_check.isChecked():
+            hinge_x = self.flap_hinge_slider.value() / 100.0
+            deflection = float(self.flap_deflection_slider.value())
+            self.current_coords = GeometryTools.apply_hinged_flap(*self.current_coords, hinge_x, deflection)
+            self.current_name = f"{self.current_name} | flap {deflection:+.1f}° @ {hinge_x:.2f}c"
+        self.update_plots()
+
+    def load_validation_csv(self):
+        path, _ = QFileDialog.getOpenFileName(self, "Load Experimental Polar", "", "CSV (*.csv)")
+        if not path:
+            return
+        try:
+            with open(path, "r", encoding="utf-8-sig") as handle:
+                self.experimental_rows = ExperimentalValidation.parse_csv_text(handle.read())
+            self.status_bar.showMessage(f"Loaded {len(self.experimental_rows)} experimental measurements", 5000)
+        except (OSError, ValueError) as error:
+            self.experimental_rows = None
+            QMessageBox.warning(self, "Validation CSV", str(error))
         self.update_plots()
 
     def update_plots(self):
@@ -140,11 +180,22 @@ class MainWindow(QMainWindow):
         cls = [AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, a)[0] for a in alphas]
         axv.plot(alphas, cls, 'o-', color='#00aaff', label='Computational (Manus Pro)')
         
-        if self.show_val_check.isChecked() and self.current_name in self.validation_data:
+        if self.experimental_rows:
+            validation = ExperimentalValidation.compare_polar(xu, yu, xl, yl, self.experimental_rows, re=1e6, rough=0.0)
+            val_alphas = [d['alpha_deg'] for d in self.experimental_rows]
+            val_cls = [d['cl'] for d in self.experimental_rows]
+            axv.plot(val_alphas, val_cls, 's--', color='#ffaa00', label='Uploaded experimental CSV')
+            cl_rmse = validation['cl_metrics']['rmse']
+            cd_rmse = validation['cd_metrics']['rmse']
+            self.validation_summary_label.setText(f"Validation: Cl RMSE {cl_rmse:.4f} | Cd RMSE {cd_rmse:.5f}")
+        elif self.show_val_check.isChecked() and self.current_name in self.validation_data:
             val = self.validation_data[self.current_name]
             val_alphas = [d['alpha'] for d in val['data']]
             val_cls = [d['cl'] for d in val['data']]
             axv.plot(val_alphas, val_cls, 's--', color='#ffaa00', label=f'Experimental ({val["source"]})')
+            self.validation_summary_label.setText("Validation: built-in reference points shown; upload CSV for residual metrics.")
+        else:
+            self.validation_summary_label.setText("Validation: no uploaded CSV")
         
         axv.set_xlabel("Alpha (deg)"); axv.set_ylabel("Cl"); axv.legend(); axv.grid(True, color='#333')
         self.val_canvas.draw()

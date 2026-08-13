@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .slide-container { 
+          width: 1280px; 
+          min-height: 720px; 
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+          color: #f8fafc;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .header {
+          padding: 60px 80px 40px;
+      }
+      h1 {
+          font-size: 56px;
+          color: #38bdf8;
+      }
+      .content {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding: 20px 80px 32px; /* reduced bottom padding */
+          gap: 20px; /* reduced gap */
+      }
+      .grid-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          flex: 1;
+      }
+      .grid-item {
+          background: rgba(51, 65, 85, 0.4);
+          border: 1px solid rgba(148, 163, 184, 0.2);
+          padding: 40px;
+          display: flex;
+          align-items: center;
+          gap: 30px;
+      }
+      .grid-item i {
+          font-size: 50px;
+          color: #7dd3fc;
+          width: 60px;
+          text-align: center;
+      }
+      .item-content h3 {
+          font-size: 32px;
+          color: #e2e8f0;
+          margin-bottom: 10px;
+      }
+      .item-content p {
+          font-size: 24px;
+          color: #94a3b8;
+          font-family: monospace;
+          direction: ltr;
+          text-align: left;
+      }
+      .warning-box {
+          background: rgba(234, 179, 8, 0.1);
+          border-right: 8px solid #eab308;
+          padding: 24px 40px; /* reduced vertical padding */
+          display: flex;
+          align-items: center;
+          gap: 20px;
+      }
+      .warning-box i {
+          font-size: 40px;
+          color: #eab308;
+      }
+      .warning-box p {
+          font-size: 26px;
+          color: #fef08a;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>چهار فایل، پیش‌نیاز انتشار هستند</h1>
+        </div>
+        <div class="content">
+            <div class="grid-container">
+                <div class="grid-item">
+                    <i class="fab fa-github-alt"></i>
+                    <div class="item-content">
+                        <h3>مخزن عمومی</h3>
+                        <p>Ali-Marandi/naca-airfoil-kit</p>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <i class="fas fa-code-branch"></i>
+                    <div class="item-content">
+                        <h3>شاخه انتشار</h3>
+                        <p>main</p>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <i class="fas fa-file-code"></i>
+                    <div class="item-content">
+                        <h3>فایل ورودی رابط</h3>
+                        <p>app.py</p>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <i class="fas fa-cubes"></i>
+                    <div class="item-content">
+                        <h3>وابستگی‌های Python</h3>
+                        <p>requirements.txt</p>
+                    </div>
+                </div>
+            </div>
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p><strong>یادآوری:</strong> حساب GitHub باید دسترسی <strong>admin</strong> برای مخزن داشته باشد.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

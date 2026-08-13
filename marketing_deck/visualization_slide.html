@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      body { margin: 0; }
+      .slide-container {
+        width: 1280px;
+        min-height: 720px;
+        box-sizing: border-box;
+        background-color: #F0F4F8;
+        background-image: radial-gradient(#829AB1 0.5px, transparent 0.5px);
+        background-size: 10px 10px;
+        font-family: 'Segoe UI', sans-serif;
+        color: #334E68;
+      }
+      .header-block {
+        padding-top: 40px;
+        margin-left: 60px;
+      }
+      h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        font-size: 56px;
+        color: #102A43;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 40px;
+        padding-top: 40px;
+        margin-left: 60px;
+        margin-right: 60px;
+      }
+      .text-block {
+        border: 2px solid #102A43;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        background: white;
+        min-height: 420px;
+      }
+      .feature-item {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 22px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: flex-start;
+      }
+      .feature-item i {
+        color: #0078d4;
+        margin-right: 20px;
+        padding-top: 4px;
+        font-size: 28px;
+      }
+      .feature-item strong {
+        color: #102A43;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .visual-block {
+        border: 2px solid #829AB1;
+        background: #102A43;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        height: 420px;
+        text-align: center;
+      }
+      .visual-block i {
+        font-size: 120px;
+        color: #829AB1;
+        margin-bottom: 20px;
+      }
+      .visual-label {
+        font-family: 'Courier New', Courier, monospace;
+        color: #F0F4F8;
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header-block">
+            <h2>Ultimate Visualization</h2>
+        </div>
+        <div class="main-content">
+            <div class="text-block">
+                <div class="feature-item">
+                    <i class="fas fa-wind"></i>
+                    <span>
+                        <strong>Live Streamlines</strong>
+                        Interactive flow field visualization around any airfoil geometry.
+                    </span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-film"></i>
+                    <span>
+                        <strong>Flow Animation</strong>
+                        Export professional GIFs of flow changes across alpha ranges.
+                    </span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-area"></i>
+                    <span>
+                        <strong>Pressure Mapping</strong>
+                        High-resolution Cp distribution plots for precise analysis.
+                    </span>
+                </div>
+            </div>
+            <div class="visual-block">
+                <i class="fas fa-project-diagram"></i>
+                <div class="visual-label">Interactive Flow Field Engine</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

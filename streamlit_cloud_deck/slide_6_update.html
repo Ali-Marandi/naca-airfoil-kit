@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .slide-container { 
+          width: 1280px; 
+          min-height: 720px; 
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+          color: #f8fafc;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .header {
+          /* keep top padding (60px) as required; reduce bottom padding to save height */
+          padding: 60px 80px 8px;
+      }
+      h1 {
+          font-size: 56px;
+          color: #38bdf8;
+      }
+      .content {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          /* shrink inner padding to reduce overall height */
+          padding: 8px 80px 16px;
+          gap: 18px;
+      }
+      .list-item {
+          display: flex;
+          align-items: center;
+          background: rgba(51, 65, 85, 0.3);
+          border: 1px solid rgba(56, 189, 248, 0.2);
+          /* reduce vertical padding to lower each item's height */
+          padding: 12px 32px;
+      }
+      .list-item i {
+          font-size: 48px;
+          color: #7dd3fc;
+          width: 64px;
+          text-align: center;
+          margin-left: 20px;
+      }
+      .list-item p {
+          font-size: 28px;
+          color: #e2e8f0;
+          line-height: 1.5;
+      }
+      .list-item strong {
+          color: #38bdf8;
+      }
+      .list-item code {
+          font-family: monospace;
+          background: rgba(0,0,0,0.3);
+          padding: 4px 8px;
+          color: #cbd5e1;
+      }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>انتشار GitHub، چرخهٔ به‌روزرسانی شماست</h1>
+        </div>
+        <div class="content">
+            <div class="list-item">
+                <i class="fas fa-code-branch"></i>
+                <p>هر <strong>push</strong> به شاخه <code>main</code> نسخه وب را به‌طور خودکار به‌روز می‌کند.</p>
+            </div>
+            <div class="list-item">
+                <i class="fas fa-box-open"></i>
+                <p>تغییر در فایل وابستگی‌ها (<code>requirements.txt</code>) یک <strong>build جدید</strong> را اجرا می‌کند.</p>
+            </div>
+            <div class="list-item">
+                <i class="fas fa-share-alt"></i>
+                <p><strong>URL عمومی</strong> را با تیم یا کاربران به اشتراک بگذارید؛ لاگ‌ها فقط برای ادمین‌ها قابل مشاهده است.</p>
+            </div>
+            <div class="list-item">
+                <i class="fas fa-key"></i>
+                <p>کلیدها و تنظیمات حساس آینده را در بخش <strong>Secrets</strong> پلتفرم نگه دارید، نه در GitHub.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
