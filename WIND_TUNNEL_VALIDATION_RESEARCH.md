@@ -15,6 +15,10 @@
 
 برای اعتبارسنجی باید فقط نقاطی مقایسه شوند که شرایطشان با tolerance تعریف‌شده منطبق است. پیشنهاد عملی برای نسخه فعلی: تطبیق Re در ±5٪ و Mach در ±0.02، مگر آنکه کاربر tolerance دیگری تعریف کند. سپس برای Cl و Cd به‌ترتیب MAE، RMSE و bias محاسبه می‌شود. اختلاف زاویه‌ای صفر-برا (Δα0)، اختلاف بیشینه Cl و اختلاف L/D بیشینه نیز گزارش می‌گردد. ناحیه stall به‌صورت جداگانه برچسب‌گذاری می‌شود و با RMSE خطی پیش از stall مخلوط نمی‌شود.
 
+## دادهٔ خام قابل‌استفاده برای NACA 0012
+
+دیتاست عمومی **Airfoil 360 v2022** یک فایل XLSX با نام `Airfoil360_wind_tunnel_data_v2022.xlsx` منتشر می‌کند. این فایل شامل Cl و Cd برای NACA 0012، NACA 2412 و Selig s1210 در Re = 50,000 و 100,000 و در دامنه 360 درجه است؛ داده‌ها در تونل زیرصوت Kent State بین 2016 تا 2022 جمع‌آوری و طبق صفحه dataset با تصحیحات استاندارد تونل باد همراه شده‌اند. مجوز آن CC BY 4.0 است. لینک مستقیم فایل: https://data.mendeley.com/public-files/datasets/dz4bv26ncd/files/cfba6ca3-0b79-497c-a676-5536f0b41b47/file_downloaded
+
 ## منابع
 
 [1]: https://ntrs.nasa.gov/citations/19880002254 "A Critical Assessment of Wind Tunnel Results for the NACA 0012 Airfoil"
