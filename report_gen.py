@@ -24,10 +24,20 @@ class AirfoilReport(FPDF):
 
 
 def _write_section_title(pdf: AirfoilReport, title: str):
+    pdf.set_x(pdf.l_margin)
     pdf.set_font("Arial", "B", 12)
     pdf.set_text_color(31, 78, 121)
     pdf.cell(0, 8, title, 0, 1, "L")
+    pdf.set_x(pdf.l_margin)
     pdf.set_text_color(0, 0, 0)
+
+
+def _write_multiline(pdf: AirfoilReport, line_height: float, text: str, **kwargs):
+    """Render at the left margin regardless of fpdf2 cursor semantics."""
+    pdf.set_x(pdf.l_margin)
+    printable_width = pdf.w - pdf.l_margin - pdf.r_margin
+    pdf.multi_cell(printable_width, line_height, text, **kwargs)
+    pdf.set_x(pdf.l_margin)
 
 
 def _write_scope_and_evidence(pdf: AirfoilReport, readiness: dict | None):
@@ -35,7 +45,7 @@ def _write_scope_and_evidence(pdf: AirfoilReport, readiness: dict | None):
     _write_section_title(pdf, "Scope and Evidence")
     pdf.set_font("Arial", "", 10)
     pdf.set_fill_color(255, 247, 237)
-    pdf.multi_cell(0, 6, PRELIMINARY_SCOPE_NOTICE, border=1, fill=True)
+    _write_multiline(pdf, 6, PRELIMINARY_SCOPE_NOTICE, border=1, fill=True)
     pdf.ln(2)
 
     if readiness:
@@ -44,14 +54,14 @@ def _write_scope_and_evidence(pdf: AirfoilReport, readiness: dict | None):
         pdf.set_font("Arial", "B", 10)
         pdf.cell(0, 6, f"Evidence status: {headline}", 0, 1, "L")
         pdf.set_font("Arial", "", 10)
-        pdf.multi_cell(0, 6, guidance)
+        _write_multiline(pdf, 6, guidance)
         missing = readiness.get("missing_metadata") or []
         if missing:
             pdf.set_font("Arial", "I", 9)
-            pdf.multi_cell(0, 5, "Metadata still required for review: " + "; ".join(map(str, missing)))
+            _write_multiline(pdf, 5, "Metadata still required for review: " + "; ".join(map(str, missing)))
     else:
         pdf.set_font("Arial", "", 10)
-        pdf.multi_cell(0, 6, "Evidence status: screening-only study; no validation metadata was attached to this report.")
+        _write_multiline(pdf, 6, "Evidence status: screening-only study; no validation metadata was attached to this report.")
     pdf.ln(3)
 
 
@@ -91,7 +101,7 @@ def generate_pdf_report(filename, data):
     if data.get("audit_manifest_note"):
         _write_section_title(pdf, "Traceability")
         pdf.set_font("Arial", "", 10)
-        pdf.multi_cell(0, 6, str(data["audit_manifest_note"]))
+        _write_multiline(pdf, 6, str(data["audit_manifest_note"]))
         pdf.ln(3)
 
     plot_path = data.get("plot_path")
