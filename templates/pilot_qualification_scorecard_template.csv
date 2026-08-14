@@ -1,0 +1,6 @@
+candidate_id,score_version,assessment_date,interviewer,segment,region,scope_safety_gate,data_handling_gate,operating_commitment_gate,problem_repetition_score_0_2,problem_repetition_evidence,ownership_score_0_2,ownership_evidence,data_readiness_score_0_2,data_readiness_evidence,pain_urgency_score_0_2,pain_urgency_evidence,product_fit_score_0_2,product_fit_evidence,collaboration_score_0_2,collaboration_evidence,total_score,qualification_status,primary_reason_code,recommended_offer,next_action,decision_owner,rescore_trigger,rescore_due_date,decision_notes
+PILOT-C01,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PILOT-C02,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PILOT-C03,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PILOT-C04,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PILOT-C05,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,

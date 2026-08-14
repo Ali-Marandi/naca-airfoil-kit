@@ -1,0 +1,11 @@
+interview_id,interview_date,region,segment,role,team_size_band,decision_timeline_days,last_real_design_decision,workflow_current,tools_current,workflow_frequency,pain_summary,pain_severity_1_5,consequence_of_delay,geometry_data_ready,evidence_or_validation_context,economic_buyer_identified,budget_owner_or_path,price_offer_shown_usd,price_reaction,primary_objection,objection_detail,study_package_reaction,pilot_eligibility_1_5,follow_up_status,anonymized_quote,interviewer_confidence_1_5,consent_for_anonymized_use,notes
+INT-01,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-02,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-03,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-04,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-05,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-06,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-07,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-08,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-09,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INT-10,,,,,,,,,,,,,,,,,,,,,,,,,,,,
