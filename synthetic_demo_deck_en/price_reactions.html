@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+            position: relative;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 40px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #f97316;
+        }
+        .content-area {
+            display: flex;
+            flex: 1;
+            padding: 0 80px;
+            gap: 50px;
+        }
+        .left-col {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        .bullet-icon {
+            color: #38bdf8;
+            font-size: 24px;
+            margin-right: 20px;
+            margin-top: 6px;
+        }
+        .bullet-text {
+            font-size: 24px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #f97316;
+            font-weight: 600;
+        }
+        .code-tag {
+            background-color: #1e293b;
+            color: #38bdf8;
+            padding: 2px 8px;
+            font-family: monospace;
+            font-size: 22px;
+            border: 1px solid #334155;
+        }
+        .image-container {
+            width: 100%;
+            height: 420px;
+            background-color: #0f172a;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #334155;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .image-caption {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .footer-note {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #ef4444;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">Illustrative Price Reactions Require <span class="title-accent">Behavioral Context</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="left-col">
+                <div class="bullet-item">
+                    <i class="fas fa-chart-bar bullet-icon"></i>
+                    <div class="bullet-text">Synthetic coding produces 3 <span class="code-tag">accept</span>, 2 <span class="code-tag">conditional_accept</span>, 1 <span class="code-tag">consider</span>, 1 <span class="code-tag">no_budget</span>, 2 <span class="code-tag">not_discussed</span>, and 1 <span class="code-tag">too_high</span> entries.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-exclamation-circle bullet-icon"></i>
+                    <div class="bullet-text"><span class="highlight">Accept and conditional accept must remain separate:</span> a condition may be scope, security, timing, or budget approval.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-ban bullet-icon"></i>
+                    <div class="bullet-text"><span class="code-tag">not_discussed</span> records must <span class="highlight">not</span> be silently treated as negative or positive conversion outcomes.</div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="image-container">
+                    <img src="/home/ubuntu/naca-airfoil-kit/analysis_outputs/synthetic_discovery_demo/synthetic_price_reactions.png" alt="Synthetic Price Reactions Chart">
+                </div>
+                <div class="image-caption">Illustrative price reactions distribution (Synthetic Demo)</div>
+            </div>
+        </div>
+
+        <div class="footer-note">SYNTHETIC DEMO — NOT A CONVERSION RATE OR PRICING RESULT</div>
+    </div>
+</body>
+</html>

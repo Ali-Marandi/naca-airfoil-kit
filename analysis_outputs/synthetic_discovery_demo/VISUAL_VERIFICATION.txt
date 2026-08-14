@@ -1,0 +1,6 @@
+Visual verification completed on 2026-08-14.
+
+1. synthetic_price_reactions.png: The title visibly states “SYNTHETIC DEMO” and “not customer evidence”; categorical labels and count annotations are readable.
+2. synthetic_qualification_ranking.png: The title visibly states “SYNTHETIC DEMO”; eligibility (8) and priority (10) thresholds are visible and the score labels are readable.
+
+Both charts are acceptable as educational illustrations only. They must not be used as customer, traction, pricing, revenue, or investment evidence.

@@ -1,0 +1,11 @@
+data_status,candidate_id,segment,scope_safety_gate,data_handling_gate,operating_commitment_gate,problem_repetition_score_0_2,ownership_score_0_2,data_readiness_score_0_2,pain_urgency_score_0_2,product_fit_score_0_2,collaboration_score_0_2,total_score,qualification_status,recommended_offer,selection_note
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-01,Small UAS design team,PASS,PASS,PASS,2,2,2,2,2,2,12,Priority design partner,Standard Evidence Pilot,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-02,Rotor startup,PASS,PASS,PASS,2,2,2,2,2,1,11,Priority design partner,Extended Workflow Pilot,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-03,Aero design consultancy,PASS,PASS,PASS,2,2,2,2,2,1,11,Priority design partner,Standard Evidence Pilot,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-04,Applied research laboratory,PASS,HOLD,HOLD,1,1,1,1,2,2,8,Disqualified,Founding Design Partner,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-05,Small UAS design team,PASS,HOLD,HOLD,1,0,1,1,2,1,6,Disqualified,None,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-06,Aero design consultancy,PASS,PASS,PASS,2,2,2,2,2,1,11,Priority design partner,Standard Evidence Pilot,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-07,UAS manufacturer,PASS,PASS,HOLD,2,1,2,2,2,1,10,Priority design partner,Founding Design Partner,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-08,Applied research laboratory,PASS,HOLD,HOLD,0,0,1,0,1,1,3,Disqualified,None,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-09,Early-stage drone venture,PASS,HOLD,HOLD,1,2,1,1,2,1,8,Disqualified,None,Synthetic demonstration only.
+SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE,PILOT-10,Rotor technology team,PASS,PASS,PASS,2,2,2,2,2,2,12,Priority design partner,Extended Workflow Pilot,Synthetic demonstration only.

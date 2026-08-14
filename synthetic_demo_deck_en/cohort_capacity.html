@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+            position: relative;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 40px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #38bdf8;
+        }
+        .content-area {
+            display: flex;
+            flex: 1;
+            padding: 0 80px;
+            gap: 40px;
+        }
+        .text-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 20px;
+        }
+        .image-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 10px;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        .bullet-icon {
+            color: #f97316;
+            font-size: 28px;
+            margin-right: 20px;
+            margin-top: 4px;
+        }
+        .bullet-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .bullet-text {
+            font-size: 24px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .chart-image {
+            width: 580px;
+            height: 313px;
+            object-fit: contain;
+            border: 2px solid #334155;
+            background-color: #0f172a;
+        }
+        .image-caption {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #94a3b8;
+            text-align: center;
+            font-style: italic;
+        }
+        .footer-note {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #ef4444;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">A Synthetic Cohort Shows <span class="title-accent">Capacity Discipline</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="text-col">
+                <div class="bullet-item">
+                    <i class="fas fa-sort-amount-down bullet-icon"></i>
+                    <div class="bullet-content">
+                        <div class="bullet-text">The illustrative ranking produces <span class="highlight">six priority candidates</span>, but the cohort capacity is strictly limited to five.</div>
+                    </div>
+                </div>
+
+                <div class="bullet-item">
+                    <i class="fas fa-check-double bullet-icon"></i>
+                    <div class="bullet-content">
+                        <div class="bullet-text">The five selected records have the strongest score and readiness combination; the sixth becomes a <span class="highlight">reserve candidate</span>.</div>
+                    </div>
+                </div>
+
+                <div class="bullet-item">
+                    <i class="fas fa-clipboard-list bullet-icon"></i>
+                    <div class="bullet-content">
+                        <div class="bullet-text">This example shows why <span class="highlight">capacity and tie-break rules</span> must be documented before commercial outreach begins.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-col">
+                <img src="/home/ubuntu/naca-airfoil-kit/analysis_outputs/synthetic_discovery_demo/synthetic_qualification_ranking.png" class="chart-image" alt="Synthetic Qualification Ranking Chart" />
+                <div class="image-caption">Candidate labels, scores, and offers are fictional demonstration data.</div>
+            </div>
+        </div>
+
+        <div class="footer-note">SYNTHETIC DEMO — NOT CUSTOMER EVIDENCE</div>
+    </div>
+</body>
+</html>

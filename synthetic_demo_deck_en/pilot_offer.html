@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+            position: relative;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #f97316;
+        }
+        .pricing-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 80px;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .pricing-tier {
+            flex: 1;
+            background-color: #0f172a;
+            border-top: 6px solid #475569;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .pricing-tier.highlight {
+            border-top-color: #38bdf8;
+            background-color: #1e293b;
+        }
+        .pricing-tier.premium {
+            border-top-color: #f97316;
+        }
+        .tier-name {
+            font-size: 26px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .tier-price {
+            font-size: 42px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .pricing-tier.premium .tier-price {
+            color: #f97316;
+        }
+        .tier-features {
+            list-style: none;
+            margin-top: 12px;
+        }
+        .tier-features li {
+            font-size: 20px;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .tier-features li i {
+            color: #22c55e;
+            margin-right: 12px;
+            margin-top: 6px;
+            font-size: 16px;
+        }
+        .bullet-container {
+            padding: 0 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        .bullet-icon {
+            color: #38bdf8;
+            font-size: 20px;
+            margin-right: 15px;
+            margin-top: 6px;
+        }
+        .bullet-text {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .highlight-text {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .footer-note {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #ef4444;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">The Pilot Offer Remains an <span class="title-accent">Experiment</span></h1>
+        </div>
+
+        <div class="pricing-container">
+            <div class="pricing-tier">
+                <div class="tier-name">Founding Design Partner</div>
+                <div class="tier-price">$1,500</div>
+                <ul class="tier-features">
+                    <li><i class="fas fa-check"></i> Up to 3 geometries</li>
+                    <li><i class="fas fa-check"></i> One review cycle</li>
+                    <li><i class="fas fa-check"></i> Evidence package</li>
+                </ul>
+            </div>
+
+            <div class="pricing-tier highlight">
+                <div class="tier-name">Standard Evidence Pilot</div>
+                <div class="tier-price">$3,500</div>
+                <ul class="tier-features">
+                    <li><i class="fas fa-check"></i> Up to 5 geometries</li>
+                    <li><i class="fas fa-check"></i> Robust study</li>
+                    <li><i class="fas fa-check"></i> Two check-ins</li>
+                </ul>
+            </div>
+
+            <div class="pricing-tier premium">
+                <div class="tier-name">Extended Workflow Pilot</div>
+                <div class="tier-price">$5,000</div>
+                <ul class="tier-features">
+                    <li><i class="fas fa-check"></i> All Standard features</li>
+                    <li><i class="fas fa-check"></i> Workflow mapping</li>
+                    <li><i class="fas fa-check"></i> Handoff workshop</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bullet-container">
+            <div class="bullet-item">
+                <i class="fas fa-arrow-right bullet-icon"></i>
+                <div class="bullet-text">The packages demonstrate how <span class="highlight-text">scope, support, and price</span> can be tested together.</div>
+            </div>
+            <div class="bullet-item">
+                <i class="fas fa-arrow-right bullet-icon"></i>
+                <div class="bullet-text">They do <span class="highlight-text">not</span> constitute a validated price list, accepted contract, or forecast.</div>
+            </div>
+        </div>
+
+        <div class="footer-note">SYNTHETIC DEMO — NOT CUSTOMER EVIDENCE</div>
+    </div>
+</body>
+</html>

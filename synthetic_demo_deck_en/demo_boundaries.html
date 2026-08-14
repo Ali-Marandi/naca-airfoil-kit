@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+            position: relative;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 30px; /* reduced from 60px */
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #ef4444;
+        }
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 0 80px;
+            gap: 20px; /* reduced from 40px */
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            background-color: #0f172a;
+            border-left: 4px solid #ef4444;
+            padding: 16px; /* reduced from 30px */
+        }
+        .bullet-item:nth-child(2) { border-left-color: #f97316; }
+        .bullet-item:nth-child(3) { border-left-color: #38bdf8; }
+
+        .bullet-icon {
+            font-size: 36px;
+            margin-right: 20px; /* slightly reduced */
+            margin-top: 2px;
+        }
+        .bullet-item:nth-child(1) .bullet-icon { color: #ef4444; }
+        .bullet-item:nth-child(2) .bullet-icon { color: #f97316; }
+        .bullet-item:nth-child(3) .bullet-icon { color: #38bdf8; }
+
+        .bullet-text {
+            font-size: 26px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .footer-note {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #ef4444;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">What This Demonstration <span class="title-accent">Does—and Does Not Prove</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="bullet-item">
+                <i class="fas fa-route bullet-icon"></i>
+                <div class="bullet-text">
+                    <span class="highlight">It demonstrates a structured pipeline.</span> It shows how raw interview notes can be systematically coded, scored for qualification, and translated into pilot decisions.
+                </div>
+            </div>
+
+            <div class="bullet-item">
+                <i class="fas fa-database bullet-icon"></i>
+                <div class="bullet-text">
+                    <span class="highlight">It uses exactly 10 hand-authored illustrative records.</span> No actual customer, prospect, transcript, survey, or CRM data is included in this presentation.
+                </div>
+            </div>
+
+            <div class="bullet-item">
+                <i class="fas fa-ban bullet-icon"></i>
+                <div class="bullet-text">
+                    <span class="highlight">It proves workflow execution only.</span> It does <strong>not</strong> prove customer pain, market demand, willingness to pay, conversion rates, or revenue potential.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">SYNTHETIC DEMO — NOT CUSTOMER EVIDENCE</div>
+    </div>
+</body>
+</html>

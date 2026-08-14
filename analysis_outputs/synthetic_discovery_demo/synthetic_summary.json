@@ -1,0 +1,41 @@
+{
+  "data_status": "SYNTHETIC_DEMO_NOT_CUSTOMER_EVIDENCE",
+  "record_count": 10,
+  "high_pain_4_or_5_count": 6,
+  "price_reaction_counts": {
+    "accept": 3,
+    "conditional_accept": 2,
+    "consider": 1,
+    "no_budget": 1,
+    "not_discussed": 2,
+    "too_high": 1
+  },
+  "objection_counts": {
+    "budget": 3,
+    "no_current_project": 1,
+    "none": 2,
+    "scope_mismatch": 1,
+    "security_privacy": 1,
+    "timing": 1,
+    "trust_accuracy": 1
+  },
+  "segment_counts": {
+    "Aero design consultancy": 2,
+    "Applied research laboratory": 2,
+    "Early-stage drone venture": 1,
+    "Rotor startup": 1,
+    "Rotor technology team": 1,
+    "Small UAS design team": 2,
+    "UAS manufacturer": 1
+  },
+  "priority_design_partner_count": 6,
+  "eligible_candidate_count": 0,
+  "selected_synthetic_cohort": [
+    "PILOT-01",
+    "PILOT-02",
+    "PILOT-03",
+    "PILOT-06",
+    "PILOT-07"
+  ],
+  "disclosure": "All values are hand-authored synthetic examples. They are not customer, market, traction, pricing, or investment evidence."
+}

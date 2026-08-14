@@ -1,0 +1,111 @@
+{
+  "project_info": {
+    "title": "Cover",
+    "created": 1786679839.622,
+    "last_updated": 1786680025.711,
+    "total_slides": 9
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "demo_boundaries",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "synthetic_intake",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "price_reactions",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "objection_taxonomy",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "qualification_gates",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "cohort_capacity",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "pilot_offer",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "real_milestone",
+      "state": "edited",
+      "pageNum": 9
+    }
+  ],
+  "outline": [
+    {
+      "id": "cover",
+      "title": "Cover",
+      "summary": "Title slide: NACA Airfoil Kit Pro — Synthetic Discovery Demonstration. Illustrative pipeline only; not customer evidence.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "demo_boundaries",
+      "title": "What This Demonstration Does—and Does Not Prove",
+      "summary": "Explain that the deck shows a structured pipeline using exactly 10 hand-authored illustrative records, proving only that the workflow can be executed.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "synthetic_intake",
+      "title": "The Synthetic Input Mirrors a Real Discovery Schema",
+      "summary": "Describe the intake schema: segment, role, timeline, pain severity, readiness, buyer path, and objections. Note that it forces distinction between facts and assumptions.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "price_reactions",
+      "title": "Illustrative Price Reactions Require Behavioral Context",
+      "summary": "Show the synthetic price reactions chart. Explain why 'conditional_accept' and 'not_discussed' must be handled carefully. Label clearly as synthetic.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "objection_taxonomy",
+      "title": "Objections Drive the Follow-Up, Not a Feature Roadmap",
+      "summary": "List the illustrative objections (budget, trust, privacy, scope). Show how each links to a follow-up action rather than an immediate feature build.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "qualification_gates",
+      "title": "Qualification Uses Gates Before Scores",
+      "summary": "Explain the mandatory gates (screening-only scope, data readiness, operating commitment) and the six 0-to-2 scoring dimensions.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "cohort_capacity",
+      "title": "A Synthetic Cohort Shows Capacity Discipline",
+      "summary": "Show the synthetic qualification ranking chart. Explain how tie-break rules and a capacity limit of 5 shape the final priority list. Label clearly as synthetic.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "pilot_offer",
+      "title": "The Pilot Offer Remains an Experiment",
+      "summary": "Present the three experimental packages (Founding, Standard, Extended). Reiterate that these test scope and support, and do not constitute a validated price list.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "real_milestone",
+      "title": "The Real Milestone Is Replacing Synthetic Data",
+      "summary": "Close by stating the next step: upload real interview records, re-run the pipeline in a separate directory, and replace all synthetic artifacts before any decision is made.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}
