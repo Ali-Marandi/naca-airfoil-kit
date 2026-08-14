@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px; /* keep top padding */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px; /* reduced from 60 */
+        }
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #38bdf8;
+        }
+        .asks-container {
+            display: flex;
+            gap: 24px; /* slightly reduced gap */
+            width: 1120px;
+            margin-bottom: 16px; /* reduced from 60 */
+        }
+        .ask-box {
+            flex: 1;
+            background-color: #0f172a;
+            border-top: 4px solid #f97316;
+            padding: 16px 20px; /* reduced from 40px 30px */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ask-box:nth-child(2) {
+            border-top-color: #38bdf8;
+        }
+        .ask-box:nth-child(3) {
+            border-top-color: #22c55e;
+        }
+        .ask-icon {
+            font-size: 48px;
+            color: #f97316;
+            margin-bottom: 16px; /* reduced from 24 */
+        }
+        .ask-box:nth-child(2) .ask-icon { color: #38bdf8; }
+        .ask-box:nth-child(3) .ask-icon { color: #22c55e; }
+
+        .ask-text {
+            font-size: 24px;
+            color: #cbd5e1;
+            line-height: 1.45; /* tightened from 1.6 */
+        }
+        .goal-banner {
+            width: 1120px;
+            background: linear-gradient(90deg, rgba(56,189,248,0.1) 0%, rgba(249,115,22,0.1) 100%);
+            border: 2px solid #334155;
+            padding: 20px 30px; /* reduced from 30px 40px */
+            text-align: center;
+        }
+        .goal-title {
+            font-size: 24px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px; /* reduced from 12 */
+        }
+        .goal-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+        .goal-highlight {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">درخواست: <span class="title-accent">سرمایهٔ اعتبارسنجی مرحله‌ای</span></h1>
+        </div>
+
+        <div class="asks-container">
+            <div class="ask-box">
+                <i class="fas fa-handshake ask-icon"></i>
+                <div class="ask-text">معرفی به ۳ تا ۵ تیم UAS/rotor یا مشاور با تصمیم طراحی واقعی در ۹۰ روز آینده.</div>
+            </div>
+
+            <div class="ask-box">
+                <i class="fas fa-tasks ask-icon"></i>
+                <div class="ask-text">پشتیبانی از اجرای فرآیند Discovery، گروه پایلوت و انضباط در اندازه‌گیری نتایج.</div>
+            </div>
+
+            <div class="ask-box">
+                <i class="fas fa-map-signs ask-icon"></i>
+                <div class="ask-text">همراهی برای تبدیل شواهد واقعی به نقشه راه محصول و مدل قیمت‌گذاری قابل‌تکرار.</div>
+            </div>
+        </div>
+
+        <div class="goal-banner">
+            <div class="goal-title">هدف نهایی</div>
+            <div class="goal-text">
+                ساخت مسیر قابل‌اعتماد از <span class="goal-highlight">هندسه تا تصمیم</span>؛ ابتدا برای غربال‌گری، سپس با شواهد کافی برای جریان‌های کاری حرفه‌ای‌تر.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

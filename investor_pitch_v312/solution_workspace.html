@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 50px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #38bdf8;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 0 80px;
+            flex: 1;
+        }
+        .feature-card {
+            background-color: #0f172a;
+            border-top: 4px solid #38bdf8;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .feature-card:nth-child(2), .feature-card:nth-child(4) {
+            border-top-color: #f97316;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-icon {
+            font-size: 32px;
+            color: #38bdf8;
+            margin-left: 20px;
+            width: 40px;
+            text-align: center;
+        }
+        .feature-card:nth-child(2) .card-icon, .feature-card:nth-child(4) .card-icon {
+            color: #f97316;
+        }
+        .card-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .card-text {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">یک فضای کار غربال‌گریِ <span class="title-accent">قابل‌ردیابی (Evidence-Ready)</span></h1>
+        </div>
+
+        <div class="grid-container">
+            <div class="feature-card">
+                <div class="card-header">
+                    <i class="fas fa-desktop card-icon"></i>
+                    <div class="card-title">ابزارهای Web و Desktop یکپارچه</div>
+                </div>
+                <div class="card-text">تولید هندسه، تحلیل قطبی (Polar)، بررسی کیفیت (QA) و وارد کردن داده‌ها در یک محیط منسجم بدون نیاز به جابجایی فایل‌ها.</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line card-icon"></i>
+                    <div class="card-title">محاسبهٔ خطای اعتبارسنجی (Residuals)</div>
+                </div>
+                <div class="card-text">طبقه‌بندی وضعیت شواهد به screening-only یا metadata-complete؛ نمایش فاصلهٔ مدل از داده‌های آزمایشگاهی.</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="card-header">
+                    <i class="fas fa-layer-group card-icon"></i>
+                    <div class="card-title">مطالعهٔ مقاوم چندشرایطی (Robust Pareto)</div>
+                </div>
+                <div class="card-text">بررسی هم‌زمان کاندیداها در اعداد رینولدز مختلف برای یافتن گزینه‌هایی که در دامنهٔ وسیع‌تری پایدارند.</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="card-header">
+                    <i class="fas fa-file-signature card-icon"></i>
+                    <div class="card-title">تولید خودکار Audit Manifest</div>
+                </div>
+                <div class="card-text">ثبت امضای دیجیتال هندسه، شرایط مرزی و نسخهٔ حل‌گر در فایل JSON و PDF برای اطمینان از بازتولیدپذیری تصمیمات.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

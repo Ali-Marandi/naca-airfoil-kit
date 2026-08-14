@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 50px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #f97316;
+        }
+        .content-area {
+            display: flex;
+            flex: 1;
+            padding: 0 80px;
+            gap: 40px;
+        }
+        .left-col {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+        .right-col {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .bullet-icon {
+            color: #f97316;
+            font-size: 24px;
+            margin-left: 20px;
+            margin-top: 6px;
+        }
+        .bullet-text {
+            font-size: 26px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+        .workflow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .flow-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .box {
+            background-color: #0f172a;
+            border: 2px dashed #475569;
+            padding: 12px;
+            text-align: center;
+            width: 30%;
+            position: relative;
+        }
+        .box i {
+            font-size: 40px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        .box-title {
+            font-size: 20px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .broken-link {
+            color: #ef4444;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+        }
+        .result-box {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            padding: 12px;
+            text-align: center;
+            width: 80%;
+            margin-top: 10px;
+        }
+        .result-box i {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+        .result-title {
+            font-size: 28px;
+            color: #fca5a5;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">جریان کار آئرودینامیک در مرحلهٔ Concept <span class="title-accent">پراکنده است</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="left-col">
+                <div class="bullet-item">
+                    <i class="fas fa-times-circle bullet-icon"></i>
+                    <div class="bullet-text">در مرحلهٔ concept، <span class="highlight">هندسه، حل‌گر، صفحات گسترده و گزارش‌ها</span> اغلب در ابزارها و فایل‌های جداگانه‌اند.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-times-circle bullet-icon"></i>
+                    <div class="bullet-text">ابزارهای موجود از desktopهای رایگان تا CFDهای حرفه‌ای گسترده‌اند؛ اما دامنهٔ fidelity آن‌ها یکسان نیست.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-times-circle bullet-icon"></i>
+                    <div class="bullet-text">نتیجه: تصمیمات اولیهٔ طراحی <span class="highlight">غیرقابل‌ردیابی (Untraceable)</span> می‌شوند و انتقال آن‌ها به تیم‌های بعدی با خطا همراه است.</div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="workflow-diagram">
+                    <div class="flow-row">
+                        <div class="box">
+                            <i class="fas fa-draw-polygon"></i>
+                            <div class="box-title">فایل‌های مختصات</div>
+                        </div>
+                        <div class="broken-link"><i class="fas fa-bolt"></i></div>
+                        <div class="box">
+                            <i class="fas fa-calculator"></i>
+                            <div class="box-title">حل‌گرهای مجزا</div>
+                        </div>
+                        <div class="broken-link"><i class="fas fa-bolt"></i></div>
+                        <div class="box">
+                            <i class="fas fa-table"></i>
+                            <div class="box-title">اکسل‌های دستی</div>
+                        </div>
+                    </div>
+                    <div class="result-box">
+                        <i class="fas fa-file-circle-xmark"></i>
+                        <div class="result-title">تصمیماتِ بدون پشتوانهٔ مستند (No Provenance)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

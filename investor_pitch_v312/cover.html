@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #f8fafc;
+        }
+        .bg-shape-1 {
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, rgba(8,17,31,0) 70%);
+            z-index: 1;
+        }
+        .bg-shape-2 {
+            position: absolute;
+            bottom: -300px;
+            left: -100px;
+            width: 1000px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(249,115,22,0.08) 0%, rgba(8,17,31,0) 70%);
+            z-index: 1;
+        }
+        .content-wrapper {
+            z-index: 10;
+            text-align: center;
+            max-width: 1000px;
+        }
+        .badge {
+            display: inline-block;
+            background-color: rgba(249,115,22,0.2);
+            color: #fdba74;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(249,115,22,0.5);
+        }
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        .title span {
+            color: #38bdf8;
+        }
+        .subtitle {
+            font-size: 32px;
+            color: #cbd5e1;
+            font-weight: 400;
+            margin-bottom: 60px;
+            line-height: 1.5;
+        }
+        .footer-note {
+            position: absolute;
+            bottom: 40px;
+            font-size: 14px;
+            color: #64748b;
+            letter-spacing: 1px;
+        }
+        .divider {
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, #38bdf8, #f97316);
+            margin: 0 auto 40px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-shape-1"></div>
+        <div class="bg-shape-2"></div>
+
+        <div class="content-wrapper">
+            <div class="badge">INVESTOR & PILOT PITCH</div>
+            <h1 class="title">NACA Airfoil Kit <span>Pro</span></h1>
+            <div class="divider"></div>
+            <h2 class="subtitle">از هندسهٔ خام تا تصمیمات غربال‌گریِ قابل‌ردیابی</h2>
+        </div>
+
+        <div class="footer-note">August 2026 | Preliminary & Confidential</div>
+    </div>
+</body>
+</html>

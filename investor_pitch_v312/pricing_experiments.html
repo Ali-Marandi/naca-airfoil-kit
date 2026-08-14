@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px; /* do not change */
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 20px; /* reduced from 40 */
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #f97316;
+        }
+        .pricing-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 80px;
+            gap: 20px; /* reduced gap */
+            flex: 1;
+        }
+        .pricing-tier {
+            flex: 1;
+            background-color: #0f172a;
+            border-top: 6px solid #475569;
+            padding: 24px 20px; /* reduced padding */
+            display: flex;
+            flex-direction: column;
+        }
+        .pricing-tier.highlight {
+            border-top-color: #38bdf8;
+            background-color: #1e293b;
+        }
+        .pricing-tier.premium {
+            border-top-color: #f97316;
+        }
+        .tier-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .tier-price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 18px; /* reduced */
+            text-align: center;
+        }
+        .pricing-tier.premium .tier-price {
+            color: #f97316;
+        }
+        .tier-features {
+            list-style: none;
+            margin-top: 12px; /* reduced */
+        }
+        .tier-features li {
+            font-size: 22px;
+            color: #cbd5e1;
+            margin-bottom: 10px; /* reduced */
+            display: flex;
+            align-items: flex-start;
+        }
+        .tier-features li i {
+            color: #22c55e;
+            margin-left: 12px;
+            margin-top: 6px;
+            font-size: 18px;
+        }
+        .footer-note {
+            background-color: rgba(249, 115, 22, 0.1);
+            border: 1px solid #f97316;
+            margin: 20px 80px 30px; /* reduced margins */
+            padding: 16px; /* reduced padding */
+            text-align: center;
+            font-size: 22px;
+            color: #fdba74;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">قیمت‌گذاری آزمایشی و <span class="title-accent">بسته‌های پایلوت</span></h1>
+        </div>
+
+        <div class="pricing-container">
+            <div class="pricing-tier">
+                <div class="tier-name">Founding Partner</div>
+                <div class="tier-price">$1,500</div>
+                <ul class="tier-features">
+                    <li><i class="fas fa-check"></i> ۳ هندسه (Geometry)</li>
+                    <li><i class="fas fa-check"></i> ۱ چرخهٔ بازبینی (Review Cycle)</li>
+                    <li><i class="fas fa-check"></i> ۹۰ دقیقه Onboarding</li>
+                </ul>
+            </div>
+
+            <div class="pricing-tier highlight">
+                <div class="tier-name">Standard Evidence</div>
+                <div class="tier-price">$3,500</div>
+                <ul class="tier-features">
+                    <li><i class="fas fa-check"></i> ۵ هندسه (Geometry)</li>
+                    <li><i class="fas fa-check"></i> مطالعهٔ مقاوم (Robust Study)</li>
+                    <li><i class="fas fa-check"></i> ۲ جلسهٔ Check-in</li>
+                </ul>
+            </div>
+
+            <div class="pricing-tier premium">
+                <div class="tier-name">Extended Workflow</div>
+                <div class="tier-price">$5,000</div>
+                <ul class="tier-features">
+                    <li><i class="fas fa-check"></i> تمام ویژگی‌های Standard</li>
+                    <li><i class="fas fa-check"></i> نقشه‌برداری جریان کار (Workflow Mapping)</li>
+                    <li><i class="fas fa-check"></i> بررسی نقشه راه XFOIL</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <i class="fas fa-info-circle" style="margin-left: 8px;"></i>
+            این قیمت‌ها آزمایشی هستند و برای سنجش Willingness-to-Pay طراحی شده‌اند، نه لیست قیمت نهایی.
+        </div>
+    </div>
+</body>
+</html>

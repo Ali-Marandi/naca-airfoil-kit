@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "title": "Cover",
+    "created": 1786673029.07,
+    "last_updated": 1786673329.748,
+    "total_slides": 10
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "problem_workflow",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "solution_workspace",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "differentiation",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "technical_foundation",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "market_beachhead",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "pricing_experiments",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "pilot_cohort_scenarios",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "discovery_evidence_status",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "investment_ask",
+      "state": "edited",
+      "pageNum": 10
+    }
+  ],
+  "outline": [
+    {
+      "id": "cover",
+      "title": "Cover",
+      "summary": "Title slide: NACA Airfoil Kit Pro. From geometry to traceable screening decisions.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "problem_workflow",
+      "title": "The Concept-Stage Aerodynamic Workflow is Fragmented",
+      "summary": "Highlight the pain point: geometry, solver, spreadsheet, and reporting are disconnected, leading to untraceable early decisions.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "solution_workspace",
+      "title": "An Evidence-Ready Screening Workspace",
+      "summary": "Introduce the product solution: web/desktop tools, validation residuals, robust Pareto, and audit manifests that make decisions reviewable.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "differentiation",
+      "title": "Multi-Condition Decisions, Not Single-Point Estimates",
+      "summary": "Showcase the robust multi-Re Pareto and sensitivity envelopes. Emphasize that the product exposes limitations rather than hiding them.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "technical_foundation",
+      "title": "Built for Scalable Solver Integration",
+      "summary": "Highlight the safe XFOIL adapter, FastAPI worker, and Kubernetes guardrails that prepare the product for higher-fidelity solvers.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "market_beachhead",
+      "title": "Targeting the UAS & Rotor Concept Phase",
+      "summary": "Present the beachhead hypothesis: small UAS/rotor teams and consultants. Cite FAA/EASA ecosystem data as context, not direct TAM.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "pricing_experiments",
+      "title": "Experimental Pricing & Pilot Offers",
+      "summary": "Detail the testable price ladder: Founding ($1.5k), Standard ($3.5k), and Extended ($5k) packages. Emphasize these are tests, not final prices.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "pilot_cohort_scenarios",
+      "title": "The 5-Partner Pilot Cohort Strategy",
+      "summary": "Present the capacity scenarios using the generated chart. Explain the strict scope, success gates, and goal of proving willingness-to-pay.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "discovery_evidence_status",
+      "title": "Current Status: Ready for Discovery Evidence",
+      "summary": "Transparently state that the product is built, but customer problem-discovery interviews and willingness-to-pay remain to be proven.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "investment_ask",
+      "title": "The Ask: Staged Validation Capital",
+      "summary": "Request introductions to design partners and support for executing the 90-day pilot plan before funding enterprise feature sprawl.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

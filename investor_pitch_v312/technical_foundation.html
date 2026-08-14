@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 60px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #38bdf8;
+        }
+        .columns-container {
+            display: flex;
+            gap: 40px;
+            padding: 0 80px;
+            flex: 1;
+        }
+        .tech-pillar {
+            flex: 1;
+            background-color: #0f172a;
+            border-top: 4px solid #38bdf8;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .tech-pillar:nth-child(2) {
+            border-top-color: #f97316;
+        }
+        .pillar-icon {
+            font-size: 48px;
+            color: #38bdf8;
+            margin-bottom: 24px;
+        }
+        .tech-pillar:nth-child(2) .pillar-icon {
+            color: #f97316;
+        }
+        .pillar-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        .pillar-text {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #ffffff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">زیرساخت فنی برای <span class="title-accent">حل‌گرهای مقیاس‌پذیر</span></h1>
+        </div>
+
+        <div class="columns-container">
+            <div class="tech-pillar">
+                <i class="fas fa-shield-halved pillar-icon"></i>
+                <div class="pillar-title">آداپتور امن XFOIL</div>
+                <div class="pillar-text">
+                    اجرای ایزوله با پروتکل‌های مجاز (<span class="highlight">Allowlisted</span>)، پوشه‌های کاری یک‌بارمصرف، کنترل زمان اجرا (Timeout) و تجزیه‌گر مقاوم خروجی‌ها برای جلوگیری از خطاهای سیستمی.
+                </div>
+            </div>
+
+            <div class="tech-pillar">
+                <i class="fas fa-server pillar-icon"></i>
+                <div class="pillar-title">ورکر مستقل FastAPI</div>
+                <div class="pillar-text">
+                    معماری میکروسرویس با احراز هویت سخت‌گیرانه (<span class="highlight">Fail-closed</span>)، کنترل سهمیه درخواست‌ها و اجرای کانتینر بدون دسترسی ریشه (Non-root) برای امنیت در سطح تولید.
+                </div>
+            </div>
+
+            <div class="tech-pillar">
+                <i class="fas fa-cubes pillar-icon"></i>
+                <div class="pillar-title">محافظ‌های Kubernetes</div>
+                <div class="pillar-text">
+                    استقرار آماده برای مقیاس‌پذیری با سرویس‌های داخلی، محدودیت‌های زمان اجرا (<span class="highlight">Restricted Runtime</span>) و سیاست‌های شبکه محدود به DNS برای ایزوله‌سازی کامل.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

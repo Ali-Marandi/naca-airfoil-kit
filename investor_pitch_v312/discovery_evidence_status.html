@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 50px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #f97316;
+        }
+        .content-area {
+            display: flex;
+            padding: 0 80px;
+            gap: 40px;
+            margin-bottom: 20px; /* reduced to save vertical space */
+        }
+        .status-col {
+            flex: 1;
+            background-color: #0f172a;
+            padding: 35px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .status-col.built {
+            border-top: 4px solid #38bdf8;
+        }
+        .status-col.pending {
+            border-top: 4px solid #f97316;
+        }
+        .col-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .col-icon {
+            font-size: 32px;
+            margin-left: 15px;
+        }
+        .built .col-icon { color: #38bdf8; }
+        .pending .col-icon { color: #f97316; }
+
+        .col-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        .bullet-icon {
+            font-size: 18px;
+            margin-left: 15px;
+            margin-top: 8px;
+        }
+        .built .bullet-icon { color: #38bdf8; }
+        .pending .bullet-icon { color: #f97316; }
+
+        .bullet-text {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .key-message {
+            margin: 0 80px;
+            background-color: rgba(56, 189, 248, 0.1);
+            border-right: 6px solid #38bdf8;
+            padding: 10px 30px; /* reduced vertical padding from 25 to 10 */
+            display: flex;
+            align-items: center;
+        }
+        .key-message-icon {
+            font-size: 40px;
+            color: #38bdf8;
+            margin-left: 25px;
+        }
+        .key-message-text {
+            font-size: 24px;
+            color: #e0f2fe;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+        .highlight {
+            color: #f97316;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">وضعیت فعلی: آماده برای <span class="title-accent">شواهد Discovery</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="status-col built">
+                <div class="col-header">
+                    <i class="fas fa-check-square col-icon"></i>
+                    <div class="col-title">زیرساخت محصول (آماده)</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-chevron-left bullet-icon"></i>
+                    <div class="bullet-text">جریان کار اعتبارسنجی، پارتو چندشرایطی و تولید Audit Manifest پیاده‌سازی شده‌اند.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-chevron-left bullet-icon"></i>
+                    <div class="bullet-text">معماری امن XFOIL و استقرار Kubernetes با موفقیت در CI تست شده‌اند.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-chevron-left bullet-icon"></i>
+                    <div class="bullet-text">استانداردهای ثبت Discovery و دروازه‌های Stop/Go عملیاتی تدوین شده‌اند.</div>
+                </div>
+            </div>
+
+            <div class="status-col pending">
+                <div class="col-header">
+                    <i class="fas fa-search col-icon"></i>
+                    <div class="col-title">شواهد بازار (نیازمند اثبات)</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-chevron-left bullet-icon"></i>
+                    <div class="bullet-text">ممیزی نشان می‌دهد <span class="highlight">هیچ مصاحبهٔ ثبت‌شده‌ای</span> از مشتریان واقعی هنوز وجود ندارد.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-chevron-left bullet-icon"></i>
+                    <div class="bullet-text">رتبه‌بندی درد (Pain Ranking)، تمایل به پرداخت (WTP) و نرخ تبدیل فعلاً ناشناخته‌اند.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-chevron-left bullet-icon"></i>
+                    <div class="bullet-text">ارزش اقتصادی جریان کار باید در شرایط واقعی و با داده‌های مشتری سنجیده شود.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="key-message">
+            <i class="fas fa-lightbulb key-message-icon"></i>
+            <div class="key-message-text">
+                سرمایه برای توسعهٔ بی‌هدف ویژگی‌ها (Feature Sprawl) درخواست نمی‌شود؛ هدف ما اثبات پروفایل مشتری (ICP)، قیمت‌گذاری و استفادهٔ تکرارپذیر است.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

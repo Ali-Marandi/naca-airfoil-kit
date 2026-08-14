@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .header {
+            padding: 0 80px;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #38bdf8;
+        }
+        .content-area {
+            display: flex;
+            flex: 1;
+            padding: 0 80px;
+            gap: 40px;
+        }
+        .text-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 20px;
+        }
+        .image-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 10px;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px; /* reduced from 35px to save vertical space */
+        }
+        .bullet-icon {
+            color: #f97316;
+            font-size: 28px;
+            margin-left: 20px;
+            margin-top: 4px;
+        }
+        .bullet-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .bullet-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        .bullet-text {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .chart-image {
+            width: 580px;
+            height: 309px;
+            object-fit: contain;
+            border: 2px solid #334155;
+            background-color: #0f172a;
+        }
+        .image-caption {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #94a3b8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">استراتژی پایلوت با <span class="title-accent">۵ شریک طراحی</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="text-col">
+                <div class="bullet-item">
+                    <i class="fas fa-bullseye bullet-icon"></i>
+                    <div class="bullet-content">
+                        <div class="bullet-title">اثبات تمایل به پرداخت (WTP)</div>
+                        <div class="bullet-text">هدف اصلی، اعتبارسنجی ارزش اقتصادی جریان کار است، نه صرفاً جمع‌آوری بازخورد رایگان.</div>
+                    </div>
+                </div>
+
+                <div class="bullet-item">
+                    <i class="fas fa-ruler-combined bullet-icon"></i>
+                    <div class="bullet-content">
+                        <div class="bullet-title">محدودهٔ دقیق و کنترل‌شده</div>
+                        <div class="bullet-text">دوره‌های ۴ هفته‌ای با خروجی‌های مشخص؛ جلوگیری از تبدیل شدن پایلوت به خدمات مشاوره‌ای نامحدود.</div>
+                    </div>
+                </div>
+
+                <div class="bullet-item">
+                    <i class="fas fa-door-open bullet-icon"></i>
+                    <div class="bullet-content">
+                        <div class="bullet-title">دروازه‌های موفقیت (Success Gates)</div>
+                        <div class="bullet-text">حداقل ۳ تعهد پرداخت (Paid/LOI)، فعال‌سازی بالای ۷۰٪ و استفاده از بسته‌های شواهد در مرورهای واقعی.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-col">
+                <img src="/home/ubuntu/naca-airfoil-kit/analysis_outputs/pilot_program/pilot_cohort_capacity_scenarios.png" class="chart-image" alt="Pilot Capacity Scenarios Chart" />
+                <div class="image-caption">سناریوهای ظرفیت پایلوت (آزمایشی، نه پیش‌بینی درآمد قطعی)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

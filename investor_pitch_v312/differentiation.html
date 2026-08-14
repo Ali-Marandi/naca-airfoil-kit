@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 40px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #f97316;
+        }
+        .content-area {
+            display: flex;
+            flex: 1;
+            padding: 0 80px;
+            gap: 50px;
+        }
+        .left-col {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        .bullet-icon {
+            color: #38bdf8;
+            font-size: 24px;
+            margin-left: 20px;
+            margin-top: 6px;
+        }
+        .bullet-text {
+            font-size: 24px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #f97316;
+            font-weight: 600;
+        }
+        .image-container {
+            width: 100%;
+            height: 420px;
+            background-color: #ffffff;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #475569;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .image-caption {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #94a3b8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">تصمیم‌گیری چندشرایطی، نه <span class="title-accent">تخمین‌های تک‌نقطه‌ای</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="left-col">
+                <div class="bullet-item">
+                    <i class="fas fa-check-circle bullet-icon"></i>
+                    <div class="bullet-text">استفاده از <span class="highlight">Robust Multi-Re Pareto</span> برای بررسی کاندیداها در مجموعه‌ای از شرایط، به‌جای بهینه‌سازی در یک عدد رینولدز خاص.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-check-circle bullet-icon"></i>
+                    <div class="bullet-text">در اجرای تکرارپذیر ۲۴ پروفیل UIUC، پروفیل NACA6412 تنها عضو جبههٔ پارتو بود؛ این نشان‌دهندهٔ <span class="highlight">وابستگی نتایج به دامنهٔ مدل</span> است.</div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fas fa-check-circle bullet-icon"></i>
+                    <div class="bullet-text">پاکت حساسیت (Sensitivity Envelope) و جریان کار اعتبارسنجی برای <span class="highlight">نمایش محدودیت‌ها و عدم‌قطعیت‌ها</span> طراحی شده‌اند، نه پنهان‌کردن آن‌ها.</div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="image-container">
+                    <img src="/home/ubuntu/naca-airfoil-kit/analysis_outputs/pareto_multi_re/pareto_multi_re.png" alt="Pareto Multi-Re Analysis">
+                </div>
+                <div class="image-caption">نمودار پارتو چندشرایطی (Multi-Re) برای کاتالوگ UIUC</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

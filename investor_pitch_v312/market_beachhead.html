@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #08111f;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px; /* keep upper padding */
+        }
+        .header {
+            padding: 0 80px;
+            margin-bottom: 20px; /* reduced from 50 to save height */
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        .title-accent {
+            color: #38bdf8;
+        }
+        .content-area {
+            display: flex;
+            flex: 1;
+            padding: 0 80px;
+            gap: 60px;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .col-header {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 18px; /* reduced from 30 */
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* compact vertical spacing */
+            border-bottom: 2px solid #334155;
+        }
+        .col-header.blue { color: #38bdf8; border-bottom-color: #38bdf8; }
+        .col-header.orange { color: #f97316; border-bottom-color: #f97316; }
+        .col-header i { margin-left: 15px; font-size: 36px; }
+
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px; /* reduced from 30 */
+        }
+        .bullet-icon {
+            font-size: 20px;
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        .blue .bullet-icon { color: #38bdf8; }
+        .orange .bullet-icon { color: #f97316; }
+
+        .bullet-text {
+            font-size: 24px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .disclaimer-box {
+            background-color: rgba(249, 115, 22, 0.1);
+            border: 1px solid #f97316;
+            padding: 14px; /* reduced from 20 */
+            margin-top: auto;
+            margin-bottom: 30px; /* reduced from 60 */
+        }
+        .disclaimer-text {
+            font-size: 20px;
+            color: #fdba74;
+            line-height: 1.5;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1 class="title">تمرکز بر مرحلهٔ Concept در <span class="title-accent">تیم‌های پهپاد (UAS) و روتور</span></h1>
+        </div>
+
+        <div class="content-area">
+            <div class="column">
+                <div class="col-header blue">
+                    <i class="fas fa-users-cog"></i>
+                    فرضیهٔ بازار هدف (Beachhead)
+                </div>
+                <div class="bullet-item blue">
+                    <i class="fas fa-check bullet-icon"></i>
+                    <div class="bullet-text"><span class="highlight">مخاطب اولیه:</span> تیم‌های کوچک طراحی UAS/Rotor و مشاوران مستقل آئرودینامیک.</div>
+                </div>
+                <div class="bullet-item blue">
+                    <i class="fas fa-check bullet-icon"></i>
+                    <div class="bullet-text"><span class="highlight">نیاز اصلی:</span> رسیدن سریع به یک Shortlist قابل‌دفاع و مستند پیش از ورود به فاز پرهزینهٔ CFD یا آزمایشگاه.</div>
+                </div>
+                <div class="bullet-item blue">
+                    <i class="fas fa-check bullet-icon"></i>
+                    <div class="bullet-text"><span class="highlight">چرا این بخش؟</span> حساسیت کمتر به Certificationهای سنگین هوافضا در مراحل اولیه، و تناسب بالا با قابلیت‌های فعلی محصول.</div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="col-header orange">
+                    <i class="fas fa-globe"></i>
+                    بستر و اکوسیستم (Context)
+                </div>
+                <div class="bullet-item orange">
+                    <i class="fas fa-chart-pie bullet-icon"></i>
+                    <div class="bullet-text"><span class="highlight">پیش‌بینی FAA:</span> گزارش رسمی (۲۰۲۶-۲۰۴۶) رشد پایدار ناوگان UAS و Advanced Air Mobility را نشان می‌دهد.</div>
+                </div>
+                <div class="bullet-item orange">
+                    <i class="fas fa-chart-pie bullet-icon"></i>
+                    <div class="bullet-text"><span class="highlight">گزارش EASA:</span> بیش از ۱.۶ میلیون اپراتور ثبت‌شدهٔ پهپاد تحت قوانین یکپارچهٔ اروپا فعالیت می‌کنند.</div>
+                </div>
+
+                <div class="disclaimer-box">
+                    <div class="disclaimer-text">
+                        <i class="fas fa-info-circle" style="margin-left: 8px;"></i>
+                        <strong>توجه:</strong> این داده‌ها نشان‌دهندهٔ پویایی و بلوغ اکوسیستم هستند، نه اندازهٔ مستقیم بازار (TAM) نرم‌افزار ما. اندازهٔ دقیق بازار و Willingness-to-pay از طریق پایلوت‌ها سنجیده خواهد شد.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
