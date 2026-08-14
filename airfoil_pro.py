@@ -92,26 +92,59 @@ class UIUCLoader:
     """Load UIUC-format coordinate files while tolerating headers and comments."""
 
     @staticmethod
+    def parse_coordinate_text(text: str):
+        """Parse common UIUC coordinate orientations into ascending x surfaces.
+
+        Most UIUC files begin at the trailing edge, follow the upper surface to
+        the leading edge and return over the lower surface. Some legacy files
+        begin at the leading edge, traverse the upper surface to the trailing
+        edge, then return over the lower surface. Both conventions are accepted.
+        """
+        points = []
+        for line in text.splitlines():
+            fields = line.split()
+            if len(fields) < 2:
+                continue
+            try:
+                x_value, y_value = float(fields[0]), float(fields[1])
+            except ValueError:
+                continue
+            # UIUC legacy files may include a numeric point-count line (for
+            # example ``66. 66.``). Airfoil coordinates are normalized and the
+            # broad envelope avoids mistaking those counts for geometry.
+            if -5.0 <= x_value <= 5.0 and -5.0 <= y_value <= 5.0:
+                points.append((x_value, y_value))
+        coords = np.asarray(points, dtype=float)
+        if coords.shape[0] < 8 or not np.all(np.isfinite(coords)):
+            return None
+        leading_edge = int(np.argmin(coords[:, 0]))
+        if leading_edge == 0:
+            trailing_edge = int(np.argmax(coords[:, 0]))
+            if trailing_edge <= 1 or trailing_edge >= coords.shape[0] - 1:
+                return None
+            upper = coords[: trailing_edge + 1]
+            lower = coords[trailing_edge:][::-1]
+        elif leading_edge == coords.shape[0] - 1:
+            trailing_edge = int(np.argmax(coords[:, 0]))
+            if trailing_edge <= 0 or trailing_edge >= coords.shape[0] - 2:
+                return None
+            lower = coords[: trailing_edge + 1]
+            upper = coords[trailing_edge:][::-1]
+        else:
+            upper, lower = coords[: leading_edge + 1][::-1], coords[leading_edge:]
+        upper = upper[np.argsort(upper[:, 0])]
+        lower = lower[np.argsort(lower[:, 0])]
+        if upper.shape[0] < 4 or lower.shape[0] < 4:
+            return None
+        return upper[:, 0], upper[:, 1], lower[:, 0], lower[:, 1]
+
+    @staticmethod
     def load_from_url(url: str):
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
-            points = []
-            for line in response.text.splitlines():
-                fields = line.split()
-                if len(fields) < 2:
-                    continue
-                try:
-                    points.append((float(fields[0]), float(fields[1])))
-                except ValueError:
-                    continue
-            coords = np.asarray(points, dtype=float)
-            if coords.shape[0] < 8:
-                return None
-            leading_edge = int(np.argmin(coords[:, 0]))
-            upper, lower = coords[: leading_edge + 1][::-1], coords[leading_edge:]
-            return upper[:, 0], upper[:, 1], lower[:, 0], lower[:, 1]
-        except (requests.RequestException, ValueError, IndexError):
+            return UIUCLoader.parse_coordinate_text(response.text)
+        except requests.RequestException:
             return None
 
 

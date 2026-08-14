@@ -73,6 +73,8 @@ The flap controls rotate the geometry aft of a user-selected hinge. Positive def
 | `.github/workflows/xfoil-worker.yml` | Tests, constrained image smoke test, GHCR publication, SBOM and provenance workflow |
 | `scripts/compare_naca0012_airfoil360.py` | Airfoil 360 NACA 0012 experiment-versus-model comparison chart and residual export |
 | `scripts/run_pareto_uiuc_catalog.py` | Bounded, provenance-recorded Pareto run over a curated real UIUC NACA profile catalog |
+| `scripts/compare_pareto_reynolds.py` | Reynolds sweep comparing the UIUC Pareto-front profile with standard NACA references |
+| `k8s/xfoil-worker/` | Restricted Kubernetes Deployment, internal Service, NetworkPolicy and secret-safe deployment instructions |
 | `SECURITY_AUDIT_XFOIL_WORKER.md` | Production worker security assessment, residual risks and hardening checklist |
 | `app.py` | Streamlit web interface |
 | `gui.py` | PyQt6 desktop interface |
@@ -84,6 +86,12 @@ Run the UIUC catalog screen only when an internet connection is available; it do
 
 ```bash
 python scripts/run_pareto_uiuc_catalog.py --output-dir analysis_outputs/pareto_uiuc_catalog
+```
+
+Compare the selected Pareto-front profile against standard NACA references at multiple Reynolds conditions:
+
+```bash
+python scripts/compare_pareto_reynolds.py --output-dir analysis_outputs/pareto_reynolds_comparison
 ```
 
 Run the quality suite before creating a tag:

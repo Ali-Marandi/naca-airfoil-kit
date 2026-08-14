@@ -164,16 +164,24 @@ def create_app(settings: WorkerSettings | None = None) -> FastAPI:
             raise HTTPException(status_code=429, detail="Worker request rate limit exceeded.")
         timestamps.append(now)
 
+    def worker_status(active_settings: WorkerSettings) -> str:
+        if not active_settings.api_key and not active_settings.allow_insecure_no_auth:
+            return "misconfigured"
+        if not Path(active_settings.xfoil_executable).is_file():
+            return "degraded"
+        return "ok"
+
     @app.get("/healthz")
     async def healthz(request: Request):
-        active_settings: WorkerSettings = request.app.state.settings
-        if not active_settings.api_key and not active_settings.allow_insecure_no_auth:
-            status = "misconfigured"
-        elif not Path(active_settings.xfoil_executable).is_file():
-            status = "degraded"
-        else:
-            status = "ok"
+        status = worker_status(request.app.state.settings)
         return {"status": status, "service": "naca-airfoil-kit-xfoil-worker"}
+
+    @app.get("/readyz")
+    async def readyz(request: Request):
+        status = worker_status(request.app.state.settings)
+        if status != "ok":
+            raise HTTPException(status_code=503, detail="Worker is not ready to execute XFOIL jobs.")
+        return {"status": "ok", "service": "naca-airfoil-kit-xfoil-worker"}
 
     @app.post("/v1/polar", dependencies=[Depends(require_api_key)])
     async def compute_polar(request: Request, body: PolarRequest):

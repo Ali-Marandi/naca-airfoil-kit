@@ -13,12 +13,12 @@ class XFoilWorkerTests(unittest.TestCase):
         xu, yu, xl, yl = NACAGeneratorPro.naca4("0012", 30)
         self.coordinates = list(zip(xu[::-1], yu[::-1])) + list(zip(xl[1:], yl[1:]))
 
-    def make_client(self, api_key="", allow_insecure_no_auth=False, requests_per_minute=30, request_body_limit_bytes=262_144):
+    def make_client(self, api_key="", allow_insecure_no_auth=False, requests_per_minute=30, request_body_limit_bytes=262_144, xfoil_executable="/not/a/real/xfoil"):
         temporary_dir = tempfile.TemporaryDirectory()
         settings = WorkerSettings(
             api_key=api_key,
             allow_insecure_no_auth=allow_insecure_no_auth,
-            xfoil_executable="/not/a/real/xfoil",
+            xfoil_executable=xfoil_executable,
             max_concurrency=1,
             requests_per_minute=requests_per_minute,
             request_body_limit_bytes=request_body_limit_bytes,
@@ -50,6 +50,22 @@ class XFoilWorkerTests(unittest.TestCase):
             response = client.get("/healthz")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "degraded")
+
+    def test_readiness_rejects_misconfigured_or_solver_missing_worker(self):
+        temporary_dir, client = self.make_client(api_key="test-secret")
+        with temporary_dir, client:
+            response = client.get("/readyz")
+        self.assertEqual(response.status_code, 503)
+
+    def test_readiness_accepts_configured_worker_with_solver_file(self):
+        with tempfile.TemporaryDirectory() as executable_dir:
+            executable = Path(executable_dir) / "xfoil"
+            executable.touch()
+            temporary_dir, client = self.make_client(api_key="test-secret", xfoil_executable=str(executable))
+            with temporary_dir, client:
+                response = client.get("/readyz")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "ok")
 
     def test_polar_endpoint_fails_closed_without_auth_configuration(self):
         temporary_dir, client = self.make_client()

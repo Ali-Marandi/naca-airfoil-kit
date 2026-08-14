@@ -1,0 +1,44 @@
+{
+  "generated_at_utc": "2026-08-14T00:21:28.728426+00:00",
+  "study_scope": "Preliminary panel/empirical screening only; not a viscous CFD or wind-tunnel validation result.",
+  "pareto_front_source": "analysis_outputs/pareto_uiuc_catalog/pareto_uiuc_manifest.json",
+  "profile_sources": {
+    "Pareto front \u2014 UIUC NACA6412": "https://m-selig.ae.illinois.edu/ads/coord/naca6412.dat",
+    "Reference \u2014 UIUC NACA0012": "https://m-selig.ae.illinois.edu/ads/coord/n0012.dat",
+    "Reference \u2014 UIUC NACA2412": "https://m-selig.ae.illinois.edu/ads/coord/naca2412.dat",
+    "Reference \u2014 UIUC NACA4412": "https://m-selig.ae.illinois.edu/ads/coord/naca4412.dat"
+  },
+  "settings": {
+    "reynolds": [
+      50000.0,
+      100000.0,
+      250000.0,
+      500000.0,
+      1000000.0,
+      2000000.0
+    ],
+    "roughness_k_over_c": 0.0,
+    "alpha_values_deg": [
+      -4.0,
+      -3.0,
+      -2.0,
+      -1.0,
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0
+    ],
+    "design_alpha_deg": 4.0
+  },
+  "metrics_csv": "pareto_reynolds_metrics.csv",
+  "chart": "pareto_reynolds_comparison.png"
+}

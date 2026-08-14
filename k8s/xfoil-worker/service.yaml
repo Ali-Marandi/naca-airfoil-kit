@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xfoil-worker
+  namespace: naca-xfoil
+  labels:
+    app.kubernetes.io/name: xfoil-worker
+    app.kubernetes.io/part-of: naca-airfoil-kit
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: xfoil-worker
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http

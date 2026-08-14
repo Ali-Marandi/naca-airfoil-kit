@@ -67,9 +67,13 @@ Compose worker را **بدون port عمومی** اجرا می‌کند. image �
 
 workflow `.github/workflows/xfoil-worker.yml` در pull request ابتدا unit testهای worker/adapter و سپس build + smoke-test container محدودشده را اجرا می‌کند. فقط پس از موفقیت آن‌ها، push به `main` یا tag `v*` image را در GitHub Container Registry با tag branch/tag/SHA منتشر می‌کند. SBOM و provenance attestation نیز تولید می‌شوند. این workflow به `packages: write` محدود شده و برای registry از `GITHUB_TOKEN` کوتاه‌عمر استفاده می‌کند؛ secret runtime worker هرگز در CI قرار نمی‌گیرد. [1]
 
+## Kubernetes deployment
+
+برای استقرار cluster، پوشه [`k8s/xfoil-worker/`](k8s/xfoil-worker/) یک namespace `restricted`، ServiceAccount بدون token، Deployment non-root و read-only، secret mount، resource limits، probeهای `/healthz` و `/readyz`، Service داخلی و NetworkPolicy allowlisted فراهم می‌کند. secret مثال عمداً در kustomization اعمال نمی‌شود. دستورها و review کامل در [`k8s/xfoil-worker/README.md`](k8s/xfoil-worker/README.md) و [`KUBERNETES_XFOIL_WORKER_REVIEW.md`](KUBERNETES_XFOIL_WORKER_REVIEW.md) قرار دارند.
+
 ## حد استقرار و عملیات
 
-XFOIL یک CLI/system package است؛ بنابراین برای worker باید محیطی با container runtime یا کنترل OS فراهم باشد. Streamlit Community Cloud برای خود UI مناسب است، اما worker solver باید در یک سرویس container داخلی و دارای TLS/authentication جدا اجرا شود. پیش از production، کنترل‌های بلوکه‌کننده در [`SECURITY_AUDIT_XFOIL_WORKER.md`](SECURITY_AUDIT_XFOIL_WORKER.md) باید بسته شوند: private ingress/TLS، secret rotation، vulnerability/secret scan blocking، network policy، rate limit gateway، log redaction و مانیتور کردن `timed_out`/`process_error`ها.
+XFOIL یک CLI/system package است؛ بنابراین برای worker باید محیطی با container runtime یا کنترل OS فراهم باشد. Streamlit Community Cloud برای خود UI مناسب است، اما worker solver باید در یک سرویس container داخلی و دارای TLS/authentication جدا اجرا شود. پیش از production، کنترل‌های بلوکه‌کننده در [`SECURITY_AUDIT_XFOIL_WORKER.md`](SECURITY_AUDIT_XFOIL_WORKER.md) باید بسته شوند: private ingress/TLS، secret rotation، vulnerability/secret scan blocking، network policy enforceشده، rate limit gateway، log redaction و مانیتور کردن `timed_out`/`process_error`ها.
 
 ## منابع
 

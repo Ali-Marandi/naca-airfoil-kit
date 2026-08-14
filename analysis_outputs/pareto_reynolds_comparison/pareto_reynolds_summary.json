@@ -1,0 +1,330 @@
+{
+  "per_reynolds": [
+    {
+      "reynolds": 50000.0,
+      "front_airfoil": "Pareto front \u2014 UIUC NACA6412",
+      "comparisons": [
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA0012",
+          "best_ld_front": 27.89409300704656,
+          "best_ld_reference": 19.204301743838144,
+          "best_ld_delta_pct": 45.24919145262132,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.4040700944912899,
+          "cl_max_delta_pct": 45.35563045557206,
+          "ld_at_design_alpha_front": 23.970179672864223,
+          "ld_at_design_alpha_reference": 14.842057925185872,
+          "ld_at_design_alpha_delta_pct": 61.5017256615648,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.31228585284020094,
+          "cl_at_design_alpha_delta_pct": 61.62007456583287
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA2412",
+          "best_ld_front": 27.89409300704656,
+          "best_ld_reference": 5.947438771198453,
+          "best_ld_delta_pct": 369.0101753065328,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.12513014870320124,
+          "cl_max_delta_pct": 369.3821907966885,
+          "ld_at_design_alpha_front": 23.970179672864223,
+          "ld_at_design_alpha_reference": 5.209165121631638,
+          "ld_at_design_alpha_delta_pct": 360.15396158830487,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.1095973630608641,
+          "cl_at_design_alpha_delta_pct": 360.5189523935801
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA4412",
+          "best_ld_front": 27.89409300704656,
+          "best_ld_reference": 6.309010735300661,
+          "best_ld_delta_pct": 342.1310119345873,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.1327885876989157,
+          "cl_max_delta_pct": 342.3110777124684,
+          "ld_at_design_alpha_front": 23.970179672864223,
+          "ld_at_design_alpha_reference": 5.532561414751363,
+          "ld_at_design_alpha_delta_pct": 333.25645891526824,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.11644630948426142,
+          "cl_at_design_alpha_delta_pct": 333.4329103723944
+        }
+      ]
+    },
+    {
+      "reynolds": 100000.0,
+      "front_airfoil": "Pareto front \u2014 UIUC NACA6412",
+      "comparisons": [
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA0012",
+          "best_ld_front": 32.740699979551366,
+          "best_ld_reference": 22.541054894774415,
+          "best_ld_delta_pct": 45.249191452621346,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.4040700944912899,
+          "cl_max_delta_pct": 45.35563045557206,
+          "ld_at_design_alpha_front": 28.135005534215907,
+          "ld_at_design_alpha_reference": 17.42086991266846,
+          "ld_at_design_alpha_delta_pct": 61.501725661564834,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.31228585284020094,
+          "cl_at_design_alpha_delta_pct": 61.62007456583287
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA2412",
+          "best_ld_front": 32.740699979551366,
+          "best_ld_reference": 6.9808080300502855,
+          "best_ld_delta_pct": 369.01017530653286,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.12513014870320124,
+          "cl_max_delta_pct": 369.3821907966885,
+          "ld_at_design_alpha_front": 28.135005534215907,
+          "ld_at_design_alpha_reference": 6.114259113863287,
+          "ld_at_design_alpha_delta_pct": 360.153961588305,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.1095973630608641,
+          "cl_at_design_alpha_delta_pct": 360.5189523935801
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA4412",
+          "best_ld_front": 32.740699979551366,
+          "best_ld_reference": 7.405203230664874,
+          "best_ld_delta_pct": 342.13101193458743,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.1327885876989157,
+          "cl_max_delta_pct": 342.3110777124684,
+          "ld_at_design_alpha_front": 28.135005534215907,
+          "ld_at_design_alpha_reference": 6.493845609285713,
+          "ld_at_design_alpha_delta_pct": 333.2564589152683,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.11644630948426142,
+          "cl_at_design_alpha_delta_pct": 333.4329103723944
+        }
+      ]
+    },
+    {
+      "reynolds": 250000.0,
+      "front_airfoil": "Pareto front \u2014 UIUC NACA6412",
+      "comparisons": [
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA0012",
+          "best_ld_front": 39.892727213825495,
+          "best_ld_reference": 27.465025322938242,
+          "best_ld_delta_pct": 45.249191452621325,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.4040700944912899,
+          "cl_max_delta_pct": 45.35563045557206,
+          "ld_at_design_alpha_front": 34.28094395162425,
+          "ld_at_design_alpha_reference": 21.226363873945065,
+          "ld_at_design_alpha_delta_pct": 61.50172566156478,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.31228585284020094,
+          "cl_at_design_alpha_delta_pct": 61.62007456583287
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA2412",
+          "best_ld_front": 39.892727213825495,
+          "best_ld_reference": 8.505727447757963,
+          "best_ld_delta_pct": 369.0101753065328,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.12513014870320124,
+          "cl_max_delta_pct": 369.3821907966885,
+          "ld_at_design_alpha_front": 34.28094395162425,
+          "ld_at_design_alpha_reference": 7.449885649858877,
+          "ld_at_design_alpha_delta_pct": 360.1539615883048,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.1095973630608641,
+          "cl_at_design_alpha_delta_pct": 360.5189523935801
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA4412",
+          "best_ld_front": 39.892727213825495,
+          "best_ld_reference": 9.022829463889217,
+          "best_ld_delta_pct": 342.1310119345873,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.1327885876989157,
+          "cl_max_delta_pct": 342.3110777124684,
+          "ld_at_design_alpha_front": 34.28094395162425,
+          "ld_at_design_alpha_reference": 7.912390743683885,
+          "ld_at_design_alpha_delta_pct": 333.2564589152681,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.11644630948426142,
+          "cl_at_design_alpha_delta_pct": 333.4329103723944
+        }
+      ]
+    },
+    {
+      "reynolds": 500000.0,
+      "front_airfoil": "Pareto front \u2014 UIUC NACA6412",
+      "comparisons": [
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA0012",
+          "best_ld_front": 45.88809053732008,
+          "best_ld_reference": 31.592665045772918,
+          "best_ld_delta_pct": 45.249191452621325,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.4040700944912899,
+          "cl_max_delta_pct": 45.35563045557206,
+          "ld_at_design_alpha_front": 39.43292849659447,
+          "ld_at_design_alpha_reference": 24.416413097175326,
+          "ld_at_design_alpha_delta_pct": 61.5017256615648,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.31228585284020094,
+          "cl_at_design_alpha_delta_pct": 61.62007456583287
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA2412",
+          "best_ld_front": 45.88809053732008,
+          "best_ld_reference": 9.784028780895602,
+          "best_ld_delta_pct": 369.01017530653274,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.12513014870320124,
+          "cl_max_delta_pct": 369.3821907966885,
+          "ld_at_design_alpha_front": 39.43292849659447,
+          "ld_at_design_alpha_reference": 8.569507553620655,
+          "ld_at_design_alpha_delta_pct": 360.15396158830487,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.1095973630608641,
+          "cl_at_design_alpha_delta_pct": 360.5189523935801
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA4412",
+          "best_ld_front": 45.88809053732008,
+          "best_ld_reference": 10.378844572908893,
+          "best_ld_delta_pct": 342.1310119345873,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.1327885876989157,
+          "cl_max_delta_pct": 342.3110777124684,
+          "ld_at_design_alpha_front": 39.43292849659447,
+          "ld_at_design_alpha_reference": 9.1015212087828,
+          "ld_at_design_alpha_delta_pct": 333.2564589152681,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.11644630948426142,
+          "cl_at_design_alpha_delta_pct": 333.4329103723944
+        }
+      ]
+    },
+    {
+      "reynolds": 1000000.0,
+      "front_airfoil": "Pareto front \u2014 UIUC NACA6412",
+      "comparisons": [
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA0012",
+          "best_ld_front": 52.4053438602222,
+          "best_ld_reference": 36.079611415473,
+          "best_ld_delta_pct": 45.24919145262133,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.4040700944912899,
+          "cl_max_delta_pct": 45.35563045557206,
+          "ld_at_design_alpha_front": 45.033387815492965,
+          "ld_at_design_alpha_reference": 27.884152711694707,
+          "ld_at_design_alpha_delta_pct": 61.50172566156479,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.31228585284020094,
+          "cl_at_design_alpha_delta_pct": 61.62007456583287
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA2412",
+          "best_ld_front": 52.4053438602222,
+          "best_ld_reference": 11.173604885218417,
+          "best_ld_delta_pct": 369.01017530653274,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.12513014870320124,
+          "cl_max_delta_pct": 369.3821907966885,
+          "ld_at_design_alpha_front": 45.033387815492965,
+          "ld_at_design_alpha_reference": 9.786591353044546,
+          "ld_at_design_alpha_delta_pct": 360.1539615883048,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.1095973630608641,
+          "cl_at_design_alpha_delta_pct": 360.5189523935801
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA4412",
+          "best_ld_front": 52.4053438602222,
+          "best_ld_reference": 11.852899354631903,
+          "best_ld_delta_pct": 342.1310119345873,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.1327885876989157,
+          "cl_max_delta_pct": 342.3110777124684,
+          "ld_at_design_alpha_front": 45.033387815492965,
+          "ld_at_design_alpha_reference": 10.394164215864611,
+          "ld_at_design_alpha_delta_pct": 333.2564589152681,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.11644630948426142,
+          "cl_at_design_alpha_delta_pct": 333.4329103723944
+        }
+      ]
+    },
+    {
+      "reynolds": 2000000.0,
+      "front_airfoil": "Pareto front \u2014 UIUC NACA6412",
+      "comparisons": [
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA0012",
+          "best_ld_front": 59.460306068198705,
+          "best_ld_reference": 40.93675529174563,
+          "best_ld_delta_pct": 45.249191452621346,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.4040700944912899,
+          "cl_max_delta_pct": 45.35563045557206,
+          "ld_at_design_alpha_front": 51.095915522263844,
+          "ld_at_design_alpha_reference": 31.637999725983093,
+          "ld_at_design_alpha_delta_pct": 61.50172566156482,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.31228585284020094,
+          "cl_at_design_alpha_delta_pct": 61.62007456583287
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA2412",
+          "best_ld_front": 59.460306068198705,
+          "best_ld_reference": 12.677828584281142,
+          "best_ld_delta_pct": 369.01017530653274,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.12513014870320124,
+          "cl_max_delta_pct": 369.3821907966885,
+          "ld_at_design_alpha_front": 51.095915522263844,
+          "ld_at_design_alpha_reference": 11.104091192847068,
+          "ld_at_design_alpha_delta_pct": 360.1539615883048,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.1095973630608641,
+          "cl_at_design_alpha_delta_pct": 360.5189523935801
+        },
+        {
+          "reference_airfoil": "Reference \u2014 UIUC NACA4412",
+          "best_ld_front": 59.460306068198705,
+          "best_ld_reference": 13.448571681960138,
+          "best_ld_delta_pct": 342.13101193458726,
+          "cl_max_front": 0.5873386333302402,
+          "cl_max_reference": 0.1327885876989157,
+          "cl_max_delta_pct": 342.3110777124684,
+          "ld_at_design_alpha_front": 51.095915522263844,
+          "ld_at_design_alpha_reference": 11.793457309370812,
+          "ld_at_design_alpha_delta_pct": 333.2564589152682,
+          "cl_at_design_alpha_front": 0.5047166282188799,
+          "cl_at_design_alpha_reference": 0.11644630948426142,
+          "cl_at_design_alpha_delta_pct": 333.4329103723944
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "Reference \u2014 UIUC NACA0012": {
+      "mean_best_ld_delta_pct": 45.249191452621325,
+      "mean_cl_max_delta_pct": 45.35563045557206,
+      "mean_ld_at_design_alpha_delta_pct": 61.5017256615648,
+      "mean_cl_at_design_alpha_delta_pct": 61.62007456583287
+    },
+    "Reference \u2014 UIUC NACA2412": {
+      "mean_best_ld_delta_pct": 369.0101753065328,
+      "mean_cl_max_delta_pct": 369.3821907966885,
+      "mean_ld_at_design_alpha_delta_pct": 360.15396158830487,
+      "mean_cl_at_design_alpha_delta_pct": 360.5189523935801
+    },
+    "Reference \u2014 UIUC NACA4412": {
+      "mean_best_ld_delta_pct": 342.1310119345873,
+      "mean_cl_max_delta_pct": 342.3110777124684,
+      "mean_ld_at_design_alpha_delta_pct": 333.2564589152682,
+      "mean_cl_at_design_alpha_delta_pct": 333.4329103723944
+    }
+  }
+}

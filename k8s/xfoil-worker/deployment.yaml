@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xfoil-worker
+  namespace: naca-xfoil
+  labels:
+    app.kubernetes.io/name: xfoil-worker
+    app.kubernetes.io/part-of: naca-airfoil-kit
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: xfoil-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: xfoil-worker
+        app.kubernetes.io/part-of: naca-airfoil-kit
+    spec:
+      serviceAccountName: xfoil-worker
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: xfoil-worker
+          # Pin this to the verified GHCR digest produced by CI before production apply.
+          image: ghcr.io/ali-marandi/naca-airfoil-kit-xfoil-worker:main
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: XFOIL_WORKER_API_KEY_FILE
+              value: /run/secrets/xfoil-worker/api-key
+            - name: XFOIL_ALLOW_INSECURE_NO_AUTH
+              value: "false"
+            - name: XFOIL_MAX_CONCURRENCY
+              value: "1"
+            - name: XFOIL_REQUESTS_PER_MINUTE
+              value: "30"
+            - name: XFOIL_REQUEST_BODY_LIMIT_BYTES
+              value: "262144"
+            - name: XFOIL_TEMP_ROOT
+              value: /tmp/xfoil-runs
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+              ephemeral-storage: 128Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+              ephemeral-storage: 256Mi
+          volumeMounts:
+            - name: worker-api-key
+              mountPath: /run/secrets/xfoil-worker
+              readOnly: true
+            - name: runtime-tmp
+              mountPath: /tmp
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            failureThreshold: 18
+            periodSeconds: 5
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+      volumes:
+        - name: worker-api-key
+          secret:
+            secretName: xfoil-worker-api-key
+            defaultMode: 0440
+        - name: runtime-tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi

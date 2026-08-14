@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: xfoil-worker-restricted-traffic
+  namespace: naca-xfoil
+  labels:
+    app.kubernetes.io/name: xfoil-worker
+    app.kubernetes.io/part-of: naca-airfoil-kit
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: xfoil-worker
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              naca-airfoil-kit/xfoil-client: "true"
+          podSelector:
+            matchLabels:
+              naca-airfoil-kit/xfoil-client: "true"
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

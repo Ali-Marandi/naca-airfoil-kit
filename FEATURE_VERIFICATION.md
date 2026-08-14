@@ -45,3 +45,11 @@ The XFOIL production draft adds `xfoil_worker_app.py`, `Dockerfile.xfoil-worker`
 `scripts/run_pareto_uiuc_catalog.py` loaded 24 of 24 curated NACA coordinate profiles from the UIUC index at Re=1,000,000, k/c=0 and alpha −4° to 12°. It emitted CSV, chart and source manifest artifacts. In this preliminary model run, UIUC NACA6412 was the only reported front member; this is not a validated design recommendation.
 
 The XFOIL worker now fails closed when authentication is absent, supports a mounted secret file, uses constant-time key comparison, applies request-body and per-credential quota controls, and returns no-store/nosniff headers. Compose adds explicit UID, secret mount, file/process/log constraints. The full quality suite passed 34 tests after these changes.
+
+## Reynolds comparison and Kubernetes worker manifests — 2026-08-14
+
+A repeatable Reynolds sweep now compares the UIUC Pareto-front NACA6412 profile with UIUC NACA0012, NACA2412 and NACA4412 at Re=50k through 2.0M. It emits a source manifest, metrics CSV, summary JSON and four-panel chart. The result is explicitly preliminary: the model keeps Cl nearly Reynolds-invariant and produces nearly profile-invariant Cd under these conditions, so all design conclusions require XFOIL and experiment validation.
+
+`UIUCLoader.parse_coordinate_text()` now accepts both trailing-edge-first and legacy leading-edge-first UIUC contours, including numeric point-count headers. Unit tests cover both conventions.
+
+The `k8s/xfoil-worker/` kustomization adds a Restricted namespace, token-free ServiceAccount, non-root/read-only Deployment, runtime-default seccomp, capability drop, bounded memory tmpfs, secret mount, resource requests/limits, readiness endpoint, ClusterIP Service and allowlisted NetworkPolicy. Static manifest tests and worker readiness tests passed.
