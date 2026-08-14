@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            /* keep top padding to preserve title spacing, reduce bottom padding to avoid overflow */
+            padding: 80px 80px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: var(--accent-orange);
+        }
+
+        .pilot-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        .step {
+            flex: 1;
+            background: var(--bg-panel);
+            border-top: 4px solid var(--accent-orange);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            color: var(--accent-orange);
+            margin-bottom: 24px;
+        }
+
+        .step-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .step-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        .conclusion {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--text-main);
+            line-height: 1.5;
+            max-width: 900px;
+            border-left: 4px solid var(--accent-orange);
+            border-right: 4px solid var(--accent-orange);
+            padding: 0 30px;
+        }
+
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Next Steps: Pilot &amp; Validation</h1>
+            <div class="subtitle">v3.1.2 is ready to prove value in a controlled pilot.</div>
+        </div>
+
+        <div class="pilot-steps">
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-crosshairs"></i></div>
+                <div class="step-title">1. Select Mission</div>
+                <div class="step-desc">Define a limited, specific engineering use case to test the screening workflow.</div>
+            </div>
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-database"></i></div>
+                <div class="step-title">2. Record Data</div>
+                <div class="step-desc">Gather experimental wind-tunnel or high-fidelity CFD reference data for the mission.</div>
+            </div>
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-box-open"></i></div>
+                <div class="step-title">3. Build Evidence</div>
+                <div class="step-desc">Compare model outputs to reference data to create a defensible validation package.</div>
+            </div>
+        </div>
+
+        <div class="conclusion">
+            "The goal is not to sell a chart; it's to provide a <span class="highlight">reliable path from geometry to decision</span>."
+        </div>
+    </div>
+</body>
+</html>

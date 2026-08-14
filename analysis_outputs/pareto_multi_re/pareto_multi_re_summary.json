@@ -1,0 +1,15 @@
+{
+  "robust_pareto_front": [
+    "UIUC NACA6412"
+  ],
+  "front_metrics": [
+    {
+      "airfoil": "UIUC NACA6412",
+      "mean_best_ld": 46.077433531823566,
+      "worst_case_best_ld": 32.740699979551366,
+      "best_ld_std": 9.330580167415892,
+      "mean_cl_objective": 0.5047166282188799,
+      "worst_case_cl_objective": 0.5047166282188799
+    }
+  ]
+}

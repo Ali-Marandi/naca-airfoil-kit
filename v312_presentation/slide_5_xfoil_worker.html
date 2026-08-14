@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            padding: 60px 80px 0 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            margin-bottom: 12px; /* reduced from 40px -> saves 28px */
+            border-left: 6px solid var(--accent-orange);
+            padding-left: 24px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .stack-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* reduced from 16px -> saves 8px per gap (3 gaps total = 24px) */
+        }
+
+        .layer {
+            display: flex;
+            background: var(--bg-panel);
+            border-left: 4px solid var(--accent-orange);
+            padding: 20px 30px;
+            align-items: center;
+        }
+
+        .layer-icon {
+            font-size: 2.5rem;
+            color: var(--accent-orange);
+            width: 80px;
+            text-align: center;
+            margin-right: 20px;
+        }
+
+        .layer-content {
+            flex: 1;
+        }
+
+        .layer-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .layer-details {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Isolated XFOIL Worker Architecture</h1>
+            <div class="subtitle">Separation of concerns with a secure, policy-controlled solver backend.</div>
+        </div>
+
+        <div class="stack-container">
+            <div class="layer">
+                <div class="layer-icon"><i class="fas fa-desktop"></i></div>
+                <div class="layer-content">
+                    <div class="layer-title">1. Streamlit / Desktop UI</div>
+                    <div class="layer-details">Handles study definition, visualization, validation, and downloads. <span class="highlight">Strictly prohibits</span> arbitrary user command execution.</div>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-icon"><i class="fas fa-plug"></i></div>
+                <div class="layer-content">
+                    <div class="layer-title">2. XFOIL Adapter</div>
+                    <div class="layer-details">Uses allowlisted batch commands, <span class="highlight">shell=False</span>, independent temporary directory isolation, strict timeouts, and structured manifest failures.</div>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-icon"><i class="fas fa-server"></i></div>
+                <div class="layer-content">
+                    <div class="layer-title">3. FastAPI Worker</div>
+                    <div class="layer-details">Enforces fail-closed API key auth, body size limits, per-credential quotas, semaphore concurrency, and exposes <span class="highlight">/healthz</span> and <span class="highlight">/readyz</span> probes.</div>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-icon"><i class="fab fa-docker"></i></div>
+                <div class="layer-content">
+                    <div class="layer-title">4. Container / Kubernetes</div>
+                    <div class="layer-details">Executes as non-root (UID 10001) with a <span class="highlight">read-only filesystem</span>, drops ALL capabilities, and restricts network egress to DNS only.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

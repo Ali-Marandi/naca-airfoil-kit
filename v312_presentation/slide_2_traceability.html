@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            padding: 60px 80px 0 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            margin-bottom: 24px; /* reduced to save vertical space */
+            border-left: 6px solid var(--accent-orange);
+            padding-left: 24px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .flow-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 24px; /* tightened gap */
+            margin-bottom: 24px; /* reduced to save vertical space */
+        }
+
+        .step-card {
+            flex: 1;
+            background: var(--bg-panel);
+            padding: 16px 20px; /* reduced inner padding */
+            border-top: 4px solid var(--accent-orange);
+            position: relative;
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            color: var(--accent-orange);
+            margin-bottom: 12px; /* tightened */
+        }
+
+        .step-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 8px; /* tightened */
+            color: var(--text-main);
+        }
+
+        .step-desc {
+            font-size: 1.15rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .arrow {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        .conclusion {
+            background: rgba(249, 115, 22, 0.05);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            padding: 18px; /* reduced */
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Design Decision Traceability</h1>
+            <div class="subtitle">The path from geometry generation to accountable engineering decisions.</div>
+        </div>
+
+        <div class="flow-container">
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-shapes"></i></div>
+                <div class="step-title">Geometry → Analysis</div>
+                <div class="step-desc">
+                    Users set geometry, Reynolds number, alpha, and roughness. The panel/empirical engine returns quick aerodynamic estimates.
+                </div>
+            </div>
+            
+            <div class="arrow"><i class="fas fa-chevron-right"></i></div>
+
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="step-title">Analysis → Evidence</div>
+                <div class="step-desc">
+                    Validation Studio isolates Cl/Cd residuals and reports MAE/RMSE/bias so lift and drag are clearly evaluated.
+                </div>
+            </div>
+
+            <div class="arrow"><i class="fas fa-chevron-right"></i></div>
+
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="step-title">Evidence → Decision</div>
+                <div class="step-desc">
+                    Robustness tools, Pareto views, and JSON audit manifests lock the shortlist, conditions, and geometry hash for review.
+                </div>
+            </div>
+        </div>
+
+        <div class="conclusion">
+            This architecture combines <span class="highlight">iteration speed</span> with <span class="highlight">explainability and reproducibility</span>—the exact feedback loop that scattered computational tools typically lack.
+        </div>
+    </div>
+</body>
+</html>

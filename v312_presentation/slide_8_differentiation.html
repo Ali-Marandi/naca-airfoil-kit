@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            padding: 60px 80px 0 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            margin-bottom: 24px; /* reduced from 30 */
+            border-left: 6px solid var(--accent-orange);
+            padding-left: 24px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px; /* reduced from 24 */
+            margin-bottom: 12px; /* reduced from 30 */
+            flex: 1;
+        }
+
+        .grid-item {
+            background: var(--bg-panel);
+            border-left: 4px solid var(--accent-orange);
+            padding: 16px; /* reduced from 24 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .item-icon {
+            font-size: 2rem;
+            color: var(--accent-orange);
+            width: 40px;
+            text-align: center;
+        }
+
+        .item-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* slightly reduced */
+            padding-left: 56px; /* align with text, past icon */
+        }
+
+        .feature-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .feature-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 80px;
+        }
+
+        .feature-text {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        .value-text {
+            font-size: 1.15rem;
+            color: var(--accent-orange);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .conclusion {
+            background: rgba(249, 115, 22, 0.05);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            padding: 16px 24px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--text-main);
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Product Differentiation</h1>
+            <div class="subtitle">Reducing decision cycles through transparency and traceable workflows.</div>
+        </div>
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <div class="item-header">
+                    <div class="item-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="item-title">Fast Geometry Iteration</div>
+                </div>
+                <div class="item-content">
+                    <div class="feature-row">
+                        <div class="feature-label">Feature:</div>
+                        <div class="feature-text">NACA generation, UIUC import, batch comparison, and Pareto screening.</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-label">Value:</div>
+                        <div class="value-text">Dramatically reduces initial shortlist time.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="item-header">
+                    <div class="item-icon"><i class="fas fa-file-signature"></i></div>
+                    <div class="item-title">Reviewable Decisions</div>
+                </div>
+                <div class="item-content">
+                    <div class="feature-row">
+                        <div class="feature-label">Feature:</div>
+                        <div class="feature-text">JSON audit manifests, operating conditions, and geometry hashing.</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-label">Value:</div>
+                        <div class="value-text">Enables team collaboration and full traceability.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="item-header">
+                    <div class="item-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="item-title">Model Risk Reduction</div>
+                </div>
+                <div class="item-content">
+                    <div class="feature-row">
+                        <div class="feature-label">Feature:</div>
+                        <div class="feature-text">Validation metrics, multi-condition sensitivity, and explicit limit disclosures.</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-label">Value:</div>
+                        <div class="value-text">Prevents overclaiming and costly late-stage rework.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="item-header">
+                    <div class="item-icon"><i class="fas fa-project-diagram"></i></div>
+                    <div class="item-title">Solver Growth Path</div>
+                </div>
+                <div class="item-content">
+                    <div class="feature-row">
+                        <div class="feature-label">Feature:</div>
+                        <div class="feature-text">Isolated adapter/worker architecture with strict policy controls.</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-label">Value:</div>
+                        <div class="value-text">Clear upgrade path to high-fidelity solvers without UI rewrites.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="conclusion">
+            We don't define the software by a single solver. The advantage is a cohesive workflow from geometry to evidence that is practical for engineers and defensible for team leads.
+        </div>
+    </div>
+</body>
+</html>

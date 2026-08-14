@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-alt: #0b1120;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px; /* keep as required */
+            background: var(--bg-dark);
+            color: var(--text-main);
+            padding: 60px 80px 0 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            margin-bottom: 12px; /* reduced from 40px to save vertical space */
+            border-left: 6px solid var(--accent-orange);
+            padding-left: 24px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .table-container {
+            width: 100%;
+            border-top: 2px solid var(--accent-orange);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            background: var(--bg-alt);
+            padding: 8px 16px; /* reduced vertical padding */
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--accent-orange);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            padding: 8px 16px; /* reduced vertical padding */
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row:nth-child(even) {
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        .control-col {
+            display: flex;
+            align-items: center;
+            gap: 12px; /* slightly reduced gap */
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .control-icon {
+            color: var(--text-muted);
+            width: 32px;
+            text-align: center;
+        }
+
+        .evidence-col {
+            font-size: 1.15rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .highlight-code {
+            font-family: monospace;
+            background: rgba(249, 115, 22, 0.1);
+            color: #fdba74;
+            padding: 2px 6px;
+            font-size: 1.05rem;
+        }
+
+        .conclusion {
+            margin-top: 16px; /* reduced from 30px */
+            background: rgba(249, 115, 22, 0.05);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            padding: 12px; /* reduced from 20px */
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Testable Security Policies</h1>
+            <div class="subtitle">Automated validation of network boundaries, readiness, and resilience.</div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <div>Security Control</div>
+                <div>Automated Evidence / Test Coverage</div>
+            </div>
+            
+            <div class="table-row">
+                <div class="control-col">
+                    <div class="control-icon"><i class="fas fa-lock"></i></div>
+                    Auth &amp; Readiness
+                </div>
+                <div class="evidence-col">
+                    Fail-closed design: Missing secret rejects polar API with <span class="highlight-code">503</span> and readiness probe with <span class="highlight-code">503</span>.
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="control-col">
+                    <div class="control-icon"><i class="fas fa-microchip"></i></div>
+                    Runtime Limits
+                </div>
+                <div class="evidence-col">
+                    Static manifest tests assert <span class="highlight-code">non-root</span>, <span class="highlight-code">readOnlyRootFilesystem</span>, <span class="highlight-code">seccomp RuntimeDefault</span>, and <span class="highlight-code">cap drop ALL</span>.
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="control-col">
+                    <div class="control-icon"><i class="fas fa-network-wired"></i></div>
+                    Network Boundary
+                </div>
+                <div class="evidence-col">
+                    Ingress restricted to labeled namespace/pod. Egress restricted to <span class="highlight-code">kube-dns</span>. Verified via static YAML tests.
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="control-col">
+                    <div class="control-icon"><i class="fas fa-shield-alt"></i></div>
+                    Resilience Regression
+                </div>
+                <div class="evidence-col">
+                    Unit tests cover subprocess timeout, <span class="highlight-code">OSError</span>, missing executable, per-credential quota, and body-size boundaries.
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="control-col">
+                    <div class="control-icon"><i class="fas fa-check-double"></i></div>
+                    In-Cluster Validation
+                </div>
+                <div class="evidence-col">
+                    Runner script verifies 5 consecutive health calls, readiness, DNS egress, and explicitly denies unlabeled callers.
+                </div>
+            </div>
+        </div>
+
+        <div class="conclusion">
+            Static tests guarantee policy source correctness. In-cluster validation proves the <span class="highlight">CNI actually enforces the policy</span>. A NetworkPolicy without a CNI enforcing it is just a YAML file.
+        </div>
+    </div>
+</body>
+</html>

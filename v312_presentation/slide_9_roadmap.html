@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            padding: 60px 80px 0 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            border-left: 6px solid var(--accent-orange);
+            padding-left: 24px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .timeline-container {
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 40px; /* kept reasonable spacing below timeline */
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 24px;
+            left: 50px;
+            right: 50px;
+            height: 4px;
+            background: var(--text-muted);
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .timeline-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+
+        .timeline-node {
+            width: 52px;
+            height: 52px;
+            background: var(--bg-dark);
+            border: 4px solid var(--accent-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-orange);
+            font-size: 1.5rem;
+            margin-bottom: 12px; /* reduced spacing above content */
+            box-shadow: 0 0 0 8px var(--bg-dark);
+        }
+
+        .timeline-time {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px; /* reduced */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-content {
+            background: var(--bg-panel);
+            border-top: 4px solid var(--accent-orange);
+            padding: 18px; /* reduced padding */
+            width: 100%;
+            min-height: 200px; /* reduced from 220 -> saves vertical space */
+        }
+
+        .content-section {
+            margin-bottom: 12px; /* reduced */
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-orange);
+            margin-bottom: 6px; /* reduced */
+            font-weight: 600;
+        }
+
+        .section-text {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .conclusion {
+            background: rgba(249, 115, 22, 0.05);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            padding: 12px 20px; /* reduced vertical padding from 20 -> 12 */
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Commercial Roadmap</h1>
+            <div class="subtitle">Moving from screening to an evidence-backed design workspace.</div>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-step">
+                <div class="timeline-node"><i class="fas fa-rocket"></i></div>
+                <div class="timeline-time">0–3 Months</div>
+                <div class="timeline-content">
+                    <div class="content-section">
+                        <div class="section-label">Priority</div>
+                        <div class="section-text">XFOIL worker staging, NACA 0012 validation pack, and monitoring.</div>
+                    </div>
+                    <div class="content-section">
+                        <div class="section-label">Exit Criteria</div>
+                        <div class="section-text">Reproducible report &amp; policy test passed in CNI enforcing environment.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-step">
+                <div class="timeline-node"><i class="fas fa-sliders-h"></i></div>
+                <div class="timeline-time">3–6 Months</div>
+                <div class="timeline-content">
+                    <div class="content-section">
+                        <div class="section-label">Priority</div>
+                        <div class="section-text">Multi-condition optimization with thickness, moment, and manufacturing constraints.</div>
+                    </div>
+                    <div class="content-section">
+                        <div class="section-label">Exit Criteria</div>
+                        <div class="section-text">Mission-based objectives &amp; comprehensive sensitivity report.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-step">
+                <div class="timeline-node"><i class="fas fa-network-wired"></i></div>
+                <div class="timeline-time">6–12 Months</div>
+                <div class="timeline-content">
+                    <div class="content-section">
+                        <div class="section-label">Priority</div>
+                        <div class="section-text">Enterprise workspace, private studies, collaboration, and audit governance.</div>
+                    </div>
+                    <div class="content-section">
+                        <div class="section-label">Exit Criteria</div>
+                        <div class="section-text">Access control, storage policy, and lifecycle study management.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="conclusion">
+            The roadmap is not focused on claiming more features; it is focused on <span class="highlight">increasing evidence fidelity</span> and <span class="highlight">reducing adoption risk</span>. Every stage has a measurable technical exit criterion.
+        </div>
+    </div>
+</body>
+</html>

@@ -83,6 +83,28 @@ class XFoilAdapterTests(unittest.TestCase):
         result = adapter.run(self.spec)
         self.assertEqual(result.status, "executable_not_found")
         self.assertFalse(result.completed)
+        self.assertEqual(result.manifest["command_policy"], "allowlisted-batch-only")
+        self.assertTrue(result.manifest["temporary_directory_isolation"])
+
+    def test_timeout_is_a_structured_non_crashing_result(self):
+        adapter = XFoilAdapter("/bin/echo")
+        timeout = subprocess.TimeoutExpired(["/bin/echo"], 1, output="partial output", stderr="solver timed out")
+        with patch("xfoil_adapter.subprocess.run", side_effect=timeout):
+            result = adapter.run(self.spec)
+        self.assertEqual(result.status, "timed_out")
+        self.assertFalse(result.completed)
+        self.assertIn("execution limit", result.message)
+        self.assertEqual(result.stdout_tail, "partial output")
+        self.assertEqual(result.stderr_tail, "solver timed out")
+
+    def test_os_error_is_a_structured_process_error(self):
+        adapter = XFoilAdapter("/bin/echo")
+        with patch("xfoil_adapter.subprocess.run", side_effect=OSError("temporary resource unavailable")):
+            result = adapter.run(self.spec)
+        self.assertEqual(result.status, "process_error")
+        self.assertFalse(result.completed)
+        self.assertIn("could not be started", result.message)
+        self.assertIn("temporary resource unavailable", result.message)
 
 
 if __name__ == "__main__":

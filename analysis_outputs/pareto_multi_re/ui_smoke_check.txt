@@ -1,0 +1,17 @@
+UI smoke check — 2026-08-14T01:12–01:13Z
+
+The local Streamlit service at http://localhost:8501 was inspected after the robust multi-Re UI change. The Pareto Explorer tab loaded, exposed both Reynolds study modes, and showed the intended default multi-Re sweep: 100000, 250000, 500000, 1000000, 2000000. The preliminary-screening disclaimer was present.
+
+An initial browser-side robust run exposed an AttributeError for `screen_naca4_multi_re`. A fresh Python import confirmed that the method exists in the source module; the issue was a stale Streamlit process that had reloaded `app.py` while retaining the old imported `airfoil_pro` module. The stale service was stopped and restarted. The final browser navigation occurred while the new service was still loading; a separate service-log check is required before final UI acceptance.
+
+Follow-up restart check — 2026-08-14T01:14Z
+
+The service log confirmed that Streamlit bound successfully to port 8501. A subsequent browser reload fully loaded the app, and the Pareto Explorer tab was reachable again with the robust multi-Re controls available. The next check executes the robust run against the fresh process.
+
+Pre-run control check — 2026-08-14T01:14Z
+
+On the restarted service, Robust multi-Re was selected successfully and the explanatory caption appeared. The first run-button attempt targeted the input after element indices refreshed; no computation was submitted in that attempt. The subsequent button index is visible as the final browser control and is used next.
+
+End-to-end result — 2026-08-14T01:14Z
+
+The final robust multi-Re run completed successfully after restart. For the browser test set (NACA 0012, 2412, 4412 and 6409), the UI showed one robust-front candidate out of four, rendered the aggregate-map canvas, presented the multi-condition Pareto definition, displayed the rankings table and enabled the CSV download control. No AttributeError remained.

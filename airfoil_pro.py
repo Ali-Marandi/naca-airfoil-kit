@@ -376,6 +376,48 @@ class ParetoExplorer:
         return normalized_rows
 
     @staticmethod
+    def non_dominated_sort_multi(rows: Iterable[dict], objective_keys: Iterable[str]):
+        """Assign Pareto ranks for any number of maximization objectives.
+
+        A robust multi-Re study uses one L/D and one lift objective for every
+        Reynolds condition. Therefore a front member cannot be improved in all
+        conditions simultaneously by another candidate.
+        """
+        objective_keys = tuple(objective_keys)
+        if not objective_keys:
+            raise ValueError("At least one Pareto objective key is required.")
+        normalized_rows = [dict(row) for row in rows]
+        for row in normalized_rows:
+            missing = [key for key in objective_keys if key not in row]
+            if missing:
+                raise ValueError(f"Candidate is missing Pareto objective(s): {', '.join(missing)}")
+
+        def is_dominated(candidate: dict, challenger: dict) -> bool:
+            candidate_values = [float(candidate[key]) for key in objective_keys]
+            challenger_values = [float(challenger[key]) for key in objective_keys]
+            return all(challenger >= candidate for candidate, challenger in zip(candidate_values, challenger_values)) and any(
+                challenger > candidate for candidate, challenger in zip(candidate_values, challenger_values)
+            )
+
+        remaining = set(range(len(normalized_rows)))
+        rank = 1
+        while remaining:
+            front = [
+                index
+                for index in remaining
+                if not any(is_dominated(normalized_rows[index], normalized_rows[other]) for other in remaining if other != index)
+            ]
+            if not front:
+                break
+            for index in front:
+                normalized_rows[index]["pareto_rank"] = rank
+                normalized_rows[index]["pareto_front"] = rank == 1
+            remaining.difference_update(front)
+            rank += 1
+        normalized_rows.sort(key=lambda row: (row.get("pareto_rank", 999), row.get("airfoil", "")))
+        return normalized_rows
+
+    @staticmethod
     def screen_geometries(
         geometries: Mapping[str, tuple],
         alpha_values: Iterable[float],
@@ -447,6 +489,125 @@ class ParetoExplorer:
         }
 
     @staticmethod
+    def screen_geometries_multi_re(
+        geometries: Mapping[str, tuple],
+        alpha_values: Iterable[float],
+        reynolds_values: Iterable[float],
+        rough: float = 0.0,
+        cl_objective: str = "cl_max",
+        design_alpha_deg: float | None = None,
+    ):
+        """Screen geometries across Reynolds conditions and rank robust fronts.
+
+        The robust front is defined by multi-objective dominance over *every*
+        supplied Reynolds condition: maximum L/D and the chosen lift objective
+        are both maximized at each condition. Summary metrics are retained for
+        readable trade-off reporting, but do not replace the robust criterion.
+        """
+        if cl_objective not in {"cl_max", "cl_at_design_alpha"}:
+            raise ValueError("cl_objective must be 'cl_max' or 'cl_at_design_alpha'.")
+        alpha_array = np.asarray(list(alpha_values), dtype=float)
+        if alpha_array.size < 2:
+            raise ValueError("At least two alpha values are required for Pareto screening.")
+        if cl_objective == "cl_at_design_alpha" and design_alpha_deg is None:
+            raise ValueError("design_alpha_deg is required when using the design-alpha lift objective.")
+        if design_alpha_deg is not None and not float(alpha_array.min()) <= float(design_alpha_deg) <= float(alpha_array.max()):
+            raise ValueError("design_alpha_deg must lie within the supplied alpha envelope.")
+        reynolds_list = sorted({float(value) for value in reynolds_values})
+        if len(reynolds_list) < 2:
+            raise ValueError("At least two distinct Reynolds conditions are required for robust screening.")
+        if any(not np.isfinite(value) or value <= 0.0 for value in reynolds_list):
+            raise ValueError("All Reynolds conditions must be finite positive values.")
+
+        candidates, polars = [], {}
+        robust_objective_keys = []
+        for reynolds in reynolds_list:
+            suffix = f"{int(round(reynolds)):g}"
+            robust_objective_keys.extend([f"best_ld_re_{suffix}", f"cl_objective_re_{suffix}"])
+
+        for airfoil_name, coords in geometries.items():
+            if not isinstance(airfoil_name, str) or not airfoil_name.strip():
+                raise ValueError("Each geometry requires a non-empty airfoil name.")
+            if len(coords) != 4:
+                raise ValueError(f"{airfoil_name} must contain upper/lower x/y coordinate arrays.")
+            xu, yu, xl, yl = coords
+            metric = AirfoilAnalysis.geometry_metrics(xu, yu, xl, yl)
+            best_ld_values, cl_values, cd_min_values, alpha_at_best_ld = [], [], [], []
+            per_re_metrics, candidate_polars = [], {}
+            candidate = {
+                "airfoil": airfoil_name.strip(),
+                "max_thickness_pct": float(metric["max_thickness_pct"]),
+                "max_camber_pct": float(metric["max_camber_pct"]),
+            }
+            for reynolds in reynolds_list:
+                suffix = f"{int(round(reynolds)):g}"
+                polar = AirfoilAnalysis.compute_polar(xu, yu, xl, yl, alpha_array, re=reynolds, rough=float(rough))
+                summary = AirfoilAnalysis.summarize_polar(polar["rows"])
+                if cl_objective == "cl_max":
+                    cl_value = float(summary["cl_max"])
+                    objective_label = "Maximum Cl over envelope"
+                else:
+                    polar_alpha = np.asarray([row["alpha_deg"] for row in polar["rows"]], dtype=float)
+                    polar_cl = np.asarray([row["cl"] for row in polar["rows"]], dtype=float)
+                    cl_value = float(np.interp(float(design_alpha_deg), polar_alpha, polar_cl))
+                    objective_label = f"Cl at α = {float(design_alpha_deg):.2f}°"
+                best_ld = float(summary["best_ld"])
+                cd_min = float(summary["cd_min"])
+                candidate[f"best_ld_re_{suffix}"] = best_ld
+                candidate[f"cl_objective_re_{suffix}"] = cl_value
+                best_ld_values.append(best_ld)
+                cl_values.append(cl_value)
+                cd_min_values.append(cd_min)
+                alpha_at_best_ld.append(float(summary["best_alpha_deg"]))
+                per_re_metrics.append(
+                    {
+                        "reynolds": reynolds,
+                        "best_ld": best_ld,
+                        "best_ld_alpha_deg": float(summary["best_alpha_deg"]),
+                        "cl_objective": cl_value,
+                        "cl_max": float(summary["cl_max"]),
+                        "cd_min": cd_min,
+                    }
+                )
+                candidate_polars[f"{reynolds:g}"] = polar["rows"]
+            candidate.update(
+                {
+                    "mean_best_ld": float(np.mean(best_ld_values)),
+                    "worst_case_best_ld": float(np.min(best_ld_values)),
+                    "best_case_best_ld": float(np.max(best_ld_values)),
+                    "best_ld_std": float(np.std(best_ld_values)),
+                    "mean_cl_objective": float(np.mean(cl_values)),
+                    "worst_case_cl_objective": float(np.min(cl_values)),
+                    "mean_cd_min": float(np.mean(cd_min_values)),
+                    "mean_best_ld_alpha_deg": float(np.mean(alpha_at_best_ld)),
+                    "cl_objective_name": objective_label,
+                    "per_re_metrics": per_re_metrics,
+                }
+            )
+            candidates.append(candidate)
+            polars[airfoil_name.strip()] = candidate_polars
+
+        ranked = ParetoExplorer.non_dominated_sort_multi(candidates, robust_objective_keys)
+        return {
+            "rankings": ranked,
+            "polars": polars,
+            "objective": {
+                "ld": "Maximum L/D over envelope at every Reynolds condition",
+                "cl": ranked[0]["cl_objective_name"] if ranked else "Cl objective",
+                "pareto_definition": "A candidate is robust-front when no other candidate dominates it across L/D and lift at all Reynolds conditions.",
+                "robust_objective_keys": robust_objective_keys,
+                "chart_ld_key": "mean_best_ld",
+                "chart_cl_key": "mean_cl_objective",
+                "chart_ld_label": "Mean maximum L/D across Reynolds conditions",
+                "chart_cl_label": f"Mean {ranked[0]['cl_objective_name']} across Reynolds conditions" if ranked else "Mean Cl objective",
+                "reynolds_values": reynolds_list,
+                "roughness_k_over_c": float(rough),
+                "alpha_values_deg": [float(value) for value in alpha_array],
+                "design_alpha_deg": float(design_alpha_deg) if design_alpha_deg is not None else None,
+            },
+        }
+
+    @staticmethod
     def screen_naca4(
         codes: Iterable[str],
         alpha_values: Iterable[float],
@@ -467,6 +628,32 @@ class ParetoExplorer:
             geometries,
             alpha_values,
             re=float(re),
+            rough=float(rough),
+            cl_objective=cl_objective,
+            design_alpha_deg=design_alpha_deg,
+        )
+
+    @staticmethod
+    def screen_naca4_multi_re(
+        codes: Iterable[str],
+        alpha_values: Iterable[float],
+        reynolds_values: Iterable[float],
+        rough: float = 0.0,
+        cl_objective: str = "cl_max",
+        design_alpha_deg: float | None = None,
+        n_points: int = 100,
+    ):
+        """Generate NACA 4-digit candidates and run robust multi-Re screening."""
+        code_values = EngineeringStudy.parse_naca4_codes(codes) if isinstance(codes, str) else EngineeringStudy.parse_naca4_codes(",".join(str(value) for value in codes))
+        geometries = {}
+        for code in code_values:
+            coords = NACAGeneratorPro.naca4(code, n_points)
+            if coords is not None:
+                geometries[f"NACA {code}"] = coords
+        return ParetoExplorer.screen_geometries_multi_re(
+            geometries,
+            alpha_values,
+            reynolds_values=reynolds_values,
             rough=float(rough),
             cl_objective=cl_objective,
             design_alpha_deg=design_alpha_deg,

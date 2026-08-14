@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --accent-orange: #f97316;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            padding: 60px 80px 0 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            border-left: 6px solid var(--accent-orange);
+            padding-left: 24px;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .top-row {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            flex: 1;
+            background: var(--bg-panel);
+            border-left: 4px solid var(--accent-orange);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-orange);
+            margin-bottom: 12px;
+        }
+
+        .info-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            font-weight: 300;
+        }
+
+        .info-text strong {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .table-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.2rem;
+        }
+
+        .data-table td {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table td:first-child {
+            color: var(--text-muted);
+            width: 40%;
+        }
+
+        .data-table td:last-child {
+            font-weight: 600;
+        }
+
+        /* Reduced chart height from 340px to 310px to keep total slide height under 720px */
+        .chart-container {
+            width: 100%;
+            height: 310px;
+            display: flex;
+            justify-content: center;
+            background: #ffffff; /* The chart has a white background */
+            padding: 10px;
+            border: 2px solid var(--bg-panel);
+        }
+
+        .chart-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Reynolds-Aware Robust Pareto</h1>
+            <div class="subtitle">Multi-objective screening across multiple Reynolds conditions.</div>
+        </div>
+
+        <div class="top-row">
+            <div class="info-box">
+                <div class="info-title"><i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Robust Front Definition</div>
+                <div class="info-text">
+                    A candidate is on the robust front only if no other candidate dominates it in <strong>both L/D and Cl</strong> across <strong>all</strong> Reynolds conditions simultaneously.
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <tr>
+                        <td>Candidates</td>
+                        <td>24 UIUC NACA profiles</td>
+                    </tr>
+                    <tr>
+                        <td>Reynolds Range</td>
+                        <td>100k to 2.0M (5 conditions)</td>
+                    </tr>
+                    <tr>
+                        <td>Front Member</td>
+                        <td><span style="color: var(--accent-orange);">UIUC NACA6412</span></td>
+                    </tr>
+                    <tr>
+                        <td>Mean / Worst L/D</td>
+                        <td>46.08 / 32.74</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <img src="/home/ubuntu/naca-airfoil-kit/analysis_outputs/pareto_multi_re/pareto_multi_re.png" alt="Robust Pareto Chart" class="chart-img">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "title": "v3.1.2: A Workflow, Not Just a Generator",
+    "created": 1786670174.501,
+    "last_updated": 1786670536.072,
+    "total_slides": 10
+  },
+  "slides": [
+    {
+      "id": "slide_1_workflow",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "slide_2_traceability",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "slide_3_robust_pareto",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "slide_4_physical_validity",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "slide_5_xfoil_worker",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "slide_6_security_controls",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "slide_7_deployment_path",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "slide_8_differentiation",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "slide_9_roadmap",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "slide_10_call_to_action",
+      "state": "edited",
+      "pageNum": 10
+    }
+  ],
+  "outline": [
+    {
+      "id": "slide_1_workflow",
+      "title": "v3.1.2: A Workflow, Not Just a Generator",
+      "summary": "From geometry generation to reproducible QA, validation, and audit trails.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_2_traceability",
+      "title": "Design Decision Traceability",
+      "summary": "The path from geometry to analysis, evidence, and decision making.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_3_robust_pareto",
+      "title": "Reynolds-Aware Robust Pareto",
+      "summary": "Multi-objective screening across multiple Reynolds conditions.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_4_physical_validity",
+      "title": "Physical Validity at the Core",
+      "summary": "Comparing the panel model limits against viscous realities and validation data.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_5_xfoil_worker",
+      "title": "Isolated XFOIL Worker Architecture",
+      "summary": "Separation of concerns with a secure, policy-controlled solver backend.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_6_security_controls",
+      "title": "Testable Security Policies",
+      "summary": "Automated validation of network boundaries, readiness, and resilience.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_7_deployment_path",
+      "title": "Deployment: Demo to Operations",
+      "summary": "The scaling path from Streamlit Community Cloud to Kubernetes production.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_8_differentiation",
+      "title": "Product Differentiation",
+      "summary": "Reducing decision cycles through transparency and traceable workflows.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_9_roadmap",
+      "title": "Commercial Roadmap",
+      "summary": "Moving from screening to an evidence-backed design workspace.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_10_call_to_action",
+      "title": "Next Steps: Pilot & Validation",
+      "summary": "Ready for a controlled pilot to prove value with real-world evidence.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "generated_at_utc": "2026-08-14T01:10:03.134204+00:00",
+  "study_scope": "Preliminary panel/empirical screen only; not a validated viscous or wind-tunnel result.",
+  "method": {
+    "robust_pareto_definition": "A candidate is robust-front when no other candidate dominates it across L/D and lift at all Reynolds conditions.",
+    "aggregate_metrics": "mean and worst-case L/D plus L/D standard deviation are descriptive metrics; the rank uses all per-Re L/D and lift objectives.",
+    "lift_objective": "Cl at \u03b1 = 4.00\u00b0",
+    "roughness_k_over_c": 0.0,
+    "alpha_values_deg": [
+      -4.0,
+      -3.0,
+      -2.0,
+      -1.0,
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0
+    ],
+    "design_alpha_deg": 4.0
+  },
+  "reynolds_values": [
+    100000.0,
+    250000.0,
+    500000.0,
+    1000000.0,
+    2000000.0
+  ],
+  "requested_profile_count": 24,
+  "loaded_profile_count": 24,
+  "failed_or_missing_profiles": [],
+  "sources": {
+    "UIUC NACA0006": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0006.dat"
+    },
+    "UIUC NACA0008": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0008.dat"
+    },
+    "UIUC NACA0010": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0010.dat"
+    },
+    "UIUC NACA0015": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0015.dat"
+    },
+    "UIUC NACA0018": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0018.dat"
+    },
+    "UIUC NACA0021": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0021.dat"
+    },
+    "UIUC NACA0024": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0024.dat"
+    },
+    "UIUC NACA1408": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca1408.dat"
+    },
+    "UIUC NACA1410": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca1410.dat"
+    },
+    "UIUC NACA1412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca1412.dat"
+    },
+    "UIUC NACA2408": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2408.dat"
+    },
+    "UIUC NACA2410": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2410.dat"
+    },
+    "UIUC NACA2411": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2411.dat"
+    },
+    "UIUC NACA2412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2412.dat"
+    },
+    "UIUC NACA2415": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2415.dat"
+    },
+    "UIUC NACA2418": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2418.dat"
+    },
+    "UIUC NACA2421": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2421.dat"
+    },
+    "UIUC NACA2424": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2424.dat"
+    },
+    "UIUC NACA4412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4412.dat"
+    },
+    "UIUC NACA4415": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4415.dat"
+    },
+    "UIUC NACA4418": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4418.dat"
+    },
+    "UIUC NACA4421": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4421.dat"
+    },
+    "UIUC NACA4424": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4424.dat"
+    },
+    "UIUC NACA6412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca6412.dat"
+    }
+  },
+  "robust_pareto_front": [
+    "UIUC NACA6412"
+  ],
+  "ranking_csv": "pareto_multi_re_rankings.csv",
+  "condition_metrics_csv": "pareto_multi_re_condition_metrics.csv",
+  "chart": "pareto_multi_re.png",
+  "limitations": [
+    "Geometry coordinates originate from UIUC sources; aerodynamic metrics use this repository's lightweight panel/empirical screening model.",
+    "The model does not provide a validated viscous boundary-layer, transition, separation, or post-stall prediction.",
+    "Results rank this exact candidate set and operating envelope only; they are not a design release, safety margin, or certification input."
+  ]
+}

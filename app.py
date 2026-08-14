@@ -148,20 +148,30 @@ def render_validation(comparison_rows, name):
 
 
 def render_pareto(ranking_rows, objective):
-    """Render the L/D–Cl objective map with the non-dominated front emphasized."""
+    """Render the L/D–Cl map with the non-dominated front emphasized.
+
+    A robust multi-Re study ranks on all condition-level objectives but displays
+    declared aggregate metrics to retain a readable two-axis plot.
+    """
     figure, axis = plt.subplots(figsize=(9, 5))
     if not ranking_rows:
         st.info("No valid candidates were available for Pareto analysis.")
         return
-    objective_cl = np.asarray([row["cl_objective"] for row in ranking_rows], dtype=float)
-    objective_ld = np.asarray([row["best_ld"] for row in ranking_rows], dtype=float)
+    cl_key = objective.get("chart_cl_key", "cl_objective")
+    ld_key = objective.get("chart_ld_key", "best_ld")
+    objective_cl = np.asarray([row[cl_key] for row in ranking_rows], dtype=float)
+    objective_ld = np.asarray([row[ld_key] for row in ranking_rows], dtype=float)
     is_front = np.asarray([row["pareto_front"] for row in ranking_rows], dtype=bool)
     axis.scatter(objective_cl[~is_front], objective_ld[~is_front], color="#94a3b8", s=58, label="Dominated candidate", zorder=2)
     axis.scatter(objective_cl[is_front], objective_ld[is_front], color="#f97316", edgecolor="#7c2d12", linewidth=0.8, s=82, label="Pareto front", zorder=3)
     for row in ranking_rows:
         if row["pareto_front"]:
-            axis.annotate(row["airfoil"].replace("NACA ", ""), (row["cl_objective"], row["best_ld"]), xytext=(5, 5), textcoords="offset points", fontsize=8)
-    axis.set(title="Preliminary multi-objective Pareto map", xlabel=objective["cl"], ylabel=objective["ld"])
+            axis.annotate(row["airfoil"].replace("NACA ", ""), (row[cl_key], row[ld_key]), xytext=(5, 5), textcoords="offset points", fontsize=8)
+    axis.set(
+        title="Preliminary multi-objective Pareto map",
+        xlabel=objective.get("chart_cl_label", objective["cl"]),
+        ylabel=objective.get("chart_ld_label", objective["ld"]),
+    )
     axis.grid(True, alpha=0.3)
     axis.legend(loc="best")
     figure.tight_layout()
@@ -344,21 +354,42 @@ with pareto_tab:
     pareto_step = pareto_controls[2].selectbox("Pareto alpha increment", [1.0, 2.0], key="pareto_step")
     pareto_lift_metric = pareto_controls[3].selectbox("Lift objective", ["Maximum Cl over envelope", "Cl at a design alpha"], key="pareto_lift_metric")
     design_alpha = st.number_input("Design alpha for Cl objective [deg]", -15.0, 20.0, 4.0, 0.5, disabled=pareto_lift_metric != "Cl at a design alpha", key="pareto_design_alpha")
+    pareto_mode = st.radio("Reynolds study mode", ["Single Reynolds", "Robust multi-Re"], horizontal=True, key="pareto_mode")
+    robust_reynolds_raw = st.text_input(
+        "Robust Reynolds values (comma-separated)",
+        "100000, 250000, 500000, 1000000, 2000000",
+        disabled=pareto_mode != "Robust multi-Re",
+        key="pareto_robust_reynolds",
+    )
+    if pareto_mode == "Robust multi-Re":
+        st.caption("Robust rank uses L/D and the lift objective at every listed Reynolds condition. The chart displays mean metrics only for readability; it does not redefine the rank.")
     if st.button("Run Pareto Explorer", use_container_width=True):
         try:
             if pareto_end <= pareto_start:
                 raise ValueError("Pareto alpha end must be greater than alpha start.")
             pareto_alpha_values = np.arange(pareto_start, pareto_end + 0.5 * pareto_step, pareto_step)
             objective_key = "cl_max" if pareto_lift_metric == "Maximum Cl over envelope" else "cl_at_design_alpha"
-            st.session_state["pareto_study"] = ParetoExplorer.screen_naca4(
-                pareto_candidates,
-                pareto_alpha_values,
-                reynolds,
-                roughness,
-                cl_objective=objective_key,
-                design_alpha_deg=design_alpha if objective_key == "cl_at_design_alpha" else None,
-                n_points=100,
-            )
+            if pareto_mode == "Robust multi-Re":
+                robust_reynolds = [float(value.strip()) for value in robust_reynolds_raw.split(",") if value.strip()]
+                st.session_state["pareto_study"] = ParetoExplorer.screen_naca4_multi_re(
+                    pareto_candidates,
+                    pareto_alpha_values,
+                    robust_reynolds,
+                    roughness,
+                    cl_objective=objective_key,
+                    design_alpha_deg=design_alpha if objective_key == "cl_at_design_alpha" else None,
+                    n_points=100,
+                )
+            else:
+                st.session_state["pareto_study"] = ParetoExplorer.screen_naca4(
+                    pareto_candidates,
+                    pareto_alpha_values,
+                    reynolds,
+                    roughness,
+                    cl_objective=objective_key,
+                    design_alpha_deg=design_alpha if objective_key == "cl_at_design_alpha" else None,
+                    n_points=100,
+                )
         except ValueError as error:
             st.error(str(error))
     pareto_result = st.session_state.get("pareto_study")
@@ -369,9 +400,12 @@ with pareto_tab:
         pareto_a.metric("Pareto-front candidates", str(front_count))
         pareto_b.metric("Screened candidates", str(len(pareto_rows)))
         pareto_c.metric("Lift objective", pareto_result["objective"]["cl"])
+        if "pareto_definition" in pareto_result["objective"]:
+            st.info(pareto_result["objective"]["pareto_definition"])
         render_pareto(pareto_rows, pareto_result["objective"])
-        st.dataframe(pareto_rows, use_container_width=True, hide_index=True)
-        pareto_file, pareto_filename = csv_download(pareto_rows, "naca_pareto_explorer.csv")
+        display_rows = [{key: value for key, value in row.items() if key != "per_re_metrics"} for row in pareto_rows]
+        st.dataframe(display_rows, use_container_width=True, hide_index=True)
+        pareto_file, pareto_filename = csv_download(display_rows, "naca_pareto_explorer.csv")
         st.download_button("Download Pareto ranking CSV", pareto_file, pareto_filename, "text/csv", use_container_width=True)
 
 with qa_tab:

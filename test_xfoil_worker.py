@@ -1,10 +1,13 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
 from airfoil_pro import NACAGeneratorPro
+from xfoil_adapter import XFoilRunResult
 from xfoil_worker_app import WorkerSettings, create_app
 
 
@@ -114,6 +117,31 @@ class XFoilWorkerTests(unittest.TestCase):
                 headers={"X-API-Key": "test-secret", "content-type": "application/json"},
             )
         self.assertEqual(response.status_code, 413)
+
+    def test_worker_accepts_request_at_exact_body_size_limit(self):
+        body = json.dumps(self.polar_payload()).encode("utf-8")
+        temporary_dir, client = self.make_client(api_key="test-secret", request_body_limit_bytes=len(body))
+        with temporary_dir, client:
+            response = client.post(
+                "/v1/polar",
+                content=body,
+                headers={"X-API-Key": "test-secret", "content-type": "application/json"},
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "executable_not_found")
+
+    def test_solver_timeout_and_process_error_are_structured_responses(self):
+        headers = {"X-API-Key": "test-secret"}
+        for result in (
+            XFoilRunResult(status="timed_out", message="solver exceeded execution limit", manifest={"event": "timeout"}),
+            XFoilRunResult(status="process_error", message="process could not be started", manifest={"event": "os_error"}),
+        ):
+            temporary_dir, client = self.make_client(api_key="test-secret")
+            with temporary_dir, client, patch("xfoil_worker_app.XFoilAdapter.run", return_value=result):
+                response = client.post("/v1/polar", json=self.polar_payload(), headers=headers)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()["status"], result.status)
+            self.assertEqual(response.json()["manifest"], result.manifest)
 
 
 if __name__ == "__main__":
