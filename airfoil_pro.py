@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 import json
 from math import pi
-from typing import Iterable
+from typing import Iterable, Mapping
 from uuid import uuid4
 
 import numpy as np
@@ -343,19 +343,19 @@ class ParetoExplorer:
         return normalized_rows
 
     @staticmethod
-    def screen_naca4(
-        codes: Iterable[str],
+    def screen_geometries(
+        geometries: Mapping[str, tuple],
         alpha_values: Iterable[float],
         re: float,
         rough: float = 0.0,
         cl_objective: str = "cl_max",
         design_alpha_deg: float | None = None,
-        n_points: int = 100,
     ):
-        """Screen candidates and return a Pareto-ranked L/D–Cl trade-off study.
+        """Return a Pareto study for named, already-loaded airfoil geometries.
 
-        ``cl_objective`` is either ``cl_max`` across the supplied envelope or
-        ``cl_at_design_alpha`` sampled from the polar at a declared design alpha.
+        The method deliberately accepts coordinate data rather than URLs. Callers
+        are responsible for provenance and trusted acquisition; this preserves a
+        deterministic analysis boundary and enables UIUC fixture integration tests.
         """
         if cl_objective not in {"cl_max", "cl_at_design_alpha"}:
             raise ValueError("cl_objective must be 'cl_max' or 'cl_at_design_alpha'.")
@@ -368,14 +368,15 @@ class ParetoExplorer:
             raise ValueError("design_alpha_deg must lie within the supplied alpha envelope.")
 
         candidates, polars = [], {}
-        code_values = EngineeringStudy.parse_naca4_codes(codes) if isinstance(codes, str) else EngineeringStudy.parse_naca4_codes(",".join(str(value) for value in codes))
-        for code in code_values:
-            coords = NACAGeneratorPro.naca4(code, n_points)
-            if coords is None:
-                continue
-            polar = AirfoilAnalysis.compute_polar(*coords, alpha_array, re=float(re), rough=float(rough))
+        for airfoil_name, coords in geometries.items():
+            if not isinstance(airfoil_name, str) or not airfoil_name.strip():
+                raise ValueError("Each geometry requires a non-empty airfoil name.")
+            if len(coords) != 4:
+                raise ValueError(f"{airfoil_name} must contain upper/lower x/y coordinate arrays.")
+            xu, yu, xl, yl = coords
+            polar = AirfoilAnalysis.compute_polar(xu, yu, xl, yl, alpha_array, re=float(re), rough=float(rough))
             summary = AirfoilAnalysis.summarize_polar(polar["rows"])
-            metric = AirfoilAnalysis.geometry_metrics(*coords)
+            metric = AirfoilAnalysis.geometry_metrics(xu, yu, xl, yl)
             if cl_objective == "cl_max":
                 cl_value = float(summary["cl_max"])
                 objective_label = "Maximum Cl over envelope"
@@ -384,10 +385,9 @@ class ParetoExplorer:
                 polar_cl = np.asarray([row["cl"] for row in polar["rows"]], dtype=float)
                 cl_value = float(np.interp(float(design_alpha_deg), polar_alpha, polar_cl))
                 objective_label = f"Cl at α = {float(design_alpha_deg):.2f}°"
-            airfoil_name = f"NACA {code}"
             candidates.append(
                 {
-                    "airfoil": airfoil_name,
+                    "airfoil": airfoil_name.strip(),
                     "best_ld": float(summary["best_ld"]),
                     "best_ld_alpha_deg": float(summary["best_alpha_deg"]),
                     "cl_objective": cl_value,
@@ -398,7 +398,7 @@ class ParetoExplorer:
                     "max_camber_pct": float(metric["max_camber_pct"]),
                 }
             )
-            polars[airfoil_name] = polar["rows"]
+            polars[airfoil_name.strip()] = polar["rows"]
         ranked = ParetoExplorer.non_dominated_sort(candidates)
         return {
             "rankings": ranked,
@@ -412,6 +412,32 @@ class ParetoExplorer:
                 "design_alpha_deg": float(design_alpha_deg) if design_alpha_deg is not None else None,
             },
         }
+
+    @staticmethod
+    def screen_naca4(
+        codes: Iterable[str],
+        alpha_values: Iterable[float],
+        re: float,
+        rough: float = 0.0,
+        cl_objective: str = "cl_max",
+        design_alpha_deg: float | None = None,
+        n_points: int = 100,
+    ):
+        """Generate valid NACA 4-digit geometries and call ``screen_geometries``."""
+        code_values = EngineeringStudy.parse_naca4_codes(codes) if isinstance(codes, str) else EngineeringStudy.parse_naca4_codes(",".join(str(value) for value in codes))
+        geometries = {}
+        for code in code_values:
+            coords = NACAGeneratorPro.naca4(code, n_points)
+            if coords is not None:
+                geometries[f"NACA {code}"] = coords
+        return ParetoExplorer.screen_geometries(
+            geometries,
+            alpha_values,
+            re=float(re),
+            rough=float(rough),
+            cl_objective=cl_objective,
+            design_alpha_deg=design_alpha_deg,
+        )
 
 
 class GeometryOptimizer:

@@ -1,20 +1,24 @@
-"""HTTP worker for isolated XFOIL polar calculations.
+"""Restricted HTTP worker for isolated XFOIL polar calculations.
 
-This service is deliberately narrow: it accepts a validated coordinate contour
-and an allowlisted polar specification, delegates to ``XFoilAdapter``, and
-returns structured numerical results. It is designed to run behind a TLS
-terminating ingress; it does not expose arbitrary commands or persistent files.
+The worker accepts only a validated coordinate contour and an allowlisted polar
+specification. It is intended for an internal, TLS-terminating ingress and does
+not expose arbitrary commands, persistent run files, or interactive API docs.
 """
 
 from __future__ import annotations
 
 import asyncio
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
+from hashlib import sha256
+import hmac
 import os
 from pathlib import Path
-from typing import Annotated, Literal
+import time
+from typing import Annotated
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from xfoil_adapter import XFoilAdapter, XFoilRunSpec, XFoilValidationError
@@ -77,16 +81,33 @@ class WorkerSettings(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     api_key: str = ""
+    allow_insecure_no_auth: bool = False
     xfoil_executable: str = "/usr/bin/xfoil"
     max_concurrency: int = Field(default=1, ge=1, le=4)
+    request_body_limit_bytes: int = Field(default=262_144, ge=1_024, le=1_048_576)
+    requests_per_minute: int = Field(default=30, ge=1, le=600)
     temp_root: Path = Path("/tmp/xfoil-runs")
+
+
+def _read_secret_from_env() -> str:
+    """Prefer a mounted secret file and fall back to environment for local development."""
+    secret_path = os.getenv("XFOIL_WORKER_API_KEY_FILE", "").strip()
+    if secret_path:
+        try:
+            return Path(secret_path).read_text(encoding="utf-8").strip()
+        except OSError:
+            return ""
+    return os.getenv("XFOIL_WORKER_API_KEY", "").strip()
 
 
 def read_settings() -> WorkerSettings:
     return WorkerSettings(
-        api_key=os.getenv("XFOIL_WORKER_API_KEY", ""),
+        api_key=_read_secret_from_env(),
+        allow_insecure_no_auth=os.getenv("XFOIL_ALLOW_INSECURE_NO_AUTH", "false").lower() == "true",
         xfoil_executable=os.getenv("XFOIL_EXECUTABLE", "/usr/bin/xfoil"),
         max_concurrency=int(os.getenv("XFOIL_MAX_CONCURRENCY", "1")),
+        request_body_limit_bytes=int(os.getenv("XFOIL_REQUEST_BODY_LIMIT_BYTES", "262144")),
+        requests_per_minute=int(os.getenv("XFOIL_REQUESTS_PER_MINUTE", "30")),
         temp_root=Path(os.getenv("XFOIL_TEMP_ROOT", "/tmp/xfoil-runs")),
     )
 
@@ -99,34 +120,60 @@ def create_app(settings: WorkerSettings | None = None) -> FastAPI:
         settings.temp_root.mkdir(parents=True, exist_ok=True)
         app.state.settings = settings
         app.state.semaphore = asyncio.Semaphore(settings.max_concurrency)
+        app.state.request_times = defaultdict(deque)
         yield
 
     app = FastAPI(
         title="NACA Airfoil Kit XFOIL Worker",
-        version="0.1.0",
+        version="0.2.0",
         docs_url=None,
         redoc_url=None,
+        openapi_url=None,
         lifespan=lifespan,
     )
+
+    @app.middleware("http")
+    async def set_security_headers_and_check_body_size(request: Request, call_next):
+        content_length = request.headers.get("content-length")
+        if content_length and content_length.isdigit() and int(content_length) > request.app.state.settings.request_body_limit_bytes:
+            return JSONResponse(status_code=413, content={"detail": "Request body exceeds worker limit."})
+        response = await call_next(request)
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
     async def require_api_key(
         request: Request,
         x_api_key: Annotated[str | None, Header()] = None,
     ) -> None:
-        expected = request.app.state.settings.api_key
-        if expected and x_api_key != expected:
+        active_settings: WorkerSettings = request.app.state.settings
+        expected = active_settings.api_key
+        if not expected and not active_settings.allow_insecure_no_auth:
+            raise HTTPException(status_code=503, detail="Worker authentication is not configured.")
+        if expected and (x_api_key is None or not hmac.compare_digest(x_api_key, expected)):
             raise HTTPException(status_code=401, detail="Invalid worker API key.")
+
+        # Per-credential, in-memory quota. The deployment ingress must also
+        # enforce rate/connection limits because this bucket is process-local.
+        identity = sha256((x_api_key or "insecure-development").encode("utf-8")).hexdigest()
+        now = time.monotonic()
+        timestamps = request.app.state.request_times[identity]
+        while timestamps and now - timestamps[0] >= 60.0:
+            timestamps.popleft()
+        if len(timestamps) >= active_settings.requests_per_minute:
+            raise HTTPException(status_code=429, detail="Worker request rate limit exceeded.")
+        timestamps.append(now)
 
     @app.get("/healthz")
     async def healthz(request: Request):
         active_settings: WorkerSettings = request.app.state.settings
-        executable_available = Path(active_settings.xfoil_executable).is_file()
-        return {
-            "status": "ok" if executable_available else "degraded",
-            "service": "naca-airfoil-kit-xfoil-worker",
-            "xfoil_executable_available": executable_available,
-            "max_concurrency": active_settings.max_concurrency,
-        }
+        if not active_settings.api_key and not active_settings.allow_insecure_no_auth:
+            status = "misconfigured"
+        elif not Path(active_settings.xfoil_executable).is_file():
+            status = "degraded"
+        else:
+            status = "ok"
+        return {"status": status, "service": "naca-airfoil-kit-xfoil-worker"}
 
     @app.post("/v1/polar", dependencies=[Depends(require_api_key)])
     async def compute_polar(request: Request, body: PolarRequest):

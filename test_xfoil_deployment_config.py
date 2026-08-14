@@ -24,7 +24,12 @@ class XFoilDeploymentConfigTests(unittest.TestCase):
         self.assertIn("cap_drop:", compose)
         self.assertIn("- ALL", compose)
         self.assertIn("no-new-privileges:true", compose)
-        self.assertIn("XFOIL_WORKER_API_KEY", compose)
+        self.assertIn("XFOIL_WORKER_API_KEY_FILE", compose)
+        self.assertNotIn("XFOIL_WORKER_API_KEY: ${", compose)
+        self.assertIn("xfoil_worker_api_key:", compose)
+        self.assertIn("user: \"10001:10001\"", compose)
+        self.assertIn("ulimits:", compose)
+        self.assertIn("max-size: \"10m\"", compose)
 
     def test_ci_tests_before_publish_and_generates_supply_chain_metadata(self):
         workflow = (ROOT / ".github/workflows/xfoil-worker.yml").read_text(encoding="utf-8")

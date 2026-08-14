@@ -1,0 +1,112 @@
+{
+  "generated_at_utc": "2026-08-14T00:02:34.018810+00:00",
+  "study_scope": "Preliminary panel/empirical screen only; not a validated viscous or wind-tunnel result.",
+  "objective": {
+    "ld": "Maximum L/D over envelope",
+    "cl": "Maximum Cl over envelope",
+    "reynolds": 1000000.0,
+    "roughness_k_over_c": 0.0,
+    "alpha_values_deg": [
+      -4.0,
+      -3.0,
+      -2.0,
+      -1.0,
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0
+    ],
+    "design_alpha_deg": null
+  },
+  "requested_profile_count": 24,
+  "loaded_profile_count": 24,
+  "failed_or_missing_profiles": [],
+  "sources": {
+    "UIUC NACA0006": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0006.dat"
+    },
+    "UIUC NACA0008": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0008.dat"
+    },
+    "UIUC NACA0010": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0010.dat"
+    },
+    "UIUC NACA0015": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0015.dat"
+    },
+    "UIUC NACA0018": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0018.dat"
+    },
+    "UIUC NACA0021": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0021.dat"
+    },
+    "UIUC NACA0024": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca0024.dat"
+    },
+    "UIUC NACA1408": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca1408.dat"
+    },
+    "UIUC NACA1410": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca1410.dat"
+    },
+    "UIUC NACA1412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca1412.dat"
+    },
+    "UIUC NACA2408": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2408.dat"
+    },
+    "UIUC NACA2410": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2410.dat"
+    },
+    "UIUC NACA2411": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2411.dat"
+    },
+    "UIUC NACA2412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2412.dat"
+    },
+    "UIUC NACA2415": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2415.dat"
+    },
+    "UIUC NACA2418": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2418.dat"
+    },
+    "UIUC NACA2421": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2421.dat"
+    },
+    "UIUC NACA2424": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca2424.dat"
+    },
+    "UIUC NACA4412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4412.dat"
+    },
+    "UIUC NACA4415": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4415.dat"
+    },
+    "UIUC NACA4418": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4418.dat"
+    },
+    "UIUC NACA4421": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4421.dat"
+    },
+    "UIUC NACA4424": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca4424.dat"
+    },
+    "UIUC NACA6412": {
+      "url": "https://m-selig.ae.illinois.edu/ads/coord/naca6412.dat"
+    }
+  },
+  "pareto_front": [
+    "UIUC NACA6412"
+  ],
+  "ranking_csv": "pareto_uiuc_rankings.csv",
+  "chart": "pareto_uiuc_catalog.png"
+}

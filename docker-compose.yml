@@ -29,9 +29,14 @@ services:
     expose:
       - "8080"
     environment:
-      XFOIL_WORKER_API_KEY: ${XFOIL_WORKER_API_KEY:?Set a long random worker API key in .env before enabling the xfoil profile}
+      XFOIL_WORKER_API_KEY_FILE: /run/secrets/xfoil_worker_api_key
+      XFOIL_ALLOW_INSECURE_NO_AUTH: "false"
       XFOIL_MAX_CONCURRENCY: "1"
+      XFOIL_REQUESTS_PER_MINUTE: "30"
       XFOIL_TEMP_ROOT: /tmp/xfoil-runs
+    secrets:
+      - xfoil_worker_api_key
+    user: "10001:10001"
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid,size=64m,mode=1777
@@ -42,9 +47,21 @@ services:
     pids_limit: 128
     mem_limit: 512m
     cpus: 1.0
+    ulimits:
+      nofile: 1024
+      nproc: 128
+    logging:
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=3)"]
       interval: 30s
       timeout: 5s
       start_period: 20s
       retries: 3
+
+secrets:
+  xfoil_worker_api_key:
+    file: ${XFOIL_WORKER_SECRET_FILE:?Set XFOIL_WORKER_SECRET_FILE to a readable secret file before enabling the xfoil profile}

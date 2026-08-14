@@ -16,10 +16,15 @@
 
 ## شروع محلی با Compose
 
-یک فایل `.env` در ریشه پروژه ایجاد کنید و مقدار بلند و تصادفی برای `XFOIL_WORKER_API_KEY` قرار دهید. این فایل نباید commit شود.
+یک فایل secret محلی با دسترسی محدود بسازید و مسیر آن را در `.env` نگه دارید. خود secret و `.env` نباید commit شوند. worker در نبود secret، به‌طور پیش‌فرض **fail-closed** است و درخواست تحلیل را نمی‌پذیرد.
+
+```bash
+umask 077
+openssl rand -base64 48 > .xfoil-worker-api-key
+```
 
 ```dotenv
-XFOIL_WORKER_API_KEY=replace-with-a-long-random-secret
+XFOIL_WORKER_SECRET_FILE=./.xfoil-worker-api-key
 ```
 
 سپس worker اختیاری را همراه اپ اصلی فعال کنید:
@@ -28,16 +33,16 @@ XFOIL_WORKER_API_KEY=replace-with-a-long-random-secret
 docker compose --profile xfoil up --build
 ```
 
-Compose worker را **بدون port عمومی** اجرا می‌کند. image با `read_only: true`، tmpfs محدود برای `/tmp`، `cap_drop: ALL`، `no-new-privileges`، سقف PID/CPU/memory و یک concurrency پیش‌فرض ساخته شده است. اگر به ingress مستقل نیاز باشد، فقط همان ingress باید به port 8080 داخلی وصل شود و باید API key را به شکل `X-API-Key` منتقل کند.
+Compose worker را **بدون port عمومی** اجرا می‌کند. image با `read_only: true`، tmpfs محدود برای `/tmp`، `cap_drop: ALL`، `no-new-privileges`، UID غیر-root، secret mount، سقف PID/CPU/memory/file descriptors، rotation log و concurrency پیش‌فرض ساخته شده است. اگر به ingress مستقل نیاز باشد، فقط همان ingress باید به port 8080 داخلی وصل شود و باید API key را به شکل `X-API-Key` منتقل کند.
 
 ## API contract
 
 | مسیر | روش | authentication | کاربرد |
 |---|---|---|---|
-| `/healthz` | `GET` | ندارد | وضعیت سرویس و وجود executable |
-| `/v1/polar` | `POST` | `X-API-Key` در صورت تنظیم secret | polar محدودشده XFOIL |
+| `/healthz` | `GET` | ندارد؛ فقط شبکه داخلی | وضعیت خلاصه سرویس |
+| `/v1/polar` | `POST` | `X-API-Key` اجباری مگر override توسعه‌ای صریح | polar محدودشده XFOIL |
 
-بدنه `POST /v1/polar` فقط fields مشخص‌شدهٔ geometry، Re، Mach، Ncrit، transition، alpha range و iteration/timeout را می‌پذیرد. field اضافه رد می‌شود. geometry حداکثر 601 نقطه دارد و alpha/re/timeout با schema و adapter کنترل می‌شوند.
+بدنه `POST /v1/polar` فقط fields مشخص‌شدهٔ geometry، Re، Mach، Ncrit، transition، alpha range و iteration/timeout را می‌پذیرد. field اضافه رد می‌شود. geometry حداکثر 601 نقطه دارد، body حداکثر 256 KiB است، alpha/re/timeout با schema و adapter کنترل می‌شوند و quota محلی پیش‌فرض 30 درخواست در دقیقه به‌ازای هر credential است. ingress باید مستقل از quota محلی، rate/connection/body-timeout را enforce کند.
 
 ```json
 {
@@ -64,7 +69,7 @@ workflow `.github/workflows/xfoil-worker.yml` در pull request ابتدا unit 
 
 ## حد استقرار و عملیات
 
-XFOIL یک CLI/system package است؛ بنابراین برای worker باید محیطی با container runtime یا کنترل OS فراهم باشد. Streamlit Community Cloud برای خود UI مناسب است، اما worker solver باید در یک سرویس container داخلی و دارای TLS/authentication جدا اجرا شود. پیش از production، ownership GHCR package، policy retention، log redaction، rate limit ingress و مانیتور کردن `timed_out`/`process_error`ها باید توسط تیم پروژه تأیید شود.
+XFOIL یک CLI/system package است؛ بنابراین برای worker باید محیطی با container runtime یا کنترل OS فراهم باشد. Streamlit Community Cloud برای خود UI مناسب است، اما worker solver باید در یک سرویس container داخلی و دارای TLS/authentication جدا اجرا شود. پیش از production، کنترل‌های بلوکه‌کننده در [`SECURITY_AUDIT_XFOIL_WORKER.md`](SECURITY_AUDIT_XFOIL_WORKER.md) باید بسته شوند: private ingress/TLS، secret rotation، vulnerability/secret scan blocking، network policy، rate limit gateway، log redaction و مانیتور کردن `timed_out`/`process_error`ها.
 
 ## منابع
 

@@ -37,3 +37,11 @@ The Streamlit application was restarted and loaded successfully with the new **P
 A local web smoke test then executed Pareto Explorer for NACA 0012, 2412, 4412 and 6409 over alpha −4° to 12° at the default preliminary operating condition. The interface rendered the L/D–Cl map, a ranking table, the Pareto-front count and the `Download Pareto ranking CSV` control. In this model-only screening run, NACA 4412 was the sole non-dominated candidate; this is a result of the selected objectives and envelope, not a universal design recommendation.
 
 The XFOIL production draft adds `xfoil_worker_app.py`, `Dockerfile.xfoil-worker`, an optional restricted Compose service, and an Actions workflow that performs worker tests, constrained container smoke test, GHCR publication, SBOM and provenance. Local Docker was unavailable in the current environment, so the image was not built locally; static configuration tests verify non-root execution, internal-only Compose exposure, read-only runtime constraints, test-before-publish ordering and supply-chain metadata settings. GitHub Actions is the authoritative environment for the container build/smoke test.
+
+## Pareto catalog integration and XFOIL worker hardening — 2026-08-14
+
+`test_pareto_integration_catalog.py` successfully executed a 120-candidate deterministic NACA 4-digit matrix and verified complete ranking, polar completeness and the non-domination property for every reported Pareto-front member. The reusable `screen_geometries()` path also passed on a named geometry fixture catalog using the design-alpha Cl objective.
+
+`scripts/run_pareto_uiuc_catalog.py` loaded 24 of 24 curated NACA coordinate profiles from the UIUC index at Re=1,000,000, k/c=0 and alpha −4° to 12°. It emitted CSV, chart and source manifest artifacts. In this preliminary model run, UIUC NACA6412 was the only reported front member; this is not a validated design recommendation.
+
+The XFOIL worker now fails closed when authentication is absent, supports a mounted secret file, uses constant-time key comparison, applies request-body and per-credential quota controls, and returns no-store/nosniff headers. Compose adds explicit UID, secret mount, file/process/log constraints. The full quality suite passed 34 tests after these changes.

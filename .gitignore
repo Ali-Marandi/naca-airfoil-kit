@@ -6,3 +6,8 @@ __pycache__/
 .env.*
 .streamlit/secrets.toml
 .DS_Store
+/.xfoil-worker-api-key
+/Streamlit_Community_Cloud.pdf
+/Streamlit_Community_Cloud.pptx
+/streamlit_cloud_deck/slide_notes.json
+/streamlit_cloud_deck/slide_notes.md
