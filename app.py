@@ -26,6 +26,12 @@ from airfoil_pro import (
     StudyAudit,
     UIUCLoader,
 )
+from product_guidance import (
+    PRELIMINARY_SCOPE_NOTICE,
+    STARTER_WORKFLOWS,
+    VALIDATION_METADATA_FIELDS,
+    evidence_readiness,
+)
 
 
 st.set_page_config(page_title="NACA Airfoil Kit Pro — Web Edition", layout="wide")
@@ -50,6 +56,28 @@ def csv_download(rows, filename, extra_columns=None):
     for row in rows:
         writer.writerow(row)
     return output.getvalue().encode("utf-8-sig"), filename
+
+
+def current_validation_metadata():
+    """Return the user-entered validation provenance available in this session."""
+    return {
+        field: st.session_state.get(f"validation_meta_{field}", "")
+        for field, _label in VALIDATION_METADATA_FIELDS
+    }
+
+
+def render_evidence_readiness(readiness):
+    """Render a scope-safe evidence classification without claiming validation."""
+    message = f"**{readiness['headline']}** — {readiness['guidance']}"
+    if readiness["status"] == "metadata_complete_validation_review":
+        st.success(message)
+    elif readiness["status"] == "informational_validation":
+        st.warning(message)
+    else:
+        st.info(message)
+    if readiness["missing_metadata"]:
+        st.caption("Still needed: " + "; ".join(readiness["missing_metadata"]) + ".")
+    st.caption(readiness["scope_notice"])
 
 
 def coordinate_rows(xu, yu, xl, yl):
@@ -194,8 +222,19 @@ def render_robustness(envelope_rows, name):
 
 
 st.title("NACA Airfoil Kit Pro — Enterprise Web")
-st.caption("Preliminary panel/empirical screening only. Validate with experimental data or a high-fidelity viscous solver before production decisions.")
+st.caption(PRELIMINARY_SCOPE_NOTICE)
+with st.expander("Start here — create an evidence-ready study in three steps", expanded=True):
+    workflow_columns = st.columns(3)
+    for column, workflow in zip(workflow_columns, STARTER_WORKFLOWS):
+        column.markdown(f"**{workflow['title']}**")
+        column.caption(workflow["workspace"])
+        column.write(workflow["description"])
+    st.caption("The app accelerates preliminary screening. A complete metadata record improves reviewability but does not create a universal validation or certification claim.")
 st.markdown("---")
+
+for _field, _label in VALIDATION_METADATA_FIELDS:
+    st.session_state.setdefault(f"validation_meta_{_field}", "")
+st.session_state.setdefault("validation_upload_present", False)
 
 database = load_db()
 st.sidebar.header("Airfoil controls")
@@ -423,8 +462,15 @@ with qa_tab:
     coordinates_file, coordinates_filename = csv_download(coordinate_rows(xu, yu, xl, yl), f"{name.replace(' ', '_')}_coordinates.csv")
     st.download_button("Download normalized coordinate CSV", coordinates_file, coordinates_filename, "text/csv", use_container_width=True)
 
+    st.subheader("Evidence readiness")
+    current_readiness = evidence_readiness(
+        current_validation_metadata(),
+        experimental_rows_loaded=bool(st.session_state.get("validation_upload_present", False)),
+    )
+    render_evidence_readiness(current_readiness)
+
     st.subheader("Study audit trail")
-    st.caption("The manifest records geometry signature, inputs and solver provenance. Attach polar/validation exports for a complete review package.")
+    st.caption("The manifest records geometry signature, inputs, evidence readiness and solver provenance. Attach polar/validation exports for a complete review package.")
     audit_manifest = StudyAudit.build_manifest(
         name,
         xu,
@@ -445,6 +491,12 @@ with qa_tab:
             "result_scope": "not a viscous CFD or experimental result",
         },
         study_label=f"{name} screening study",
+        source_data={
+            "evidence_readiness": current_readiness,
+            "validation_artifacts": {
+                "experimental_polar_csv_attached": bool(st.session_state.get("validation_upload_present", False)),
+            },
+        },
     )
     st.download_button(
         "Download audit manifest JSON",
@@ -467,7 +519,19 @@ with validation_tab:
     st.subheader("Experimental wind-tunnel validation")
     st.write("Upload a CSV with `alpha_deg` (or `alpha`) and at least one of `cl` or `cd`. Use measurements with documented geometry, Reynolds, Mach, transition/roughness and tunnel corrections.")
     uploaded_validation = st.file_uploader("Experimental polar CSV", type=["csv"], key="validation_csv")
+    st.session_state["validation_upload_present"] = uploaded_validation is not None
     validation_reynolds = st.number_input("Experimental Reynolds number", 1e4, 1e8, float(reynolds), format="%.0e", key="validation_re")
+
+    with st.expander("Validation metadata required for an evidence-ready review", expanded=uploaded_validation is not None):
+        st.caption("These fields make a comparison reviewable. They do not turn the preliminary model into a certified or universally validated solver.")
+        metadata_columns = st.columns(2)
+        for index, (field, label) in enumerate(VALIDATION_METADATA_FIELDS):
+            metadata_columns[index % 2].text_input(label, key=f"validation_meta_{field}")
+        validation_readiness = evidence_readiness(
+            current_validation_metadata(),
+            experimental_rows_loaded=uploaded_validation is not None,
+        )
+        render_evidence_readiness(validation_readiness)
     if uploaded_validation is not None:
         try:
             experimental_rows = ExperimentalValidation.parse_csv_text(uploaded_validation.getvalue().decode("utf-8", errors="replace"))
@@ -513,4 +577,4 @@ with robustness_tab:
         st.download_button("Download sensitivity envelope CSV", robustness_file, robustness_filename, "text/csv", use_container_width=True)
 
 st.markdown("---")
-st.caption("NACA Airfoil Kit Pro — preliminary aerodynamic screening; validate externally before safety-critical use.")
+st.caption("NACA Airfoil Kit Pro — " + PRELIMINARY_SCOPE_NOTICE)

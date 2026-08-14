@@ -53,3 +53,9 @@ A repeatable Reynolds sweep now compares the UIUC Pareto-front NACA6412 profile 
 `UIUCLoader.parse_coordinate_text()` now accepts both trailing-edge-first and legacy leading-edge-first UIUC contours, including numeric point-count headers. Unit tests cover both conventions.
 
 The `k8s/xfoil-worker/` kustomization adds a Restricted namespace, token-free ServiceAccount, non-root/read-only Deployment, runtime-default seccomp, capability drop, bounded memory tmpfs, secret mount, resource requests/limits, readiness endpoint, ClusterIP Service and allowlisted NetworkPolicy. Static manifest tests and worker readiness tests passed.
+
+## Commercial onboarding and evidence-readiness — 2026-08-14
+
+A Streamlit smoke test confirmed the visible three-step onboarding panel at application entry: screen candidates, stress-test the shortlist, and export an evidence-ready study package. The Validation tab exposes a CSV uploader, experimental Reynolds input, and six provenance fields for geometry/flap, Mach, transition/surface state, tunnel/facility corrections, alpha convention, and dataset source.
+
+With no experimental CSV, the UI reports **Screening-only study**, lists the missing metadata, and repeats the preliminary-scope notice; it does not display a validation claim. Dedicated unit tests confirm that a CSV with incomplete metadata remains informational, while a complete metadata record creates only a `metadata_complete_validation_review` state—not a universal validation claim.

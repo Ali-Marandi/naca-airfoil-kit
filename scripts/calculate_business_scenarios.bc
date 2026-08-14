@@ -1,0 +1,11 @@
+scale=2
+# Conservative: 20 individual x $19/month x 12 + 3 team x $79/month x 12 + 1 pilot x $1500
+(20*19*12) + (3*79*12) + (1*1500)
+# Base: 50 individual x $29/month x 12 + 10 team x $99/month x 12 + 3 pilots x $5000
+(50*29*12) + (10*99*12) + (3*5000)
+# Aggressive: 100 individual x $29/month x 12 + 25 team x $99/month x 12 + 8 pilots x $7500 + 5 usage accounts x $100/month x 12
+(100*29*12) + (25*99*12) + (8*7500) + (5*100*12)
+# Gross profit at 85% margin for each scenario
+((20*19*12) + (3*79*12) + (1*1500)) * .85
+((50*29*12) + (10*99*12) + (3*5000)) * .85
+((100*29*12) + (25*99*12) + (8*7500) + (5*100*12)) * .85

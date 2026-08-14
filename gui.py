@@ -1,6 +1,7 @@
-import sys
 import os
+import sys
 import json
+import tempfile
 import numpy as np
 import requests
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
@@ -14,6 +15,7 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from airfoil_pro import (NACAGeneratorPro, UIUCLoader, AirfoilAnalysis, ExperimentalValidation, GeometryOptimizer, GeometryTools, ParetoExplorer, RobustStudy, StudyAudit, export_stl, export_csv_advanced)
 from report_gen import generate_pdf_report
+from product_guidance import PRELIMINARY_SCOPE_NOTICE, desktop_study_checklist, evidence_readiness
 
 STYLESHEET = """
 QMainWindow { background-color: #1e1e1e; }
@@ -101,6 +103,16 @@ class MainWindow(QMainWindow):
         analysis_layout.addRow(self.validation_summary_label)
         analysis_group.setLayout(analysis_layout); sidebar_layout.addWidget(analysis_group)
 
+        evidence_group = QGroupBox("Evidence Readiness")
+        evidence_layout = QVBoxLayout()
+        self.evidence_summary_label = QLabel("Evidence: screening-only study; no experimental CSV attached.")
+        self.evidence_summary_label.setWordWrap(True)
+        evidence_layout.addWidget(self.evidence_summary_label)
+        btn_evidence_checklist = QPushButton("Show Evidence-Ready Checklist")
+        btn_evidence_checklist.clicked.connect(self.show_evidence_checklist)
+        evidence_layout.addWidget(btn_evidence_checklist)
+        evidence_group.setLayout(evidence_layout); sidebar_layout.addWidget(evidence_group)
+
         flap_group = QGroupBox("Trailing-Edge Flap (Preliminary)")
         flap_layout = QFormLayout()
         self.flap_check = QCheckBox("Apply hinged flap")
@@ -177,6 +189,9 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Validation CSV", str(error))
         self.update_plots()
 
+    def show_evidence_checklist(self):
+        QMessageBox.information(self, "Evidence-Ready Study Checklist", desktop_study_checklist())
+
     def update_plots(self):
         if not self.current_coords: return
         xu, yu, xl, yl = self.current_coords
@@ -184,6 +199,8 @@ class MainWindow(QMainWindow):
         res = AirfoilAnalysis.compute_aerodynamics(xu, yu, xl, yl, alpha)
         self.last_cl, self.last_cd, self.last_cp, self.last_xc, self.last_gamma, self.last_pxc, self.last_pyc, self.last_pl = res
         self.cl_label.setText(f"Cl: {self.last_cl:.4f}"); self.cd_label.setText(f"Cd: {self.last_cd:.4f}")
+        readiness = evidence_readiness({}, experimental_rows_loaded=bool(self.experimental_rows))
+        self.evidence_summary_label.setText(f"Evidence: {readiness['headline']}. {readiness['guidance']}")
         
         # Geometry
         ax = self.geom_canvas.axes; ax.clear()
@@ -256,7 +273,40 @@ class MainWindow(QMainWindow):
 
     def export_pdf(self):
         path, _ = QFileDialog.getSaveFileName(self, "Save Report", f"{self.current_name}_Report.pdf", "PDF (*.pdf)")
-        if path: self.status_bar.showMessage(f"Report saved to {path}", 5000)
+        if not path or not self.current_coords:
+            return
+        plot_path = None
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as handle:
+                plot_path = handle.name
+            self.geom_canvas.fig.savefig(plot_path, dpi=150, facecolor="#1e1e1e")
+            readiness = evidence_readiness({}, experimental_rows_loaded=bool(self.experimental_rows))
+            generate_pdf_report(
+                path,
+                {
+                    "name": self.current_name,
+                    "params": {
+                        "Alpha [deg]": float(self.alpha_slider.value()),
+                        "Reynolds number": "1.0e6 (desktop default)",
+                        "Surface roughness k/c": "0.0 (desktop default)",
+                        "Flap applied": bool(self.flap_check.isChecked()),
+                    },
+                    "cl": self.last_cl,
+                    "cd": self.last_cd,
+                    "plot_path": plot_path,
+                    "evidence_readiness": readiness,
+                    "audit_manifest_note": (
+                        "Export the companion Study Audit Manifest JSON with this report. "
+                        "It records the geometry hash, operating conditions, solver provenance and evidence status."
+                    ),
+                },
+            )
+            self.status_bar.showMessage(f"Preliminary study report saved to {path}", 5000)
+        except OSError as error:
+            QMessageBox.warning(self, "PDF Report", str(error))
+        finally:
+            if plot_path and os.path.exists(plot_path):
+                os.remove(plot_path)
 
     def export_audit_manifest(self):
         if not self.current_coords:
@@ -285,6 +335,16 @@ class MainWindow(QMainWindow):
                 "result_scope": "not a viscous CFD or experimental result",
             },
             study_label=f"{self.current_name} desktop study",
+            source_data={
+                "evidence_readiness": evidence_readiness(
+                    {},
+                    experimental_rows_loaded=bool(self.experimental_rows),
+                ),
+                "validation_artifacts": {
+                    "experimental_polar_csv_attached": bool(self.experimental_rows),
+                    "desktop_metadata_capture": "Use the evidence-ready checklist and retain metadata with the exported package.",
+                },
+            },
         )
         with open(path, "w", encoding="utf-8") as handle:
             handle.write(StudyAudit.to_json(manifest))
